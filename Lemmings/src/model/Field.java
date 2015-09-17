@@ -26,19 +26,16 @@ public class Field implements Runnable{
 	
 	@Override
 	public void run(){
-		try {
-			Lemming Steve = new Lemming("Steve",10);
-	    	FieldConnector connector = new FieldConnector(this);
-		    connector.Send(Steve);
-			System.out.println("Serving at port: " + this.port);
-			Socket incoming = this.serversocket.accept();
-			Thread thread = new Thread(new InputHandler(incoming));
-			thread.start();
-			this.neighbors.add(new SocketConnection(this.address, this.port));
-			Steve.neighbors = this.neighbors;
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
+		if(this.numberOfLemmings < this.capacity){
+			try {
+				Socket incoming = this.serversocket.accept();
+				Thread thread = new Thread(new InputHandler(incoming));
+				thread.start();
+		    	this.neighbors.add(new SocketConnection(this.address, this.port));
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	public int getCapacity(){

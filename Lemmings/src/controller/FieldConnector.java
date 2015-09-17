@@ -13,24 +13,32 @@ public class FieldConnector implements Serializable{
 
 	private static final long serialVersionUID = 6159903509176495008L;
 	int port;
+	Field field;
 	String address;
 	Socket client;
 	
 	public FieldConnector(Field field){
+		this.field = field;
 		this.port = field.getPort();
 		this.address = "localhost";
 	}
 	
-	public void Send(Lemming L){
-		try {
-			Socket client  = new Socket();
-			client.connect(new InetSocketAddress(this.address, this.port));
-			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-			out.writeObject(L);
-			client.close();
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
+	public boolean Send(Lemming L){
+		if(this.field.numberOfLemmings < this.field.capacity){
+			try {
+				Socket client  = new Socket();
+				client.connect(new InetSocketAddress(this.address, this.port));
+				ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+				out.writeObject(L);
+				client.close();
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 

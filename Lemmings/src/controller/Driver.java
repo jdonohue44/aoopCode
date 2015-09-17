@@ -1,7 +1,10 @@
 package controller;
 
 import java.io.IOException;
+
+import view.FieldView;
 import model.Field;
+import model.Lemming;
 
 public class Driver {
 	
@@ -12,8 +15,12 @@ public class Driver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// testing git hub
 		Thread thread = new Thread(field);
 		thread.start();
+		Lemming L = new Lemming(field);
+    	FieldConnector connector = new FieldConnector(field);
+	    connector.Send(L);
+		System.out.println("Serving at port: " + field.port);
+		new FieldView(field);
 	}
 } 

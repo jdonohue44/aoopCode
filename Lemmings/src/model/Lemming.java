@@ -1,26 +1,38 @@
 package model;
 import java.io.Serializable;
 
+import controller.FieldConnector;
+
 
 public class Lemming implements Serializable, Runnable{
 
 	private static final long serialVersionUID = -5977684576375763088L;
 	
 	public FieldMap neighbors;
-	public String name;
 	public int energy;
+	public Field field;
+	public boolean alive;
 	
-	public Lemming(String name, int energy){
-		this.name = name;
-		this.energy = energy;
+	public Lemming(Field f){
+		this.field = f;
+		this.neighbors = f.neighbors;
+		this.alive = true;
+		new Thread(this).start();
 	}
 
 	@Override
 	public void run() {
-		try {
-			Thread.sleep((long)Math.random()*3);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		while(this.isAlive()){
+			double action = Math.random();
+			if(action <= 0.20){
+				this.giveBirth();
+			}
+			else if((action > 0.20) && (action <= 0.60)){
+				this.changeField();
+			}
+			else{
+				this.sleep();
+			}
 		}
 	}
 	
@@ -32,23 +44,44 @@ public class Lemming implements Serializable, Runnable{
 		this.neighbors = neighbors;
 	}
 	
-	public String toString(){
-		return " I AM A LEMMING. MY NAME IS " + this.name;
+	public boolean isAlive(){
+		return this.alive;
 	}
 	
 	public void sleep(){
-	}
-	
-	public void eat(){
-		
+		try {
+			Thread.sleep((long)(Math.random()*3000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void giveBirth(){
-		
+		new Lemming(this.field); // A baby is born!
+		if (this.field.numberOfLemmings == this.field.capacity){
+			this.alive = false; // The mother Lemming has comitted suicicde...
+		}
+		else{
+			this.field.numberOfLemmings ++;
+		}
 	}
 	
 	public void changeField(){
-		
+		FieldConnector fc = new FieldConnector(this.field);
+		if(!fc.Send(this)){
+			this.alive = false;
+		}
 	}
-
+	
+	public String toString(){
+		return "|||||   \n"
+				+        "  O O    \n"
+				+        "  \\_/    \n"
+				+        " /  \\   \n"
+				+        "||   ||  \n"
+				+        "|/  \\|  \n"
+				+        ")     (  \n"
+				+        "_______  \n"
+				+        "|__|__|  \n";
+	}
 }

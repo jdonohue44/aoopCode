@@ -1,5 +1,5 @@
 package view;
-//testing
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,6 +48,7 @@ public class FieldView extends javax.swing.JFrame implements Observer {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Field");
         setName("frame"); // NOI18N
+        setVisible(true);
 
         lemmingsField.setEditable(false);
         jScrollPane2.setViewportView(lemmingsField);
@@ -178,9 +179,7 @@ public class FieldView extends javax.swing.JFrame implements Observer {
         hostnameLabel.setText("adress: " + model.getAddress());
         portLabel.setText("port: " + model.getPort());
 		nolemmingsLabel.setText("no lemmings: " + model.getNumberOfLemmings());
-
         setTitle(model.getAddress());
-
 		lemmingsField.setText(model.getLemmingsListing());
         fieldsField.setText(model.getFieldsListing());
     }
