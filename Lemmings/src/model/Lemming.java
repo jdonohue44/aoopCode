@@ -7,14 +7,11 @@ import controller.FieldConnector;
 public class Lemming implements Serializable, Runnable{
 
 	private static final long serialVersionUID = -5977684576375763088L;
-	
 	public FieldMap neighbors;
-	public transient Field field;
 	public boolean alive;
 	
-	public Lemming(Field f){
-		this.field = f;
-		this.neighbors = f.neighbors;
+	public Lemming(FieldMap neighbors){
+		this.neighbors = neighbors;
 		this.alive = true;
 		new Thread(this).start();
 	}

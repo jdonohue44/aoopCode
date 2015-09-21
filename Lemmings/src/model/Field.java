@@ -38,7 +38,7 @@ public class Field implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		}
+	}
 	public int getCapacity(){
 		return this.capacity;
 	}
