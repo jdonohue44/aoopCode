@@ -2,16 +2,14 @@ package controller;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import model.Field;
 import model.Lemming;
 
-public class FieldConnector implements Serializable{
+public class FieldConnector{
 
-	private static final long serialVersionUID = 6159903509176495008L;
 	int port;
 	Field field;
 	String address;

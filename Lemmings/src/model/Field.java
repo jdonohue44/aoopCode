@@ -10,7 +10,7 @@ import view.FieldView;
 public class Field implements Runnable{
 
 	public int capacity; 
-	public String address; 
+	public String address = "localhost"; 
 	public int port;
 	public int numberOfLemmings;
 	public ServerSocket serversocket;
@@ -22,22 +22,23 @@ public class Field implements Runnable{
 		this.serversocket = new ServerSocket(0);
 		this.port = this.serversocket.getLocalPort();
 		this.neighbors = new FieldMap();
+		new Thread(this).start();
+    	//this.neighbors.add(new SocketConnection(this.address, this.port));
 	}
 	
 	@Override
 	public void run(){
-		if(this.numberOfLemmings < this.capacity){
+		while(true){
 			try {
 				Socket incoming = this.serversocket.accept();
 				Thread thread = new Thread(new InputHandler(incoming));
 				thread.start();
-		    	this.neighbors.add(new SocketConnection(this.address, this.port));
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-	}
+		}
 	public int getCapacity(){
 		return this.capacity;
 	}

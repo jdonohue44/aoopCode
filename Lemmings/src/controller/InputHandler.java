@@ -19,7 +19,9 @@ public class InputHandler implements Runnable{
 	      try {
 	    	  ObjectInputStream in= new ObjectInputStream(this.incoming.getInputStream());
 	    	  Lemming myLemming = ((Lemming)in.readObject());
+	    	  System.out.println("reading  object...");
 	    	  System.out.println(myLemming);
+	    	  System.out.print(myLemming.field);
 	    	  in.close();
 	      	  }
 	      catch (Exception e) {

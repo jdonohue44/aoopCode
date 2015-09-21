@@ -15,16 +15,12 @@ public class Driver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 		Thread thread = new Thread(field);
 		thread.start();
 		Lemming L = new Lemming(field);
     	FieldConnector connector = new FieldConnector(field);
 	    connector.Send(L);
 		System.out.println("Serving at port: " + field.port);
-		new FieldView(field);
+		//new FieldView(field);
 	}
 } 

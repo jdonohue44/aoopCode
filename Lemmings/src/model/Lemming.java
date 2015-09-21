@@ -9,8 +9,7 @@ public class Lemming implements Serializable, Runnable{
 	private static final long serialVersionUID = -5977684576375763088L;
 	
 	public FieldMap neighbors;
-	public int energy;
-	public Field field;
+	public transient Field field;
 	public boolean alive;
 	
 	public Lemming(Field f){
@@ -25,12 +24,15 @@ public class Lemming implements Serializable, Runnable{
 		while(this.isAlive()){
 			double action = Math.random();
 			if(action <= 0.20){
+				System.out.println("birth");
 				this.giveBirth();
 			}
 			else if((action > 0.20) && (action <= 0.60)){
+				System.out.println("move");
 				this.changeField();
 			}
 			else{
+				System.out.println("sleep");
 				this.sleep();
 			}
 		}
@@ -60,6 +62,7 @@ public class Lemming implements Serializable, Runnable{
 		new Lemming(this.field); // A baby is born!
 		if (this.field.numberOfLemmings == this.field.capacity){
 			this.alive = false; // The mother Lemming has comitted suicicde...
+			System.out.println("suicide");
 		}
 		else{
 			this.field.numberOfLemmings ++;
@@ -74,7 +77,7 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public String toString(){
-		return "|||||   \n"
+		return " |||||   \n"
 				+        "  O O    \n"
 				+        "  \\_/    \n"
 				+        " /  \\   \n"
