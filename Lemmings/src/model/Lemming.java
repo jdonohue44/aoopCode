@@ -11,12 +11,16 @@ public class Lemming implements Serializable, Runnable{
 	public transient Field field;
 	public boolean alive;
 	
+	public double name;
+	
 	public Lemming(Field field){
 		this.field = field;
 		this.alive = true;
 		this.knownFields = new FieldMap();
 		this.knownFields.add(new SocketConnection(this.field.address,this.field.port));
 		new Thread(this).start();
+		
+		this.name = Math.random()*100;
 	}
 
 	@Override
@@ -24,15 +28,15 @@ public class Lemming implements Serializable, Runnable{
 		while(this.isAlive()){
 			double action = Math.random();
 			if(action <= 0.20){
-				System.out.println("birth");
+				System.out.println(this.name+" birth");
 				this.giveBirth();
 			}
 			else if((action > 0.20) && (action <= 0.60)){
-				System.out.println("move");
+				System.out.println(this.name+" move");
 				this.changeField();
 			}
 			else{
-				System.out.println("sleep");
+				System.out.println(this.name+" sleep");
 				this.sleep();
 			}
 		}
@@ -62,7 +66,7 @@ public class Lemming implements Serializable, Runnable{
 		new Lemming(this.field); // A baby is born on this field
 		if (this.field.numberOfLemmings == this.field.capacity){ 
 			this.alive = false; // The mother Lemming has comitted suicicde...
-			System.out.println("suicide");
+			System.out.println(this.name+" suicide");
 		}
 		else{
 			this.field.numberOfLemmings ++;
@@ -78,9 +82,9 @@ public class Lemming implements Serializable, Runnable{
 		return " |||||   \n"
 				+        "  O O    \n"
 				+        "  \\_/    \n"
-				+        " /  \\   \n"
+				+        " /   \\   \n"
 				+        "||   ||  \n"
-				+        "|/  \\|  \n"
+				+        "|/   \\|  \n"
 				+        ")     (  \n"
 				+        "_______  \n"
 				+        "|__|__|  \n";
