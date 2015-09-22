@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import view.FieldView;
 import model.Field;
 import model.Lemming;
 import model.SocketConnection;

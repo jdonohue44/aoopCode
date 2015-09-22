@@ -1,13 +1,12 @@
 package model;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import view.FieldView;
 import controller.FieldConnector;
 import controller.InputHandler;
-import view.FieldView;
 
 public class Field implements Runnable{
 
@@ -30,21 +29,12 @@ public class Field implements Runnable{
 		new Thread(this).start();
 		}
 	
-	public Field(Lemming l) throws IOException{
-		this.numberOfLemmings = 0;
-		this.capacity = 10;
-		this.serversocket = new ServerSocket(0);
-		this.port = this.serversocket.getLocalPort();
-		this.neighbors = new FieldMap();
-		new Thread(this).start();
-		}
-	
 	@Override
 	public void run(){
 		while(true){
 			try {
 				Socket incoming = this.serversocket.accept();
-				Thread thread = new Thread(new InputHandler(incoming));
+				Thread thread = new Thread(new InputHandler(this,incoming));
 				thread.start();
 			} 
 			catch (IOException e) {

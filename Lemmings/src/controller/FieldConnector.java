@@ -5,7 +5,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import model.Field;
 import model.Lemming;
 
 public class FieldConnector{
