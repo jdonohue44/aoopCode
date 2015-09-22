@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import controller.FieldConnector;
 import controller.InputHandler;
@@ -17,16 +18,26 @@ public class Field implements Runnable{
 	public ServerSocket serversocket;
 	public FieldMap neighbors;
 	public FieldConnector fieldconnector;
+	public ArrayList<Lemming> lemmings;
 	
 	public Field() throws IOException{
+		this.numberOfLemmings = 0;
+		this.capacity = 10;
+		this.lemmings = new ArrayList<Lemming>();
+		this.serversocket = new ServerSocket(0);
+		this.port = this.serversocket.getLocalPort();
+		this.neighbors = new FieldMap();
+		new Thread(this).start();
+		}
+	
+	public Field(Lemming l) throws IOException{
 		this.numberOfLemmings = 0;
 		this.capacity = 10;
 		this.serversocket = new ServerSocket(0);
 		this.port = this.serversocket.getLocalPort();
 		this.neighbors = new FieldMap();
 		new Thread(this).start();
-    	//this.neighbors.add(new SocketConnection(this.address, this.port));
-	}
+		}
 	
 	@Override
 	public void run(){

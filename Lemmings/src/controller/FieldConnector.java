@@ -5,13 +5,13 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import model.Field;
 import model.Lemming;
 
 public class FieldConnector{
 
 	int port;
 	String address;
-	Socket client;
 	
 	public FieldConnector(String address, int port){
 		this.address = address;
@@ -20,7 +20,7 @@ public class FieldConnector{
 	
 	public void Send(Lemming L){
 		try {
-			client  = new Socket();
+			Socket client  = new Socket();
 			client.connect(new InetSocketAddress(this.address, this.port));
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 			out.writeObject(L);
@@ -47,11 +47,4 @@ public class FieldConnector{
 		this.address = address;
 	}
 
-	public Socket getClient() {
-		return client;
-	}
-
-	public void setClient(Socket client) {
-		this.client = client;
-	}
 }
