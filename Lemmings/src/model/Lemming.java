@@ -16,6 +16,7 @@ public class Lemming implements Serializable, Runnable{
 		this.alive = true;
 		this.knownFields = new FieldMap();
 		this.knownFields.add(new SocketConnection(this.field.address,this.field.port));
+		this.field.lemmings.add(this);
 		new Thread(this).start();
 	}
 
@@ -23,11 +24,11 @@ public class Lemming implements Serializable, Runnable{
 	public void run() {
 		while(this.isAlive()){
 			double action = Math.random();
-			if(action <= 0.20){
+			if(action <= 0.15){
 				System.out.println("birth");
 				this.giveBirth();
 			}
-			else if((action > 0.20) && (action <= 0.60)){
+			else if((action > 0.15) && (action <= 0.60)){
 				System.out.println("move");
 				this.changeField();
 			}
@@ -70,8 +71,12 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public void changeField(){
-		FieldConnector fc = new FieldConnector(this.getKnownFields().get(this.getKnownFields().getMap().size()-1).getAddress(),this.getKnownFields().get(this.getKnownFields().getMap().size()-1).getPort());
+		int fieldNumber = (int)Math.random()*this.knownFields.getMap().size();
+		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
 		fc.Send(this);
+		this.field.numberOfLemmings--;
+		this.field.lemmings.remove(this);
+		this.alive = false;
 	}
 	
 	public String toString(){

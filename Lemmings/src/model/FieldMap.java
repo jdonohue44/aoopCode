@@ -28,6 +28,7 @@ public class FieldMap implements Serializable{
 	public SocketConnection get(int i) {
 		return map.get(i);
 	}
+	
 
 	public void setMap(ArrayList<SocketConnection> map) {
 		this.map = map;
