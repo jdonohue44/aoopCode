@@ -4,8 +4,6 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import model.Lemming;
-import model.SocketConnection;
-
 public class InputHandler implements Runnable{
 
 	
