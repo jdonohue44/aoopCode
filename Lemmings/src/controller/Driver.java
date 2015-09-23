@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 
+import view.FieldView;
 import model.Field;
 import model.Lemming;
 import model.SocketConnection;
@@ -12,8 +13,8 @@ public class Driver {
 		Field field1 = null;
 		Field field2 = null;
 		try {
-			field1 = new Field();
-			field2 = new Field();
+			field1 = new Field("Strawberry Field");
+			field2 = new Field("Moo Moo Meadows");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -27,6 +28,6 @@ public class Driver {
 		thread2.start();
 		Lemming L = new Lemming(field1);
 		System.out.println("Serving at port: " + field1.port);
-//		new FieldView(field1);
+		new FieldView(field1);
 	}
 } 

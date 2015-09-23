@@ -3,12 +3,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import view.FieldView;
 import controller.FieldConnector;
 import controller.InputHandler;
 
-public class Field implements Runnable{
+public class Field extends Observable implements Runnable{
 
 	public int capacity; 
 	public String address = "localhost"; 
@@ -18,8 +19,9 @@ public class Field implements Runnable{
 	public FieldMap neighbors;
 	public FieldConnector fieldconnector;
 	public ArrayList<Lemming> lemmings;
+	public String fieldName;
 	
-	public Field() throws IOException{
+	public Field(String fieldName) throws IOException{
 		this.numberOfLemmings = 0;
 		this.capacity = 10;
 		this.lemmings = new ArrayList<Lemming>();
@@ -58,19 +60,26 @@ public class Field implements Runnable{
 		return this.numberOfLemmings;
 	}
 	
-	public void setTitle(int address){
-		
-	}
-	
 	public String getLemmingsListing(){
-		return "<no lemmings>";
+		StringBuilder sb = new StringBuilder();
+		for(int i =0; i < this.lemmings.size()-1; i++){
+			sb.append(this.lemmings.get(i)+", ");
+		}
+		sb.append(this.lemmings.get(this.lemmings.size()-1));
+		return sb.toString();
 	}
 	
 	public String getFieldsListing(){
-		return "<no fields>";
+		StringBuilder sb = new StringBuilder();
+		for(int i =0; i < this.neighbors.map.size()-1; i++){
+			sb.append(this.neighbors.map.get(i)+", ");
+		}
+		sb.append(this.neighbors.map.get(this.neighbors.map.size()-1));
+		return sb.toString();
+	}
+	
+	public String getFieldName(){
+		return this.fieldName;
 	}
 
-	public void addObserver(FieldView fieldView) {
-		// TODO Auto-generated method stub
-	}
 }

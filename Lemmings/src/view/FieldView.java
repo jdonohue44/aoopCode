@@ -178,8 +178,8 @@ public class FieldView extends javax.swing.JFrame implements Observer {
         capacityLabel.setText("capacity: " + model.getCapacity());
         hostnameLabel.setText("adress: " + model.getAddress());
         portLabel.setText("port: " + model.getPort());
-		nolemmingsLabel.setText("no lemmings: " + model.getNumberOfLemmings());
-        setTitle(model.getAddress());
+		nolemmingsLabel.setText("no. of lemmings: " + model.getNumberOfLemmings());
+        setTitle(model.getFieldName());
 		lemmingsField.setText(model.getLemmingsListing());
         fieldsField.setText(model.getFieldsListing());
     }
