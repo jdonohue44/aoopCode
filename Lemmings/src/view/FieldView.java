@@ -111,7 +111,7 @@ public class FieldView extends javax.swing.JFrame implements Observer {
 
         capacityLabel.setText("capacity:");
 
-        nolemmingsLabel.setText("no lemmings:");
+        nolemmingsLabel.setText("no. of lemmings:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -176,7 +176,7 @@ public class FieldView extends javax.swing.JFrame implements Observer {
 
     public void update(Observable ob, Object o) {
         capacityLabel.setText("capacity: " + model.getCapacity());
-        hostnameLabel.setText("adress: " + model.getAddress());
+        hostnameLabel.setText("address: " + model.getAddress());
         portLabel.setText("port: " + model.getPort());
 		nolemmingsLabel.setText("no. of lemmings: " + model.getNumberOfLemmings());
         setTitle(model.getFieldName());

@@ -11,8 +11,10 @@ public class SocketConnection implements Serializable {
 	private static final long serialVersionUID = -3002920225538942283L;
 	public String address;
 	public int port;
+	public String name;
 	
-	public SocketConnection(String a, int p){
+	public SocketConnection(String name,String a, int p){
+		this.name = name;
 		this.address = a;
 		this.port = p;
 	}
@@ -33,4 +35,7 @@ public class SocketConnection implements Serializable {
 		this.port = port;
 	}
 	
+	public String toString(){
+		return this.name;
+	}
 }

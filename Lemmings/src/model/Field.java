@@ -16,7 +16,7 @@ public class Field extends Observable implements Runnable{
 	public int port;
 	public int numberOfLemmings;
 	public ServerSocket serversocket;
-	public FieldMap neighbors;
+	public FieldMap knownFields;
 	public FieldConnector fieldconnector;
 	public ArrayList<Lemming> lemmings;
 	public String fieldName;
@@ -27,7 +27,8 @@ public class Field extends Observable implements Runnable{
 		this.lemmings = new ArrayList<Lemming>();
 		this.serversocket = new ServerSocket(0);
 		this.port = this.serversocket.getLocalPort();
-		this.neighbors = new FieldMap();
+		this.fieldName = fieldName;
+		this.knownFields = new FieldMap();
 		new Thread(this).start();
 		}
 	
@@ -38,6 +39,8 @@ public class Field extends Observable implements Runnable{
 				Socket incoming = this.serversocket.accept();
 				Thread thread = new Thread(new InputHandler(this,incoming));
 				thread.start();
+				setChanged();
+				notifyObservers();
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
@@ -62,20 +65,18 @@ public class Field extends Observable implements Runnable{
 	
 	public String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
-		for(int i =0; i < this.lemmings.size()-1; i++){
-			sb.append(this.lemmings.get(i)+", ");
+		for(int i =0; i < this.lemmings.size(); i++){
+			sb.append(this.lemmings.get(i)+ "  ");
 		}
-		sb.append(this.lemmings.get(this.lemmings.size()-1));
 		return sb.toString();
 	}
 	
 	public String getFieldsListing(){
-		StringBuilder sb = new StringBuilder();
-		for(int i =0; i < this.neighbors.map.size()-1; i++){
-			sb.append(this.neighbors.map.get(i)+", ");
-		}
-		sb.append(this.neighbors.map.get(this.neighbors.map.size()-1));
-		return sb.toString();
+		return this.knownFields.toString();
+	}
+	
+	public String toString(){
+		return this.getFieldName();
 	}
 	
 	public String getFieldName(){

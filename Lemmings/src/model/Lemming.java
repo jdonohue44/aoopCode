@@ -14,7 +14,7 @@ public class Lemming implements Serializable, Runnable{
 	public Lemming(Field field){
 		this.field = field;
 		this.alive = true;
-		this.knownFields = field.neighbors;
+		this.knownFields = field.knownFields;
 		this.field.lemmings.add(this);
 		new Thread(this).start();
 	}
@@ -23,17 +23,14 @@ public class Lemming implements Serializable, Runnable{
 	public void run() {
 		while(this.isAlive()){
 			double action = Math.random();
-			if(action <= 0.15){
-				System.out.println("birth");
+			if(action <= 0.10){
 				this.giveBirth();
 			}
-			else if((action > 0.15) && (action <= 0.60)){
-				System.out.println("move");
+			else if((action > 0.10) && (action <= 0.60)){
 				this.changeField();
 
 			}
 			else{
-				System.out.println("sleep");
 				this.sleep();
 			}
 		}
@@ -61,7 +58,7 @@ public class Lemming implements Serializable, Runnable{
 	
 	public void giveBirth(){
 		this.field.lemmings.add(new Lemming(this.field));
-		if (this.field.numberOfLemmings == this.field.capacity){ 
+		if (this.field.numberOfLemmings >= this.field.capacity){ 
 			this.alive = false; // The mother Lemming has comitted suicicde...
 			this.field.lemmings.remove(this);
 		}
@@ -73,21 +70,18 @@ public class Lemming implements Serializable, Runnable{
 	public void changeField(){
 		this.field.numberOfLemmings--;
 		this.field.lemmings.remove(this);
-		int fieldNumber = (int)(Math.random()*this.knownFields.getMap().size());
+		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
 		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
 		fc.Send(this);
 		this.alive = false;
 	}
 	
-//	public String toString(){
-//		return " |||||   \n"
-//				+        "  O O    \n"
-//				+        "  \\_/    \n"
-//				+        " /  \\   \n"
-//				+        "||   ||  \n"
-//				+        "|/  \\|  \n"
-//				+        ")     (  \n"
-//				+        "_______  \n"
-//				+        "|__|__|  \n";
-//	}
+	public String toString(){
+		return 
+				         " O O    \n"
+				+        "  \\_/    \n"
+				+        "  /  \\   \n"
+				+        " ----  \n"
+				+        "|__|__|  \n\n\n";
+	}
 }
