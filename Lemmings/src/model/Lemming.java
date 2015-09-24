@@ -12,13 +12,16 @@ public class Lemming implements Serializable, Runnable{
 	public boolean alive;
 	public static int counter = 0;
 	public int id;
+	public String status;
+	
 	public Lemming(Field field){
 		this.field = field;
 		this.alive = true;
 		this.knownFields = field.knownFields;
-		this.field.lemmings.add(this);
+		this.field.add(this);
 		this.id = counter;
 		counter++;
+		this.status = "Just born";
 		new Thread(this).start();
 	}
 
@@ -27,13 +30,16 @@ public class Lemming implements Serializable, Runnable{
 		while(this.isAlive()){
 			double action = Math.random();
 			if(action <= 0.10){
+				this.status = "Giving birth";
 				this.giveBirth();
 			}
 			else if((action > 0.10) && (action <= 0.60)){
+				this.status = "Moving to another field";
 				this.changeField();
 
 			}
 			else{
+				this.status = "Sleeping";
 				this.sleep();
 			}
 		}
@@ -92,10 +98,10 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public void giveBirth(){
-		this.field.lemmings.add(new Lemming(this.field));
+		new Lemming(this.field);
 		if (this.field.numberOfLemmings >= this.field.capacity){ 
 			this.alive = false; // The mother Lemming has comitted suicicde...
-			this.field.lemmings.remove(this);
+			this.field.remove(this);
 		}
 		else{
 			this.field.numberOfLemmings ++;
@@ -104,7 +110,7 @@ public class Lemming implements Serializable, Runnable{
 	
 	public void changeField(){
 		this.field.numberOfLemmings--;
-		this.field.lemmings.remove(this);
+		this.field.remove(this);
 		
 		/*
 		 * fieldNumber --> Get a random field in the range (2,n), where n is the number of fields in this field map.
@@ -117,7 +123,7 @@ public class Lemming implements Serializable, Runnable{
 	
 	public String toString(){
 		return 	         
-						 "\t\t\t My ID is " + this.getId()
+						 "ID:  " + this.getId() + "\nStatus: " + status
 				+        "\n O O    \n"
 				+        "  \\_/    \n"
 				+        "  /  \\   \n"

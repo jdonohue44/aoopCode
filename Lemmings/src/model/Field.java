@@ -83,6 +83,10 @@ public class Field extends Observable implements Runnable{
 		return this.fieldName;
 	}
 	
+	public synchronized void add(Lemming l){
+		this.lemmings.add(l);
+	}
+	
 	public synchronized void remove(Lemming l){
 		this.lemmings.remove(l);
 	}

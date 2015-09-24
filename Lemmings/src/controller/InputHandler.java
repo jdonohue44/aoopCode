@@ -21,7 +21,7 @@ public class InputHandler implements Runnable{
 	    	  ObjectInputStream in= new ObjectInputStream(this.incoming.getInputStream());
 	    	  Lemming myLemming = ((Lemming)in.readObject());
 		    	  if(this.field.numberOfLemmings<10){
-			    	  this.field.lemmings.add(myLemming);
+			    	  this.field.add(myLemming);
 			    	  myLemming.field = this.field;
 			    	  this.field.numberOfLemmings ++;
 			    	  Thread thread = new Thread(myLemming);
