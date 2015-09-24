@@ -36,7 +36,7 @@ public class FieldMap implements Serializable{
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		for(int i =0; i < this.map.size(); i++){
-			sb.append(this.map.get(i) + "  ");
+			sb.append(this.map.get(i) + "     ");
 		}
 		return sb.toString();
 	}

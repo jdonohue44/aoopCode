@@ -36,6 +36,6 @@ public class SocketConnection implements Serializable {
 	}
 	
 	public String toString(){
-		return this.name;
+		return this.name + "(" + this.address + ", port:" + this.port + ")";
 	}
 }

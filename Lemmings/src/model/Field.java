@@ -59,11 +59,11 @@ public class Field extends Observable implements Runnable{
 		return this.port;
 	}
 	
-	public int getNumberOfLemmings(){
+	public synchronized int getNumberOfLemmings(){
 		return this.numberOfLemmings;
 	}
 	
-	public String getLemmingsListing(){
+	public synchronized String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
 		for(int i =0; i < this.lemmings.size(); i++){
 			sb.append(this.lemmings.get(i)+ "  ");

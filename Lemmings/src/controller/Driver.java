@@ -22,6 +22,10 @@ public class Driver {
 			e.printStackTrace();
 		}
 		
+		
+		// Dont hard code in all of the fields to the fieldmap. Start a Field only knowing its
+		// own field, and have the lemmings update the fieldmap when it moves
+		
 		field1.knownFields.add(new SocketConnection(field1.fieldName, field1.address,field1.port));
 		field1.knownFields.add(new SocketConnection(field2.fieldName, field2.address,field2.port));
 		field1.knownFields.add(new SocketConnection(field3.fieldName, field3.address,field3.port));
@@ -40,7 +44,7 @@ public class Driver {
 		Thread thread3 = new Thread(field3);
 		thread3.start();
 
-		Lemming L = new Lemming(field1);
+		new Lemming(field1);
 		field1.numberOfLemmings++;
 		System.out.println("Serving at port: " + field1.port + "...");
 		System.out.println("Serving at port: " + field2.port + "...");

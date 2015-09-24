@@ -10,12 +10,15 @@ public class Lemming implements Serializable, Runnable{
 	public FieldMap knownFields;
 	public transient Field field;
 	public boolean alive;
-	
+	public static int counter = 0;
+	public int id;
 	public Lemming(Field field){
 		this.field = field;
 		this.alive = true;
 		this.knownFields = field.knownFields;
 		this.field.lemmings.add(this);
+		this.id = counter;
+		counter++;
 		new Thread(this).start();
 	}
 
@@ -48,6 +51,38 @@ public class Lemming implements Serializable, Runnable{
 		return this.alive;
 	}
 	
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+	public static int getCounter() {
+		return counter;
+	}
+
+	public static void setCounter(int counter) {
+		Lemming.counter = counter;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
 	public void sleep(){
 		try {
 			Thread.sleep((long)(Math.random()*3000));
@@ -70,6 +105,10 @@ public class Lemming implements Serializable, Runnable{
 	public void changeField(){
 		this.field.numberOfLemmings--;
 		this.field.lemmings.remove(this);
+		
+		/*
+		 * fieldNumber --> Get a random field in the range (2,n), where n is the number of fields in this field map.
+		 */
 		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
 		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
 		fc.Send(this);
@@ -77,8 +116,9 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public String toString(){
-		return 
-				         " O O    \n"
+		return 	         
+						 "\t\t\t My ID is " + this.getId()
+				+        "\n O O    \n"
 				+        "  \\_/    \n"
 				+        "  /  \\   \n"
 				+        " ----  \n"

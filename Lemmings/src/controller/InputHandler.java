@@ -33,7 +33,6 @@ public class InputHandler implements Runnable{
 	    	  in.close();
 	      	  }
 	      catch (Exception e) {
-	    	  // flag something went wrong.
 	          e.printStackTrace();
 	       }
 	}
