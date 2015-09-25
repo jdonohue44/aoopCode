@@ -28,13 +28,11 @@ public class Driver {
 		
 		field1.knownFields.add(new SocketConnection(field1.fieldName, field1.address,field1.port));
 		field1.knownFields.add(new SocketConnection(field2.fieldName, field2.address,field2.port));
-		field1.knownFields.add(new SocketConnection(field3.fieldName, field3.address,field3.port));
 		Thread thread = new Thread(field1);
 		thread.start();
 		
 		field2.knownFields.add(new SocketConnection(field2.fieldName, field2.address,field2.port));
 		field2.knownFields.add(new SocketConnection(field3.fieldName, field3.address,field3.port));
-		field2.knownFields.add(new SocketConnection(field1.fieldName, field1.address,field1.port));
 		Thread thread2 = new Thread(field2);
 		thread2.start();
 		

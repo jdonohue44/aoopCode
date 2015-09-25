@@ -108,13 +108,13 @@ public class Lemming implements Serializable, Runnable{
 		}
 	}
 	
+	/*
+	 * int fieldNumber --> Get a random field in the range (2,n), where n is the number of fields in this field map.
+	 */
 	public void changeField(){
 		this.field.numberOfLemmings--;
 		this.field.remove(this);
-		
-		/*
-		 * fieldNumber --> Get a random field in the range (2,n), where n is the number of fields in this field map.
-		 */
+		System.out.println(this.id + "moving from " + this.field + " to ");
 		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
 		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
 		fc.Send(this);
