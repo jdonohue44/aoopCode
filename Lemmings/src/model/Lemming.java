@@ -30,13 +30,16 @@ public class Lemming implements Serializable, Runnable{
 		while(this.isAlive()){
 			double action = Math.random();
 			if(action <= 0.10){
+				this.status = "Giving birth";
 				this.giveBirth();
-				this.status = "Just gave birth";
 			}
 			else if((action > 0.10) && (action <= 0.60)){
+				this.status = "Moving to another field";
 				this.changeField();
+
 			}
 			else{
+				this.status = "Sleeping";
 				this.sleep();
 			}
 		}
@@ -111,7 +114,6 @@ public class Lemming implements Serializable, Runnable{
 	public void changeField(){
 		this.field.numberOfLemmings--;
 		this.field.remove(this);
-		System.out.println(this.id + "moving from " + this.field + " to ");
 		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
 		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
 		fc.Send(this);
@@ -121,10 +123,10 @@ public class Lemming implements Serializable, Runnable{
 	public String toString(){
 		return 	         
 						 "ID:  " + this.getId() + "\nStatus: " + status
-/*				+        "\n O O    \n"
+				+        "\n O O    \n"
 				+        "  \\_/    \n"
 				+        "  /  \\   \n"
 				+        " ----  \n"
-				+        "|__|__|  \n\n\n"*/;
+				+        "|__|__|  \n\n\n";
 	}
 }

@@ -35,6 +35,12 @@ public class SocketConnection implements Serializable {
 		this.port = port;
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		SocketConnection other = (SocketConnection)o;
+		return (this.port==other.port);
+	}
+	
 	public String toString(){
 		return this.name + "(" + this.address + ", port:" + this.port + ")";
 	}

@@ -20,15 +20,14 @@ public class InputHandler implements Runnable{
 	      try {
 	    	  ObjectInputStream in= new ObjectInputStream(this.incoming.getInputStream());
 	    	  Lemming myLemming = ((Lemming)in.readObject());
-<<<<<<< HEAD
-	    	  myLemming.field = this.field;
-	    	  System.out.println(myLemming.id + " " + myLemming.field + "...");
-	    	  if(this.field.numberOfLemmings<10){
-	    		  for(int i = 0 ; i < myLemming.field.knownFields.getMap().size(); i++){
-	    			  if(!this.field.knownFields.getMap().contains(myLemming.field.knownFields.getMap().get(i))){
-	    				  this.field.knownFields.getMap().add(myLemming.field.knownFields.getMap().get(i));
+	    	  if(this.field.numberOfLemmings<this.field.getCapacity()){
+	    		  for(int i = 0 ; i < myLemming.knownFields.getMap().size(); i++){
+	    			  if(!(this.field.knownFields.getMap().contains(myLemming.knownFields.getMap().get(i)))){
+	    				  this.field.knownFields.getMap().add(myLemming.knownFields.getMap().get(i));
 	    			  }
 	    		  }
+	    		  myLemming.field = this.field;
+	    		  myLemming.knownFields = this.field.knownFields;
 	    		  this.field.add(myLemming);
 	    		  this.field.numberOfLemmings ++;
 		    	  Thread thread = new Thread(myLemming);
@@ -37,19 +36,6 @@ public class InputHandler implements Runnable{
 	    	  else{
 	    		  myLemming.alive = false;
 	    	  }
-=======
-		    	  if(this.field.numberOfLemmings<10){
-			    	  this.field.add(myLemming);
-			    	  myLemming.field = this.field;
-			    	  this.field.numberOfLemmings ++;
-			    	  Thread thread = new Thread(myLemming);
-					  myLemming.status = "Just moved from another field";
-			    	  thread.start();
-		    	  }
-		    	  else{
-		    		  myLemming.alive = false;
-		    	  }
->>>>>>> origin/master
 	    	  in.close();
 	      	  }
 	      catch (Exception e) {

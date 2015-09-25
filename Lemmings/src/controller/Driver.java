@@ -13,11 +13,15 @@ public class Driver {
 		Field field1 = null;
 		Field field2 = null;
 		Field field3 = null;
+		Field field4 = null;
+		Field field5 = null;
 		
 		try {
 			field1 = new Field("Strawberry Field");
 			field2 = new Field("Moo Moo Meadows");
 			field3 = new Field("Jelly Fish Field");
+			field4 = new Field("Mushroom Gorge");
+			field5 = new Field("Koopa Troopa Beach");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,10 +41,18 @@ public class Driver {
 		thread2.start();
 		
 		field3.knownFields.add(new SocketConnection(field3.fieldName, field3.address,field3.port));
-		field3.knownFields.add(new SocketConnection(field1.fieldName, field1.address,field1.port));
-		field3.knownFields.add(new SocketConnection(field2.fieldName, field2.address,field2.port));
+		field3.knownFields.add(new SocketConnection(field4.fieldName, field4.address,field4.port));
 		Thread thread3 = new Thread(field3);
 		thread3.start();
+		
+		field4.knownFields.add(new SocketConnection(field4.fieldName, field4.address,field4.port));
+		field4.knownFields.add(new SocketConnection(field5.fieldName, field5.address,field5.port));
+		Thread thread4 = new Thread(field4);
+		thread4.start();
+		
+		field5.knownFields.add(new SocketConnection(field5.fieldName, field5.address,field5.port));
+		Thread thread5 = new Thread(field5);
+		thread5.start();
 
 		new Lemming(field1);
 		field1.numberOfLemmings++;
@@ -50,5 +62,7 @@ public class Driver {
 		new FieldView(field1);
 		new FieldView(field2);
 		new FieldView(field3);
+		new FieldView(field4);
+		new FieldView(field5);
 	}
 } 
