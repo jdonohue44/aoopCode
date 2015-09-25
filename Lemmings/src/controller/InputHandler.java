@@ -25,6 +25,7 @@ public class InputHandler implements Runnable{
 			    	  myLemming.field = this.field;
 			    	  this.field.numberOfLemmings ++;
 			    	  Thread thread = new Thread(myLemming);
+					  myLemming.status = "Just moved from another field";
 			    	  thread.start();
 		    	  }
 		    	  else{
