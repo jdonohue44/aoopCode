@@ -20,6 +20,7 @@ public class InputHandler implements Runnable{
 	      try {
 	    	  ObjectInputStream in= new ObjectInputStream(this.incoming.getInputStream());
 	    	  Lemming myLemming = ((Lemming)in.readObject());
+<<<<<<< HEAD
 	    	  myLemming.field = this.field;
 	    	  System.out.println(myLemming.id + " " + myLemming.field + "...");
 	    	  if(this.field.numberOfLemmings<10){
@@ -36,6 +37,19 @@ public class InputHandler implements Runnable{
 	    	  else{
 	    		  myLemming.alive = false;
 	    	  }
+=======
+		    	  if(this.field.numberOfLemmings<10){
+			    	  this.field.add(myLemming);
+			    	  myLemming.field = this.field;
+			    	  this.field.numberOfLemmings ++;
+			    	  Thread thread = new Thread(myLemming);
+					  myLemming.status = "Just moved from another field";
+			    	  thread.start();
+		    	  }
+		    	  else{
+		    		  myLemming.alive = false;
+		    	  }
+>>>>>>> origin/master
 	    	  in.close();
 	      	  }
 	      catch (Exception e) {

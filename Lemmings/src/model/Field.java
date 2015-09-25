@@ -71,7 +71,7 @@ public class Field extends Observable implements Runnable{
 		return sb.toString();
 	}
 	
-	public String getFieldsListing(){
+	public synchronized String getFieldsListing(){
 		return this.knownFields.toString();
 	}
 	
