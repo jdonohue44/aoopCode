@@ -22,7 +22,7 @@ public class Field extends Observable implements Runnable{
 	
 	public Field(String fieldName) throws IOException{
 		this.numberOfLemmings = 0;
-		this.capacity = 10;
+		this.capacity = (int)(((Math.random()) * 5) + 1) * 10;
 		this.lemmings = new ArrayList<Lemming>();
 		this.serversocket = new ServerSocket(0);
 		this.port = this.serversocket.getLocalPort();
@@ -57,18 +57,7 @@ public class Field extends Observable implements Runnable{
 	public int getPort(){
 		return this.port;
 	}
-	
-<<<<<<< Updated upstream
-	public synchronized int getNumberOfLemmings(){
-		return this.numberOfLemmings;
-	}
-	
-	public synchronized void setNumberOfLemmings(int number){
-		this.numberOfLemmings = number;
-	}
-	
-=======
->>>>>>> Stashed changes
+
 	public synchronized String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
 		for(int i =0; i < this.lemmings.size(); i++){
@@ -81,14 +70,7 @@ public class Field extends Observable implements Runnable{
 		return this.knownFields.toString();
 	}
 	
-<<<<<<< Updated upstream
-	public synchronized FieldMap getKnownFields(){
-		return this.knownFields;
-	}
 	
-	public String toString(){
-		return this.getFieldName();
-=======
 	public ServerSocket getServersocket() {
 		return serversocket;
 	}
@@ -135,7 +117,6 @@ public class Field extends Observable implements Runnable{
 
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
->>>>>>> Stashed changes
 	}
 	
 	public String getFieldName(){
