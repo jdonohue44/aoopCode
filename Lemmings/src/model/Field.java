@@ -63,6 +63,10 @@ public class Field extends Observable implements Runnable{
 		return this.numberOfLemmings;
 	}
 	
+	public synchronized void setNumberOfLemmings(int number){
+		this.numberOfLemmings = number;
+	}
+	
 	public synchronized String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
 		for(int i =0; i < this.lemmings.size(); i++){
@@ -73,6 +77,10 @@ public class Field extends Observable implements Runnable{
 	
 	public synchronized String getFieldsListing(){
 		return this.knownFields.toString();
+	}
+	
+	public synchronized FieldMap getKnownFields(){
+		return this.knownFields;
 	}
 	
 	public String toString(){

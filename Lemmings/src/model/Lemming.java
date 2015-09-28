@@ -10,7 +10,7 @@ public class Lemming implements Serializable, Runnable{
 	public FieldMap knownFields;
 	public transient Field field;
 	public boolean alive;
-	public static int counter = 0;
+	public static int counter = 1;
 	public int id;
 	public String status;
 	
@@ -21,7 +21,7 @@ public class Lemming implements Serializable, Runnable{
 		this.field.add(this);
 		this.id = counter;
 		counter++;
-		this.status = "Just born";
+		this.status = "Just arrived";
 		new Thread(this).start();
 	}
 
@@ -29,17 +29,14 @@ public class Lemming implements Serializable, Runnable{
 	public void run() {
 		while(this.isAlive()){
 			double action = Math.random();
-			if(action <= 0.10){
-				this.status = "Giving birth";
+			if(action <= 0.60){
 				this.giveBirth();
+				this.setStatus("Just gave birth");
 			}
-			else if((action > 0.10) && (action <= 0.60)){
-				this.status = "Moving to another field";
+			else if((action > 0.60) && (action <= 0.80)){
 				this.changeField();
-
 			}
 			else{
-				this.status = "Sleeping";
 				this.sleep();
 			}
 		}
@@ -80,11 +77,19 @@ public class Lemming implements Serializable, Runnable{
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
@@ -98,10 +103,10 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public void giveBirth(){
-		new Lemming(this.field);
-		if (this.field.numberOfLemmings >= this.field.capacity){ 
-			this.alive = false; // The mother Lemming has comitted suicicde...
-			this.field.remove(this);
+		new Lemming(this.getField());
+		if (this.getField().getNumberOfLemmings() >= this.getField().getCapacity()){ 
+			this.setAlive(false); // The mother Lemming has comitted suicicde...
+			this.getField().remove(this);
 		}
 		else{
 			this.field.numberOfLemmings ++;
@@ -113,11 +118,11 @@ public class Lemming implements Serializable, Runnable{
 	 */
 	public void changeField(){
 		this.field.numberOfLemmings--;
-		this.field.remove(this);
-		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
-		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
+		this.getField().remove(this);
+		int fieldNumber = (int)((Math.random()*this.getKnownFields().getMap().size())-1)+1;
+		FieldConnector fc = new FieldConnector(this.getKnownFields().get(fieldNumber).getAddress(),this.getKnownFields().get(fieldNumber).getPort());
 		fc.Send(this);
-		this.alive = false;
+		this.setAlive(false);
 	}
 	
 	public String toString(){
