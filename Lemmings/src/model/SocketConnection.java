@@ -4,10 +4,7 @@ import java.io.Serializable;
 
 public class SocketConnection implements Serializable {
 
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3002920225538942283L;
 	public String address;
 	public int port;
