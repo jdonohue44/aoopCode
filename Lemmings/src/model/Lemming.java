@@ -10,10 +10,6 @@ public class Lemming implements Serializable, Runnable{
 	public FieldMap knownFields;
 	public transient Field field;
 	public boolean alive;
-<<<<<<< Updated upstream
-	public static int counter = 1;
-=======
->>>>>>> Stashed changes
 	public int id;
 	public String status;
 	
@@ -25,20 +21,21 @@ public class Lemming implements Serializable, Runnable{
 		this.knownFields = field.knownFields;
 		this.field.add(this);
 		this.id = counter;
-		counter++;
 		this.status = "Just arrived";
 		new Thread(this).start();
+		
+		counter++;
 	}
 
 	@Override
 	public void run() {
 		while(this.isAlive()){
 			double action = Math.random();
-			if(action <= 0.60){
+			if(action <= 0.40){
 				this.giveBirth();
 				this.setStatus("Just gave birth");
 			}
-			else if((action > 0.60) && (action <= 0.80)){
+			else if((action > 0.40) && (action <= .50)){
 				this.changeField();
 			}
 			else{
@@ -94,18 +91,7 @@ public class Lemming implements Serializable, Runnable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-<<<<<<< Updated upstream
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 	
-	public void setAlive(boolean alive) {
-		this.alive = alive;
-	}
-
-=======
->>>>>>> Stashed changes
 	public void sleep(){
 		try {
 			Thread.sleep((long)(Math.random()*3000));
@@ -115,34 +101,20 @@ public class Lemming implements Serializable, Runnable{
 	}
 	
 	public void giveBirth(){
-<<<<<<< Updated upstream
-		new Lemming(this.getField());
 		if (this.getField().getNumberOfLemmings() >= this.getField().getCapacity()){ 
-			this.setAlive(false); // The mother Lemming has comitted suicicde...
+			this.setAlive(false);
 			this.getField().remove(this);
-=======
-		new Lemming(this.field);
-		if (this.field.getNumberOfLemmings() >= this.field.getCapacity()){ 
-			this.setAlive(false); 
-			this.field.remove(this);
->>>>>>> Stashed changes
 		}
+		new Lemming(this.getField());
 	}
 	
 	/*
 	 * int fieldNumber --> Get a random field in the range (2,n), where n is the number of fields in this field map.
 	 */
 	public void changeField(){
-<<<<<<< Updated upstream
-		this.field.numberOfLemmings--;
 		this.getField().remove(this);
 		int fieldNumber = (int)((Math.random()*this.getKnownFields().getMap().size())-1)+1;
 		FieldConnector fc = new FieldConnector(this.getKnownFields().get(fieldNumber).getAddress(),this.getKnownFields().get(fieldNumber).getPort());
-=======
-		this.field.remove(this);
-		int fieldNumber = (int)((Math.random()*this.knownFields.getMap().size())-1)+1;
-		FieldConnector fc = new FieldConnector(this.knownFields.get(fieldNumber).getAddress(),this.knownFields.get(fieldNumber).getPort());
->>>>>>> Stashed changes
 		fc.Send(this);
 		this.setAlive(false);
 	}
