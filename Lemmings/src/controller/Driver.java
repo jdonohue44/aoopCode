@@ -27,8 +27,8 @@ public class Driver {
 		}
 		
 		
-		// Start a Field only knowing its own field and one other field,
-		// so the lemmings update the fieldmaps as they move.
+		// Dont hard code in all of the fields to the fieldmap. Start a Field only knowing its
+		// own field, and have the lemmings update the fieldmap when it moves
 		
 		field1.knownFields.add(new SocketConnection(field1.fieldName, field1.address,field1.port));
 		field1.knownFields.add(new SocketConnection(field2.fieldName, field2.address,field2.port));
@@ -55,6 +55,7 @@ public class Driver {
 		thread5.start();
 
 		new Lemming(field1);
+		field1.numberOfLemmings++;
 		System.out.println("Serving at port: " + field1.port + "...");
 		System.out.println("Serving at port: " + field2.port + "...");
 		System.out.println("Serving at port: " + field3.port + "...");

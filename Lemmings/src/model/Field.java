@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import view.FieldView;
 import controller.FieldConnector;
 import controller.InputHandler;
 
@@ -58,7 +59,6 @@ public class Field extends Observable implements Runnable{
 		return this.port;
 	}
 	
-<<<<<<< Updated upstream
 	public synchronized int getNumberOfLemmings(){
 		return this.numberOfLemmings;
 	}
@@ -67,8 +67,6 @@ public class Field extends Observable implements Runnable{
 		this.numberOfLemmings = number;
 	}
 	
-=======
->>>>>>> Stashed changes
 	public synchronized String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
 		for(int i =0; i < this.lemmings.size(); i++){
@@ -77,65 +75,16 @@ public class Field extends Observable implements Runnable{
 		return sb.toString();
 	}
 	
-	public String getFieldsListing(){
+	public synchronized String getFieldsListing(){
 		return this.knownFields.toString();
 	}
 	
-<<<<<<< Updated upstream
 	public synchronized FieldMap getKnownFields(){
 		return this.knownFields;
 	}
 	
 	public String toString(){
 		return this.getFieldName();
-=======
-	public ServerSocket getServersocket() {
-		return serversocket;
-	}
-
-	public void setServersocket(ServerSocket serversocket) {
-		this.serversocket = serversocket;
-	}
-
-	public synchronized FieldMap getKnownFields() {
-		return knownFields;
-	}
-
-	public synchronized void setKnownFields(FieldMap knownFields) {
-		this.knownFields = knownFields;
-	}
-
-	public FieldConnector getFieldconnector() {
-		return fieldconnector;
-	}
-
-	public void setFieldconnector(FieldConnector fieldconnector) {
-		this.fieldconnector = fieldconnector;
-	}
-
-	public synchronized ArrayList<Lemming> getLemmings() {
-		return lemmings;
-	}
-
-	public synchronized void setLemmings(ArrayList<Lemming> lemmings) {
-		this.lemmings = lemmings;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
->>>>>>> Stashed changes
 	}
 	
 	public String getFieldName(){
@@ -144,24 +93,10 @@ public class Field extends Observable implements Runnable{
 	
 	public synchronized void add(Lemming l){
 		this.lemmings.add(l);
-		this.numberOfLemmings ++;
 	}
 	
 	public synchronized void remove(Lemming l){
 		this.lemmings.remove(l);
-		this.numberOfLemmings --;
-	}
-	
-	public synchronized void setNumberOfLemmings(int number){
-		this.numberOfLemmings = number;
-	}
-	
-	public synchronized int getNumberOfLemmings(){
-		return this.numberOfLemmings;
-	}
-	
-	public String toString(){
-		return this.getFieldName();
 	}
 
 }
