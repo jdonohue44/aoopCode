@@ -35,7 +35,7 @@ public class Field extends Observable implements Runnable{
 	public void run(){
 		while(true){
 			try {
-				Socket incoming = this.serversocket.accept();
+				Socket incoming = this.getServersocket().accept();
 				Thread thread = new Thread(new InputHandler(this,incoming));
 				thread.start();
 				setChanged();
@@ -51,7 +51,7 @@ public class Field extends Observable implements Runnable{
 	}
 	
 	public String getAddress(){
-		return this.serversocket.getLocalSocketAddress().toString();
+		return this.getServersocket().getLocalSocketAddress().toString();
 	}
 	
 	public int getPort(){
@@ -60,14 +60,14 @@ public class Field extends Observable implements Runnable{
 
 	public synchronized String getLemmingsListing(){
 		StringBuilder sb = new StringBuilder();
-		for(int i =0; i < this.lemmings.size(); i++){
-			sb.append(this.lemmings.get(i)+ "  ");
+		for(int i =0; i < this.getLemmings().size(); i++){
+			sb.append(this.getLemmings().get(i)+ "  ");
 		}
 		return sb.toString();
 	}
 	
 	public String getFieldsListing(){
-		return this.knownFields.toString();
+		return this.getKnownFields().toString();
 	}
 	
 	

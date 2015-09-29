@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class SocketConnection implements Serializable {
 
-
 	private static final long serialVersionUID = -3002920225538942283L;
 	public String address;
 	public int port;
@@ -32,6 +31,14 @@ public class SocketConnection implements Serializable {
 		this.port = port;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	@Override
 	public boolean equals(Object o){
 		SocketConnection other = (SocketConnection)o;
@@ -39,6 +46,6 @@ public class SocketConnection implements Serializable {
 	}
 	
 	public String toString(){
-		return this.name + "(" + this.address + ", port:" + this.port + ")";
+		return this.getName() + "(" + this.address + ", port:" + this.port + ")";
 	}
 }

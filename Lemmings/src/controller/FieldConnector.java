@@ -20,7 +20,7 @@ public class FieldConnector{
 	public void Send(Lemming L){
 		try {
 			Socket client  = new Socket();
-			client.connect(new InetSocketAddress(this.address, this.port));
+			client.connect(new InetSocketAddress(this.getAddress(), this.getPort()));
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 			out.writeObject(L);
 			client.close();

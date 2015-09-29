@@ -36,8 +36,8 @@ public class FieldMap implements Serializable{
 	@Override
 	public boolean equals(Object o){
 		FieldMap other = (FieldMap)o;
-		for(int i = 0; i <this.map.size(); i++){
-			if(!(this.map.get(i).equals(other.map.get(i)))){
+		for(int i = 0; i <this.getMap().size(); i++){
+			if(!(this.getMap().get(i).equals(other.getMap().get(i)))){
 				return false;
 			}
 		}
@@ -45,8 +45,8 @@ public class FieldMap implements Serializable{
 	}
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		for(int i =0; i < this.map.size(); i++){
-			sb.append(this.map.get(i) + "     ");
+		for(int i =0; i < this.getMap().size(); i++){
+			sb.append(this.getMap().get(i) + "     ");
 		}
 		return sb.toString();
 	}
