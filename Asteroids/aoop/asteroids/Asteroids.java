@@ -3,7 +3,6 @@ package aoop.asteroids;
 import aoop.asteroids.gui.AsteroidsFrame;
 import aoop.asteroids.gui.Player;
 import aoop.asteroids.model.Game;
-import java.awt.Point;
 
 /**
  *	Main class of the Asteroids program.
@@ -23,9 +22,9 @@ public class Asteroids
 		Player player = new Player ();
 		Game game = new Game ();
 		game.linkController (player);
-		AsteroidsFrame frame = new AsteroidsFrame (game, player);
-		Thread t = new Thread (game);
-		t.start ();
+	    new AsteroidsFrame (game, player);
+		Thread t = new Thread(game);
+		t.start();
 	}
 
 	/** 

@@ -1,14 +1,16 @@
 package aoop.asteroids.gui;
 
-import aoop.asteroids.Asteroids;
-import aoop.asteroids.model.Game;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+
+import aoop.asteroids.model.Game;
 
 /**
  *	AsteroidsFrame is a class that extends JFrame and thus provides a game 
@@ -27,42 +29,82 @@ public class AsteroidsFrame extends JFrame
 
 	/** New game action. */
 	private AbstractAction newGameAction;
+	
+	/** New main menu action. */
+	private AbstractAction mainMenuAction;
 
 	/** The game model. */
-	private Game game;
+	 Game game;
 
 	/** The panel in which the game is painted. */
-	private AsteroidsPanel ap;
-
+	 AsteroidsPanel ap;
+	 MenuPanel mp;
+	 JPanel cardPanel;
+	 CardLayout cardLayout = new CardLayout();
 	/** 
 	 *	Constructs a new Frame, requires a game model.
 	 *
 	 *	@param game game model.
 	 *	@param controller key listener that catches the users actions.
 	 */
+
 	public AsteroidsFrame (Game game, Player controller)
 	{
 		this.game = game;
-
 		this.initActions ();
-
 		this.setTitle ("Asteroids");
 		this.setSize (800, 800);
 		this.addKeyListener (controller);
-
 		this.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
+		// Menu Bar setup
 		JMenuBar mb = new JMenuBar ();
 		JMenu m = new JMenu ("Game");
-		mb.add (m);
+		mb.add(m);
+//		mb.setBackground(new Color(0, 80, 255));
+		mb.setBackground(Color.gray);
+		m.setBackground(Color.gray);
+		mb.setBorderPainted(true);
 		m.add (this.quitAction);
 		m.add (this.newGameAction);
+		m.add (this.mainMenuAction);
 		this.setJMenuBar (mb);
+		
+		// CardLayout setup for multiple JPanels
+		cardPanel = new JPanel(cardLayout);
+		ap = new AsteroidsPanel(this.game);
+		mp = new MenuPanel(game,cardPanel,cardLayout);
+		cardPanel.add(ap, "ap");
+		cardPanel.add(mp,"mp");
+		cardLayout.show(cardPanel,"mp");
+		
+		this.add(cardPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+	}
+	
+	public Game getGame() {
+		return game;
+	}
 
-		this.ap = new AsteroidsPanel (this.game);
-		this.add (this.ap);
-		this.setVisible (true);
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
+	public AsteroidsPanel getAp() {
+		return ap;
+	}
+
+	public void setAp(AsteroidsPanel ap) {
+		this.ap = ap;
+	}
+
+	public MenuPanel getMp() {
+		return mp;
+	}
+
+	public void setMp(MenuPanel mp) {
+		this.mp = mp;
 	}
 
 	/** Quits the old game and starts a new one. */
@@ -104,10 +146,24 @@ public class AsteroidsFrame extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				cardLayout.show(cardPanel,"ap");
 				AsteroidsFrame.this.newGame ();
+			}
+		};
+		
+		// Creates a new model
+		this.mainMenuAction = new AbstractAction ("Main Menu") 
+		{
+			public static final long serialVersionUID = 4L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				AsteroidsFrame.this.game.abort();
+				cardLayout.show(cardPanel,"mp");
 			}
 		};
 
 	}
-	
 }
+

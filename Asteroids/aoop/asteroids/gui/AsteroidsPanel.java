@@ -1,19 +1,20 @@
 package aoop.asteroids.gui;
 
-import aoop.asteroids.model.Asteroid;
-import aoop.asteroids.model.Bullet;
-import aoop.asteroids.model.Game;
-import aoop.asteroids.model.Spaceship;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
-import java.lang.Object;
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JPanel;
+
+import aoop.asteroids.model.Asteroid;
+import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.Game;
+import aoop.asteroids.model.Spaceship;
 
 /**
  *	AsteroidsPanel extends JPanel and thus provides the actual graphical 
