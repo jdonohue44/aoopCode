@@ -44,25 +44,37 @@ public class MenuPanel extends JPanel {
         			exc.printStackTrace ();
         		}
 	    		game.initGameData ();
-	    		cardLayout.show(cardPanel,"ap");
+	    		cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         hostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-               System.out.println("host");
+               NicknamePanel nicknamePanel = new NicknamePanel();          
             }
         }); 
         joinButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
-            {
-               System.out.println("join");
+            {               
+               try{
+            	   NetworkInfoPanel networkInfoPanel = new NetworkInfoPanel();
+                   NicknamePanel nicknamePanel = new NicknamePanel();
+               }
+               catch(UnsupportedOperationException exc){
+            	   System.out.println(exc.getStackTrace());
+               }
             }
         }); 
         spectateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-               System.out.println("spectate");
+            	try{
+	               NetworkInfoPanel networkInfoPanel = new NetworkInfoPanel();  
+	               NicknamePanel nicknamePanel = new NicknamePanel();
+            	}
+            	catch(UnsupportedOperationException exc){
+            		System.out.println(exc.getStackTrace());
+            	}
             }
         }); 
 	}

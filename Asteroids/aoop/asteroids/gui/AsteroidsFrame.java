@@ -37,8 +37,12 @@ public class AsteroidsFrame extends JFrame
 	 Game game;
 
 	/** The panel in which the game is painted. */
-	 AsteroidsPanel ap;
-	 MenuPanel mp;
+	 AsteroidsPanel asteroidsPanel;
+	 MenuPanel menuPanel;
+	 NetworkInfoPanel networkInfoPanel;
+	 NicknamePanel nicknamePanel;
+	 
+	 
 	 JPanel cardPanel;
 	 CardLayout cardLayout = new CardLayout();
 	/** 
@@ -61,7 +65,6 @@ public class AsteroidsFrame extends JFrame
 		JMenuBar mb = new JMenuBar ();
 		JMenu m = new JMenu ("Game");
 		mb.add(m);
-//		mb.setBackground(new Color(0, 80, 255));
 		mb.setBackground(Color.gray);
 		m.setBackground(Color.gray);
 		mb.setBorderPainted(true);
@@ -72,11 +75,13 @@ public class AsteroidsFrame extends JFrame
 		
 		// CardLayout setup for multiple JPanels
 		cardPanel = new JPanel(cardLayout);
-		ap = new AsteroidsPanel(this.game);
-		mp = new MenuPanel(game,cardPanel,cardLayout);
-		cardPanel.add(ap, "ap");
-		cardPanel.add(mp,"mp");
-		cardLayout.show(cardPanel,"mp");
+		asteroidsPanel = new AsteroidsPanel(this.game);
+		menuPanel = new MenuPanel(game,cardPanel,cardLayout);
+		
+		cardPanel.add(asteroidsPanel, "asteroidsPanel");
+		cardPanel.add(menuPanel,"menuPanel");
+		
+		cardLayout.show(cardPanel,"menuPanel");
 		
 		this.add(cardPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,19 +97,19 @@ public class AsteroidsFrame extends JFrame
 	}
 
 	public AsteroidsPanel getAp() {
-		return ap;
+		return asteroidsPanel;
 	}
 
 	public void setAp(AsteroidsPanel ap) {
-		this.ap = ap;
+		this.asteroidsPanel = ap;
 	}
 
 	public MenuPanel getMp() {
-		return mp;
+		return menuPanel;
 	}
 
 	public void setMp(MenuPanel mp) {
-		this.mp = mp;
+		this.menuPanel = mp;
 	}
 
 	/** Quits the old game and starts a new one. */
@@ -146,7 +151,7 @@ public class AsteroidsFrame extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				cardLayout.show(cardPanel,"ap");
+				cardLayout.show(cardPanel,"asteroidsPanel");
 				AsteroidsFrame.this.newGame ();
 			}
 		};
@@ -160,7 +165,7 @@ public class AsteroidsFrame extends JFrame
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				AsteroidsFrame.this.game.abort();
-				cardLayout.show(cardPanel,"mp");
+				cardLayout.show(cardPanel,"menuPanel");
 			}
 		};
 
