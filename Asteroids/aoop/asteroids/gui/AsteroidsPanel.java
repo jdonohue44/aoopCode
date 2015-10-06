@@ -36,9 +36,9 @@ public class AsteroidsPanel extends JPanel
 	 *
 	 *	@param game game model.
 	 */
-	public AsteroidsPanel (Game game)
-	{
-		this.game = game;
+
+	public void startGame(){
+		this.game = new Game();
 		this.game.addObserver (new Observer ()
 		{
 			@Override
@@ -49,6 +49,13 @@ public class AsteroidsPanel extends JPanel
 		});
 	}
 	
+	public Game getGame(){
+		return this.game;
+	}
+	
+	public void setGame(Game g){
+		this.game = g;
+	}
 	/**
 	 *	Method for refreshing the GUI.
 	 *

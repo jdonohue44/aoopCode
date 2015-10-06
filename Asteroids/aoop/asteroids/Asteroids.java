@@ -1,6 +1,9 @@
 package aoop.asteroids;
 
+import java.net.SocketException;
+
 import aoop.asteroids.gui.AsteroidsFrame;
+import aoop.asteroids.gui.MenuPanel;
 import aoop.asteroids.gui.Player;
 import aoop.asteroids.model.Game;
 
@@ -19,12 +22,78 @@ public class Asteroids
 	/** Constructs a new instance of the program. */
 	public Asteroids ()
 	{
-		Player player = new Player ();
-		Game game = new Game ();
-		game.linkController (player);
-	    new AsteroidsFrame (game, player);
-		Thread t = new Thread(game);
-		t.start();
+		AsteroidsFrame frame = new AsteroidsFrame();
+		MenuPanel menu = frame.getMenuPanel();
+		
+		while(true){
+			int gameId = menu.getGameId();
+			
+			if(gameId == 0){ // single player game
+				frame.getAsteroidsPanel().startGame();
+				Game game = frame.getAsteroidsPanel().getGame();
+				Player player = new Player ();
+				frame.addKeyListener(player);
+				game.linkController (player);
+				Thread t = new Thread(game);
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(gameId == 1){ // host
+				Server server;
+				server = new Server();
+				Thread serve = new Thread(server);
+				serve.start();
+				
+				frame.getAsteroidsPanel().startGame();
+				Game game = frame.getAsteroidsPanel().getGame();
+				Player player = new Player ();
+				frame.addKeyListener(player);
+				game.linkController (player);
+				Thread t = new Thread(game);
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(gameId == 2){ // join
+				frame.getAsteroidsPanel().startGame();
+				Game game = frame.getAsteroidsPanel().getGame();
+				Player player = new Player ();
+				frame.addKeyListener(player);
+				game.linkController (player);
+				Thread t = new Thread(game);
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else { // spectate
+				Spectator spectator = new Spectator("localhost", 4876);
+				Thread client = new Thread(spectator);
+				client.start();
+				
+				frame.getAsteroidsPanel().startGame();
+				Game game = frame.getAsteroidsPanel().getGame();
+				Player player = new Player ();
+				frame.addKeyListener(player);
+				game.linkController (player);
+				Thread t = new Thread(game);
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/** 

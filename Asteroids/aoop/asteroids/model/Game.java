@@ -296,9 +296,9 @@ public class Game extends Observable implements Runnable
 	public void run ()
 	{ // Update -> sleep -> update -> sleep -> etc...
 		long executionTime, sleepTime;
-		while (true)
+		while (!this.aborted)
 		{
-			if (!this.gameOver () && !this.aborted)
+			if (!this.gameOver ())
 			{
 				executionTime = System.currentTimeMillis ();
 				this.update ();

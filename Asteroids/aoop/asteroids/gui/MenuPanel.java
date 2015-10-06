@@ -6,20 +6,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.SpectateGame;
 
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel {
 	
-	public MenuPanel(Game game, JPanel cardPanel, CardLayout cardLayout){
+	int gameId;
+	
+	public MenuPanel(JPanel cardPanel, CardLayout cardLayout){
 		setBackground(new Color(131, 154, 215));
 		
 		JButton singleplayerButton = new JButton("Singleplayer");
 		JButton hostButton = new JButton("Host a Multiplayer Game");
 		JButton joinButton = new JButton("Join a Multiplayer Game");
-		JButton spectateButton = new JButton("Spectate a Multiplayer Game");
+		JButton spectateButton = new JButton("Spectate a Game");
 		
 		singleplayerButton.setFocusable(false);
 		hostButton.setFocusable(false);
@@ -34,34 +38,32 @@ public class MenuPanel extends JPanel {
         singleplayerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-            	try
-        		{
-        			Thread.sleep(50);
-        		}
-        		catch (InterruptedException exc)
-        		{
-        			System.err.println ("Could not sleep before initialing a new game.");
-        			exc.printStackTrace ();
-        		}
-	    		game.initGameData ();
+            	MenuPanel.this.gameId = 0;
 	    		cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         hostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-               NicknamePanel nicknamePanel = new NicknamePanel();          
+            	try{
+            		MenuPanel.this.gameId = 1;
+            		new NicknamePanel();  
+            	}
+            	catch(UnsupportedOperationException exc){
+             	   JOptionPane.showMessageDialog(MenuPanel.this, exc.toString(),"Error", JOptionPane.ERROR_MESSAGE);
+            	}
             }
         }); 
         joinButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {               
                try{
-            	   NetworkInfoPanel networkInfoPanel = new NetworkInfoPanel();
-                   NicknamePanel nicknamePanel = new NicknamePanel();
+            	   MenuPanel.this.gameId = 2;
+            	   new NetworkInfoPanel();
+                   new NicknamePanel();
                }
                catch(UnsupportedOperationException exc){
-            	   System.out.println(exc.getStackTrace());
+            	   JOptionPane.showMessageDialog(MenuPanel.this, exc.toString(),"Error", JOptionPane.ERROR_MESSAGE);
                }
             }
         }); 
@@ -69,13 +71,22 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try{
-	               NetworkInfoPanel networkInfoPanel = new NetworkInfoPanel();  
-	               NicknamePanel nicknamePanel = new NicknamePanel();
+            	   MenuPanel.this.gameId = 3;
+	               new NetworkInfoPanel();  
+	               new NicknamePanel();
             	}
             	catch(UnsupportedOperationException exc){
-            		System.out.println(exc.getStackTrace());
+             	   JOptionPane.showMessageDialog(MenuPanel.this, exc.toString(),"Error", JOptionPane.ERROR_MESSAGE);
             	}
             }
         }); 
+	}
+
+	public int getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
 	}
 }
