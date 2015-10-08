@@ -26,9 +26,6 @@ public class AsteroidsFrame extends JFrame
 
 	/** Quit action. */
 	private AbstractAction quitAction;
-
-	/** New game action. */
-	private AbstractAction newGameAction;
 	
 	/** New main menu action. */
 	private AbstractAction mainMenuAction;
@@ -106,22 +103,6 @@ public class AsteroidsFrame extends JFrame
 
 	public void setMenuPanel(MenuPanel menuPanel) {
 		this.menuPanel = menuPanel;
-	}
-
-	/** Quits the old game and starts a new one. */
-	private void newGame ()
-	{
-		this.game.abort ();
-		try
-		{
-			Thread.sleep(50);
-		}
-		catch (InterruptedException e)
-		{
-			System.err.println ("Could not sleep before initialing a new game.");
-			e.printStackTrace ();
-		}
-		this.game.initGameData ();
 	}
 
 	/** Initializes the quit- and new game action. */

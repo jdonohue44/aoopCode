@@ -1,8 +1,9 @@
 package aoop.asteroids.gui;
 
-import aoop.asteroids.model.Spaceship;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import aoop.asteroids.model.Spaceship;
 
 /**
  *	Player is the controller class that listens to the users input (key events) 

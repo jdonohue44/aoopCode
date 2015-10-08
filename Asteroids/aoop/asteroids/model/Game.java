@@ -1,12 +1,12 @@
 package aoop.asteroids.model;
 
-import aoop.asteroids.gui.Player;
 import java.awt.Point;
-import java.lang.Runnable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Random;
+
+import aoop.asteroids.gui.Player;
 
 /**
  *	The game class is the backbone of all simulations of the asteroid game. It 

@@ -1,11 +1,13 @@
 package aoop.asteroids;
 
-import java.net.SocketException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import aoop.asteroids.gui.AsteroidsFrame;
 import aoop.asteroids.gui.MenuPanel;
 import aoop.asteroids.gui.Player;
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.SpectateGame;
 
 /**
  *	Main class of the Asteroids program.
@@ -31,9 +33,15 @@ public class Asteroids
 			if(gameId == 0){ // single player game
 				frame.getAsteroidsPanel().startGame();
 				Game game = frame.getAsteroidsPanel().getGame();
+				
+				Server server = new Server(game, 4720);
+				Thread gameServer = new Thread(server);
+				gameServer.start();
+				
 				Player player = new Player ();
 				frame.addKeyListener(player);
 				game.linkController (player);
+				
 				Thread t = new Thread(game);
 				t.start();
 				try {
@@ -42,12 +50,7 @@ public class Asteroids
 					e.printStackTrace();
 				}
 			}
-			else if(gameId == 1){ // host
-				Server server;
-				server = new Server();
-				Thread serve = new Thread(server);
-				serve.start();
-				
+			else if(gameId == 1){ // host multiplayer
 				frame.getAsteroidsPanel().startGame();
 				Game game = frame.getAsteroidsPanel().getGame();
 				Player player = new Player ();
@@ -76,15 +79,19 @@ public class Asteroids
 				}
 			}
 			else { // spectate
-				Spectator spectator = new Spectator("localhost", 4876);
+				Spectator spectator = null;
+				try {
+					spectator = new Spectator(InetAddress.getByName("localhost"),4876);
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+				}
+				
 				Thread client = new Thread(spectator);
 				client.start();
 				
+				// paint the graphics for a singleplayer game
 				frame.getAsteroidsPanel().startGame();
-				Game game = frame.getAsteroidsPanel().getGame();
-				Player player = new Player ();
-				frame.addKeyListener(player);
-				game.linkController (player);
+				Game game = new SpectateGame();
 				Thread t = new Thread(game);
 				t.start();
 				try {
@@ -103,7 +110,7 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-		new Asteroids ();
+//		new Asteroids ();
 	}
 	
 }

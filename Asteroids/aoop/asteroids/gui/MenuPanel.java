@@ -9,9 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import aoop.asteroids.model.Game;
-import aoop.asteroids.model.SpectateGame;
-
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel {
 	

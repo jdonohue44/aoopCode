@@ -15,42 +15,55 @@ public class Server extends Thread{
 	
 	DatagramSocket serverSocket;
 	int port;
+	InetAddress address;
 	
 	byte[] receiveData = new byte[1024];  
 	byte[] sendData = new byte[1024];
 	Game game;
 	
-	public Server(){
+	public Server(Game game, int port){
+		this.game = game;
 		this.spectators = new ArrayList<Spectator>();
 		try {
-			this.serverSocket = new DatagramSocket();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+			this.serverSocket = new DatagramSocket(port);
+			this.address = InetAddress.getByName("localhost");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.port = serverSocket.getLocalPort();
+		this.port = port;
 	}
 	
 	public void run(){
 		while(true){
 			try{
-		        byte[] buf = new byte[256];
 		        // receive request
+		        byte[] buf = new byte[256];
 		        DatagramPacket packet = new DatagramPacket(buf, buf.length);
 		        serverSocket.receive(packet);
+		        String received = new String(packet.getData(), 0, packet.getLength());
+		        System.out.println("Recieved from Client: " + received);
 		        
-		        // Get Game data and load it into the buffer
-		   
+		        int portnumber = packet.getPort();
+		        InetAddress address = packet.getAddress();
 		        
-		        // send the response to the client at "address" and "port"
-                InetAddress address = packet.getAddress();
-                int port = packet.getPort();
-                packet = new DatagramPacket(buf, buf.length, address, port);
-                serverSocket.send(packet);
+		        // add this spectator to list if it is new.
+		        ArrayList<Integer> spectatorPorts = new ArrayList<Integer>();
+		        if(!(spectatorPorts.contains(portnumber))){
+		        	this.spectators.add(new Spectator(address, portnumber));
+		        }
+		        
+		        // receive game data and update servers game data
+		        
+		        
+		        // send spectator most recent Game data
+		        String s = "Here is some game data";
+		        buf = s.getBytes();
+				packet = new DatagramPacket(buf, buf.length, address, portnumber);
+			    serverSocket.send(packet);
 			}
 			catch(IOException e){
+				System.out.println(e);
 			}
-			serverSocket.close();
 		}
 	}
 
