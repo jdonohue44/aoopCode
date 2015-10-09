@@ -30,8 +30,12 @@ public class NetworkInfoPanel extends JPanel {
 			this.hostname = host.getText();
 			this.portname = Integer.parseInt(port.getText());
 		}
+		else if (result == JOptionPane.CANCEL_OPTION) {
+			throw new UnsupportedOperationException();
+		}
 		else{
-			throw new UnsupportedOperationException("You did not enter a value for the host name or port number.");
+			JOptionPane.showMessageDialog(this, "You did not enter a value for the host name or port number.", "Error", JOptionPane.ERROR_MESSAGE);
+			throw new UnsupportedOperationException();
 		}
 	}
 
