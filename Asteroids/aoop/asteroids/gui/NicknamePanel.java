@@ -9,11 +9,15 @@ public class NicknamePanel extends JPanel {
 	String nickname;
 	public NicknamePanel(){
 		String input = JOptionPane.showInputDialog(this,"Nickname:");
-		if(!input.isEmpty()){
+		if (input == null) {
+			throw new UnsupportedOperationException();
+		}
+		else if(!input.isEmpty()){
 			this.nickname = input;
 		}
 		else{
-			throw new UnsupportedOperationException("You did not enter a nickname.");
+			JOptionPane.showMessageDialog(this, "You did not enter a nickname", "Error", JOptionPane.ERROR_MESSAGE);
+			throw new UnsupportedOperationException();
 		}
 	}
 	public String getNickname() {
