@@ -11,8 +11,8 @@ public class SpectateGame extends Game implements Runnable {
 	
 	public SpectateGame() {
 			try {
-				this.spectator = new Spectator(InetAddress.getByName("localhost"), 4445);
-			} catch (UnknownHostException e) {
+				this.spectator = new Spectator(4355);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 	}

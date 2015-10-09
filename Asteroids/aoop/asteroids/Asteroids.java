@@ -34,7 +34,7 @@ public class Asteroids
 				frame.getAsteroidsPanel().startGame();
 				Game game = frame.getAsteroidsPanel().getGame();
 				
-				Server server = new Server(game, 4720);
+				Server server = new Server(game,"localhost", 4720);
 				Thread gameServer = new Thread(server);
 				gameServer.start();
 				
@@ -50,7 +50,7 @@ public class Asteroids
 					e.printStackTrace();
 				}
 			}
-			else if(gameId == 1){ // host multiplayer
+			else if(gameId == 1){ // host 
 				frame.getAsteroidsPanel().startGame();
 				Game game = frame.getAsteroidsPanel().getGame();
 				Player player = new Player ();
@@ -81,8 +81,8 @@ public class Asteroids
 			else if (gameId == 3){ // spectate
 				Spectator spectator = null;
 				try {
-					spectator = new Spectator(InetAddress.getByName("localhost"),4876);
-				} catch (UnknownHostException e1) {
+					spectator = new Spectator("localhost",4720);
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				
@@ -110,7 +110,16 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-		new Asteroids ();
+//		new Asteroids ();
+		Game game = new Game();
+		Thread t = new Thread(game);
+		t.start();
+		Spectator spec = new Spectator(4955);
+		Thread clientThread = new Thread(spec);
+		clientThread.start();
+		Server server = new Server(game, "localhost",4955);
+		Thread serverThread = new Thread(server);
+		serverThread.start();
 	}
 	
 }
