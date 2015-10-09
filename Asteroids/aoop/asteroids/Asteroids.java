@@ -78,7 +78,7 @@ public class Asteroids
 					e.printStackTrace();
 				}
 			}
-			else if (gameId == 3){ // spectate
+			else { // spectate
 				Spectator spectator = null;
 				try {
 					spectator = new Spectator(InetAddress.getByName("localhost"),4876);
@@ -110,7 +110,7 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-		new Asteroids ();
+//		new Asteroids ();
 	}
 	
 }
