@@ -23,17 +23,19 @@ public class Spectator extends Thread {
 	InetAddress address;
 	DatagramSocket clientSocket = null;
 	DatagramPacket packet;
+	ArrayList<Double> list; 
 	
 	DataOutputStream dataOut;
 	ByteArrayOutputStream bytesOut;
 	ByteArrayInputStream bytesIn;
 	DataInputStream dataIn;
 	
-	byte[] byteData = new byte[4096];
+	byte[] byteData;
 	Game game;
 	
 	public Spectator(int serverPort) {
 		try {
+			list = new ArrayList<Double>();
 			clientSocket = new DatagramSocket();
 			this.address = InetAddress.getByName("localhost");
 		} catch (Exception e) {
@@ -43,30 +45,36 @@ public class Spectator extends Thread {
 		this.serverPort = serverPort;
 	}
 	
-	public Spectator(String address, int port){
+	public Spectator(String host, int serverPort) {
 		try {
-			this.address = InetAddress.getByName(address);
-		} catch (UnknownHostException e) {
+			list = new ArrayList<Double>();
+			byteData = new byte[256];
+			clientSocket = new DatagramSocket();
+			this.address = InetAddress.getByName("localhost");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.clientPort = port;
+		this.clientPort = clientSocket.getLocalPort();
+		this.serverPort = serverPort;
 	}
 	
 	public void run(){
 		while(true){
 		try {
 			// request Game data
-			byteData = "Connection Request from the Client".getBytes();
-			DatagramPacket packet = new DatagramPacket(byteData, byteData.length, this.address, this.serverPort);
+	        // receive request
+			byteData = new byte[256];
+			byteData = "hi".getBytes();
+			packet = new DatagramPacket(byteData, byteData.length, this.address, this.serverPort);
 			clientSocket.send(packet);
 			
-	        // receive request
-			byteData = new byte[264];
-	        packet = new DatagramPacket(byteData, byteData.length);
-	        clientSocket.receive(packet);
+			byteData = new byte[256];
+			packet = new DatagramPacket(byteData, byteData.length);
+			clientSocket.receive(packet);
 	        byteData = packet.getData();
 	        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
 			DataInputStream dataIn = new DataInputStream(bytesIn);
+			
 			
 	        double[] asteroidPositions  = new double[20];
 	        double[] asteroidVelocities = new double[20];
@@ -77,21 +85,21 @@ public class Spectator extends Thread {
 	        double[] shipVelocities = new double[2];
 	        int score = 0;
 	        boolean EOF = false;
-	        ArrayList<Double> list = new ArrayList<Double>();
+//	        list.clear();	        
 	        
-	        while(!EOF){
-	        	try{
-	        		list.add(dataIn.readDouble());
-	        	}catch(EOFException e){
-	        		EOF = true;
-	        	}
-	        }
+//	        while(!EOF){
+//	        	try{
+//	        		list.add(dataIn.readDouble());
+//	        	}catch(EOFException e){
+//	        		EOF = true;
+//	        	}
+//	        }
 	        
-	        for(Double d : list){
-	        	System.out.println(d);
-	        }
+
+	        	System.out.println(dataIn.readDouble());
+	        
 		}catch(Exception e){
-			System.out.println(e);
+			System.out.println(e + "SPECTATOR");
 	        clientSocket.close();
 
 		}

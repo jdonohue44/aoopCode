@@ -9,6 +9,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 
 import aoop.asteroids.model.Asteroid;
@@ -20,12 +21,13 @@ public class Server extends Thread{
 
 	private HashSet<Spectator> spectators;
 	
-	DatagramSocket serverSocket;
+	DatagramSocket serverSocket = null;
 	int port;
 	String host;
 	InetAddress address;
 	
-	byte[] byteData = new byte[4056];  
+	byte[] byteData;
+	DatagramPacket packet; 
 	ByteArrayOutputStream bytesOut;
 	DataOutputStream dataOut;
 	ByteArrayInputStream byteIn;
@@ -50,19 +52,21 @@ public class Server extends Thread{
 		while(true && go){
 			try{
 		        // receive request
-		        DatagramPacket packet = new DatagramPacket(byteData, byteData.length);
+				byteData = new byte[256]; 
+				packet = new DatagramPacket(byteData, byteData.length);
 		        serverSocket.receive(packet);
 		        String received = new String(packet.getData(), 0, packet.getLength());
 		        System.out.println(received);
 		        
 		        int clientPort = packet.getPort();
 		        InetAddress clientAddress = packet.getAddress();
-        
-		        this.spectators.add(new Spectator(clientAddress.getHostAddress(), clientPort));
-     
+		        
+//        
+//		        this.spectators.add(new Spectator(clientAddress.getHostAddress(), clientPort));
+//     
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				DataOutputStream dataOut = new DataOutputStream(bytesOut);
-				
+		
 		        double[] asteroidPositions  = new double[20];
 		        double[] asteroidVelocities = new double[20];
 		        int[]    asteroidRadii      = new int[10];
@@ -70,7 +74,9 @@ public class Server extends Thread{
 		        double[] bulletVelocities = new double[20];
 		        double[] shipPositions = new double[2];
 		        double[] shipVelocities = new double[2];
-		        int score = this.game.getPlayer().getScore();
+		        double score = this.game.getPlayer().getScore();
+		        double numberOfAsteroids = this.game.getAsteroids().size();
+		        double numberOfBullets = this.game.getBullets().size();
 		        
 		        // Asteroid Positions
 		        int counter = 0;
@@ -110,47 +116,61 @@ public class Server extends Thread{
 		        }
 		        
 		        // Ship Positions
+
 		          shipPositions[0] = this.game.getPlayer().getLocation().getX();
 		          shipPositions[1] = this.game.getPlayer().getLocation().getY();
 		        
 		        // Ship Velocities
 		          shipVelocities[0] = this.game.getPlayer().getVelocityX();
 		          shipVelocities[1] = this.game.getPlayer().getVelocityY();
+		          
+		          
+		        // Write Asteroid Data
+		        dataOut.writeDouble(numberOfAsteroids);
+//
+//		        for(int i = 0; i < asteroidPositions.length; i++){
+//		        	dataOut.writeDouble(asteroidPositions[i]);
+//		        }
+//		        for(int i = 0; i < asteroidVelocities.length; i++){
+//		        	dataOut.writeDouble(asteroidVelocities[i]);
+//		        }
+//		        for(int i = 0; i < asteroidRadii.length; i++){
+//		        	dataOut.writeDouble(asteroidRadii[i]);
+//		        }
+		        
+		        
+		        // Write Bullet Data
+//		        dataOut.write(numberOfBullets);
+//		        
+//		        for(int i = 0; i < bulletPositions.length; i++){
+//		        	dataOut.writeDouble(bulletPositions[i]);
+//		        }
+//		        for(int i = 0; i < bulletVelocities.length; i++){
+//		        	dataOut.writeDouble(bulletVelocities[i]);
+//		        }
+		        
+		        // Write Ship Data
+//		        for(int i = 0; i < shipPositions.length; i++){
+//		        	dataOut.writeDouble(shipPositions[i]);
+//		        }
+//		        for(int i = 0; i < shipVelocities.length; i++){
+//		        	dataOut.writeDouble(shipVelocities[i]);
+//		        }
+		        
+//		        dataOut.writeInt(score);
 
-		        for(int i = 0; i < asteroidPositions.length; i++){
-		        	dataOut.writeDouble(asteroidPositions[i]);
-		        }
-		        for(int i = 0; i < asteroidVelocities.length; i++){
-		        	dataOut.writeDouble(asteroidPositions[i]);
-		        }
-		        for(int i = 0; i < asteroidRadii.length; i++){
-		        	dataOut.writeDouble(asteroidRadii[i]);
-		        }
-		        for(int i = 0; i < bulletPositions.length; i++){
-		        	dataOut.writeDouble(bulletPositions[i]);
-		        }
-		        for(int i = 0; i < bulletVelocities.length; i++){
-		        	dataOut.writeDouble(bulletVelocities[i]);
-		        }
-		        for(int i = 0; i < shipPositions.length; i++){
-		        	dataOut.writeDouble(shipPositions[i]);
-		        }
-		        for(int i = 0; i < shipVelocities.length; i++){
-		        	dataOut.writeDouble(shipVelocities[i]);
-		        }
-		        dataOut.writeInt(score);
-		        dataOut.close();
-				
-		        byteData = bytesOut.toByteArray();
+				byteData = new byte[256];
+		        byteData = bytesOut.toByteArray();				
 				packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
 			    serverSocket.send(packet);
+		        dataOut.close();
 			}
 			catch(Exception e){
-				System.out.println(e);
+				System.out.println(e.getStackTrace() + "SERVER");
 				go = false;
+				serverSocket.close();
 			}
 		}
-		serverSocket.close();
 	}
 
 	public HashSet<Spectator> getSpectators() {

@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel {
 	
-	int gameId;
+	int gameId = -1;
 	
 	public MenuPanel(JPanel cardPanel, CardLayout cardLayout){
 		this.setLayout(null);
@@ -30,7 +30,7 @@ public class MenuPanel extends JPanel {
 		JButton joinButton = new JButton("Join a Multiplayer Game");
 		JButton spectateButton = new JButton("Spectate a Game");
 		
-		title.setForeground(new Color(200,200,200));
+		title.setForeground(new Color(0,200,200));
 		
 		singleplayerButton.setBackground(new Color(0,196,255));
 		hostButton.setBackground(new Color(0,196,255));
@@ -104,7 +104,7 @@ public class MenuPanel extends JPanel {
         }); 
 	}
 	
-	public int getGameId() {
+	public synchronized int getGameId() {
 		return gameId;
 	}
 

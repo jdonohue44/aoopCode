@@ -26,6 +26,7 @@ public class Asteroids
 	{
 		AsteroidsFrame frame = new AsteroidsFrame();
 		MenuPanel menu = frame.getMenuPanel();
+		frame.getAsteroidsPanel().startGame(); //gives AsteroidsPanel something to paint
 		
 		while(true){
 			int gameId = menu.getGameId();
@@ -34,9 +35,13 @@ public class Asteroids
 				frame.getAsteroidsPanel().startGame();
 				Game game = frame.getAsteroidsPanel().getGame();
 				
-				Server server = new Server(game,"localhost", 4720);
-				Thread gameServer = new Thread(server);
-				gameServer.start();
+				Spectator spec = new Spectator(4055);
+				Thread clientThread = new Thread(spec);
+				clientThread.start();
+				Server server = new Server(game, "localhost",4055);
+//				System.out.println(game.getPlayer().getLocation().getX());
+				Thread serverThread = new Thread(server);
+				serverThread.start();
 				
 				Player player = new Player ();
 				frame.addKeyListener(player);
@@ -110,16 +115,16 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-//		new Asteroids ();
-		Game game = new Game();
-		Thread t = new Thread(game);
-		t.start();
-		Spectator spec = new Spectator(4955);
-		Thread clientThread = new Thread(spec);
-		clientThread.start();
-		Server server = new Server(game, "localhost",4955);
-		Thread serverThread = new Thread(server);
-		serverThread.start();
+		new Asteroids ();
+//		Game game = new Game();
+//		Thread t = new Thread(game);
+//		t.start();
+//		Spectator spec = new Spectator(4955);
+//		Thread clientThread = new Thread(spec);
+//		clientThread.start();
+//		Server server = new Server(game, "localhost",4955);
+//		Thread serverThread = new Thread(server);
+//		serverThread.start();
 	}
 	
 }
