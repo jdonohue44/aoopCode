@@ -13,7 +13,7 @@ public class NicknamePanel extends JPanel {
 			throw new UnsupportedOperationException();
 		}
 		else if(!input.isEmpty()){
-			this.nickname = input;
+			this.setNickname(input);
 		}
 		else{
 			JOptionPane.showMessageDialog(this, "You did not enter a nickname", "Error", JOptionPane.ERROR_MESSAGE);

@@ -3,15 +3,11 @@ package aoop.asteroids.gui;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -19,6 +15,8 @@ import javax.swing.SwingConstants;
 public class MenuPanel extends JPanel {
 	
 	int gameId = -1;
+	NetworkInfoPanel nip;
+	NicknamePanel np;
 	
 	public MenuPanel(JPanel cardPanel, CardLayout cardLayout){
 		this.setLayout(null);
@@ -63,43 +61,42 @@ public class MenuPanel extends JPanel {
         singleplayerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-            	MenuPanel.this.gameId = 0;
+            	MenuPanel.this.setGameId(0);
 	    		cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         hostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-            	MenuPanel.this.gameId = 1;
             	try {
-            		new NicknamePanel();
+            		MenuPanel.this.setNp(new NicknamePanel());
             	} catch (UnsupportedOperationException u) {
-	            	gameId = -1;
+            		MenuPanel.this.setGameId(-1);
 	            }
+            	MenuPanel.this.setGameId(1);
             }
         }); 
         joinButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
-            {               
-            	MenuPanel.this.gameId = 2;
+            {
             	try {
-	            	new NetworkInfoPanel();
-	                new NicknamePanel();
+            		MenuPanel.this.setNip(new NetworkInfoPanel());
+	            	MenuPanel.this.setNp(new NicknamePanel());
             	} catch (UnsupportedOperationException u) {
-	            	gameId = -1;
+            		MenuPanel.this.setGameId(-1);
 	            }
+            	MenuPanel.this.setGameId(2);
             }
         }); 
         spectateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-            	MenuPanel.this.gameId = 3;
             	try {
-		            new NetworkInfoPanel();  
-		            new NicknamePanel();
+		            MenuPanel.this.setNip(new NetworkInfoPanel());
             	} catch (UnsupportedOperationException u) {
-	            	gameId = -1;
-	            }
+            		MenuPanel.this.setGameId(-1);
+            	}
+            	MenuPanel.this.setGameId(3);
             }
         }); 
 	}
@@ -110,5 +107,21 @@ public class MenuPanel extends JPanel {
 
 	public void setGameId(int gameId) {
 		this.gameId = gameId;
+	}
+
+	public NetworkInfoPanel getNip() {
+		return nip;
+	}
+
+	public void setNip(NetworkInfoPanel nip) {
+		this.nip = nip;
+	}
+
+	public NicknamePanel getNp() {
+		return np;
+	}
+
+	public void setNp(NicknamePanel np) {
+		this.np = np;
 	}
 }
