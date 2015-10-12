@@ -72,12 +72,13 @@ public class Server extends Thread{
 		        int numberOfAsteroids = this.game.getAsteroids().size();
 		        int numberOfBullets = this.game.getBullets().size();
 		        double[] asteroidPositions  = new double[numberOfAsteroids*2];
-		        double[] asteroidVelocities = new double[numberOfAsteroids*2]; 
-		        int[]    asteroidRadii      = new int[numberOfAsteroids];      
+		        int[]    asteroidRadii      = new int[numberOfAsteroids];   
+		        
 		        double[] bulletPositions  = new double[numberOfBullets * 2];
-		        double[] bulletVelocities = new double[numberOfBullets * 2];
+		        
 		        double[] shipPositions  = new double[2];
-		        double[] shipVelocities = new double[2];
+		        double shipDirection    = this.game.getPlayer().getDirection();
+		        boolean shipAccelerating = this.game.getPlayer().isAccelerating();
 		        
 		        
 		        // Asteroid Positions
@@ -86,14 +87,6 @@ public class Server extends Thread{
 		        	asteroidPositions[counter] = a.getLocation().getX();
 		        	asteroidPositions[counter + 1] = a.getLocation().getY();
 		        	counter = counter += 2;
-		        }
-		        
-		        // Asteroid Velocities
-		        counter = 0;
-		        for(Asteroid a : this.game.getAsteroids()){
-		        	asteroidVelocities[counter] = a.getVelocityX();
-		          	asteroidVelocities[counter + 1] = a.getVelocityY();
-		          	counter = counter += 2;
 		        }
 		        
 		        // Asteroid Radii
@@ -110,22 +103,11 @@ public class Server extends Thread{
 		            bulletPositions[counter + 1] = b.getLocation().getY();
 		            counter = counter + 2;
 		        }
-		        
-		        // Bullet Velocities
-		        counter = 0;
-		        for (Bullet b : this.game.getBullets()) {
-		            bulletVelocities[counter] = b.getVelocityX();
-		            bulletVelocities[counter + 1] = b.getVelocityY();
-		            counter = counter + 2;
-		        }
-		        
+		      		        
 		        // Ship Positions
 		          shipPositions[0] = this.game.getPlayer().getLocation().getX();
 		          shipPositions[1] = this.game.getPlayer().getLocation().getY();
-		        
-		        // Ship Velocities
-		          shipVelocities[0] = this.game.getPlayer().getVelocityX();
-		          shipVelocities[1] = this.game.getPlayer().getVelocityY();
+		          
 		          
 		          
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
@@ -140,15 +122,19 @@ public class Server extends Thread{
 
 		        for(int i = 0; i < asteroidPositions.length; i++){
 		        	dataOut.writeDouble(asteroidPositions[i]);
-		        }
-		        
-		        for(int i = 0; i < asteroidVelocities.length; i++){
-		        	dataOut.writeDouble(asteroidVelocities[i]);
-		        }
+		        }	    
 		        
 		        for(int i = 0; i < asteroidRadii.length; i++){
 		        	dataOut.writeDouble(asteroidRadii[i]);
 		        }
+
+		        // Write Ship Data
+		        dataOut.writeDouble(shipPositions[0]);
+		        dataOut.writeDouble(shipPositions[1]);
+		        dataOut.writeDouble(shipDirection);
+		        dataOut.writeInt(score);
+		        
+		        
 		        
 		        
 		         // Write Bullet Data
@@ -160,16 +146,6 @@ public class Server extends Thread{
 //		        for(int i = 0; i < bulletVelocities.length; i++){
 //		        	dataOut.writeDouble(bulletVelocities[i]);
 //		        }
-//		        
-//		         // Write Ship Data
-//		        for(int i = 0; i < shipPositions.length; i++){
-//		        	dataOut.writeDouble(shipPositions[i]);
-//		        }
-//		        for(int i = 0; i < shipVelocities.length; i++){
-//		        	dataOut.writeDouble(shipVelocities[i]);
-//		        }
-//		        
-//		        dataOut.writeInt(score);
 
 				byteData = new byte[456];
 		        byteData = bytesOut.toByteArray();	
