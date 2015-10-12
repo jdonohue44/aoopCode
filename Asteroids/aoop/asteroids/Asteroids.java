@@ -1,9 +1,7 @@
 package aoop.asteroids;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import aoop.asteroids.gui.AsteroidsFrame;
+import aoop.asteroids.gui.AsteroidsPanel;
 import aoop.asteroids.gui.MenuPanel;
 import aoop.asteroids.gui.Player;
 import aoop.asteroids.model.Game;
@@ -32,14 +30,14 @@ public class Asteroids
 			int gameId = menu.getGameId();
 			
 			if(gameId == 0){ // single player game
-				frame.getAsteroidsPanel().startGame();
-				Game game = frame.getAsteroidsPanel().getGame();
+				AsteroidsPanel singlePlayerPanel = frame.getAsteroidsPanel();
+				singlePlayerPanel.startGame();
+				Game game = singlePlayerPanel.getGame();
 				
 				Spectator spec = new Spectator(4055);
 				Thread clientThread = new Thread(spec);
 				clientThread.start();
 				Server server = new Server(game, "localhost",4055);
-//				System.out.println(game.getPlayer().getLocation().getX());
 				Thread serverThread = new Thread(server);
 				serverThread.start();
 				
