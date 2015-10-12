@@ -82,12 +82,9 @@ public class Asteroids
 				}
 			}
 			else if (gameId == 3){ // spectate
-				String host = frame.getMenuPanel().getNip().getHost();
-				int port = frame.getMenuPanel().getNip().getPort();
-				
 				Spectator spectator = null;
 				try {
-					spectator = new Spectator(host,port);
+					spectator = new Spectator("localhost",4720);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

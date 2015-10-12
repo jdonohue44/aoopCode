@@ -10,7 +10,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
-//import aoop.asteroids.model.Game;
+import aoop.asteroids.model.Game;
 
 /**
  *	AsteroidsFrame is a class that extends JFrame and thus provides a game 
@@ -38,7 +38,7 @@ public class AsteroidsFrame extends JFrame
 	 NetworkInfoPanel networkInfoPanel;
 	 NicknamePanel nicknamePanel;
 	 
-	 //Game game;
+	 Game game;
 	 
 	 JPanel cardPanel;
 	 CardLayout cardLayout = new CardLayout();
@@ -51,7 +51,7 @@ public class AsteroidsFrame extends JFrame
 
 	public AsteroidsFrame ()
 	{
-		//this.game = null;
+		this.game = null;
 		this.initActions ();
 		this.setTitle ("Asteroids");
 		this.setSize (800, 800);
@@ -81,13 +81,13 @@ public class AsteroidsFrame extends JFrame
 		this.setVisible(true);
 	}
 
-//	public Game getGame() {
-//		return game;
-//	}
-//
-//	public void setGame(Game game) {
-//		this.game = game;
-//	}
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
 	public AsteroidsPanel getAsteroidsPanel() {
 		return asteroidsPanel;
@@ -128,8 +128,8 @@ public class AsteroidsFrame extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				AsteroidsFrame.this.getAsteroidsPanel().getGame().abort();
-				menuPanel.setGameId(-1);
+				AsteroidsFrame.this.game = AsteroidsFrame.this.getAsteroidsPanel().getGame();
+				AsteroidsFrame.this.game.abort();
 				cardLayout.show(cardPanel,"menuPanel");
 			}
 		};
