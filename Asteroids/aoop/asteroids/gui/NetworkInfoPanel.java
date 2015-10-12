@@ -27,8 +27,8 @@ public class NetworkInfoPanel extends JPanel {
 		int result = JOptionPane.showConfirmDialog(null, this, "Please enter the network information.", JOptionPane.OK_CANCEL_OPTION);
 
 		if((result == JOptionPane.OK_OPTION) && (!host.getText().isEmpty()) && (!port.getText().isEmpty())){
-			this.hostname = host.getText();
-			this.portname = Integer.parseInt(port.getText());
+			this.setHost(host.getText());
+			this.setPort(Integer.parseInt(port.getText()));
 		}
 		else if (result == JOptionPane.CANCEL_OPTION) {
 			throw new UnsupportedOperationException();
@@ -39,19 +39,19 @@ public class NetworkInfoPanel extends JPanel {
 		}
 	}
 
-	public String getHostname() {
+	public String getHost() {
 		return hostname;
 	}
 
-	public void setHostname(String hostname) {
+	public void setHost(String hostname) {
 		this.hostname = hostname;
 	}
 
-	public int getPortname() {
+	public int getPort() {
 		return portname;
 	}
 
-	public void setPortname(int portname) {
+	public void setPort(int portname) {
 		this.portname = portname;
 	}
 
