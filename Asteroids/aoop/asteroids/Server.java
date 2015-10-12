@@ -132,6 +132,7 @@ public class Server extends Thread{
 		        dataOut.writeDouble(shipPositions[0]);
 		        dataOut.writeDouble(shipPositions[1]);
 		        dataOut.writeDouble(shipDirection);
+		        dataOut.writeBoolean(shipAccelerating);
 		        dataOut.writeInt(score);
 		        
 		        

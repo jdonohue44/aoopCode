@@ -186,6 +186,38 @@ public class Spaceship extends GameObject
 		return this.direction;
 	}
 
+	public int getStepsTilFire() {
+		return stepsTilFire;
+	}
+
+	public void setStepsTilFire(int stepsTilFire) {
+		this.stepsTilFire = stepsTilFire;
+	}
+
+	public boolean isUp() {
+		return up;
+	}
+
+	public boolean isRight() {
+		return right;
+	}
+
+	public boolean isLeft() {
+		return left;
+	}
+
+	public void setDirection(double direction) {
+		this.direction = direction;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setFiring(boolean isFiring) {
+		this.isFiring = isFiring;
+	}
+
 	/**
 	 *	Returns whether the spaceship is accelerating.
 	 *
