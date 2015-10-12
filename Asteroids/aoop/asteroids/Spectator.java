@@ -121,9 +121,7 @@ public class Spectator extends Thread {
 	        double shipDirection    = 0;
 	        double[] asteroidPositions   = new double[numberOfAsteroids*2];
  	        double[]    asteroidRadii    = new double[numberOfAsteroids];
- 	        boolean shipAccelerating;
  	        int score = 0;
- 	        
 
 	        
     		for(int i = 0; i < numberOfAsteroids * 2; i++){
@@ -137,16 +135,21 @@ public class Spectator extends Thread {
     		shipPositions[0] = dataIn.readDouble();
     		shipPositions[1] = dataIn.readDouble();
     		shipDirection = dataIn.readDouble();
-    		shipAccelerating = dataIn.readBoolean();
     		score = dataIn.readInt();
+    		
+    		
+
 	        dataIn.close();
-     
+    
+
+	        
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 	        clientSocket.close();
+
+		}
 		}
 	}
-}
 	
 	void addAsteroid(){
 //		location = new Point ((int)asteroidPositions[indexCounter], (int)asteroidPositions[indexCounter + 1]);

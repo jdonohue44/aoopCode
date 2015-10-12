@@ -136,7 +136,7 @@ public class Game extends Observable implements Runnable
 	 *	game tick counter is updated and a new asteroid is spawn upon every 
 	 *	200th game tick.
 	 */
-	protected void update ()
+	private void update ()
 	{
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
