@@ -115,19 +115,19 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-//		new Asteroids ();
+		new Asteroids ();
 		
-		Game g = new Game();
-		Thread gt = new Thread(g);
-		gt.start();
-		
-		Server s = new Server(g, "localhost", 4452);
-		Thread st = new Thread(s);
-		st.start();
-		
-		Spectator client = new Spectator("localhost", 4452);
-		Thread ct = new Thread(client);
-		ct.start();
+//		Game g = new Game();
+//		Thread gt = new Thread(g);
+//		gt.start();
+//		
+//		Server s = new Server(g, "localhost", 4452);
+//		Thread st = new Thread(s);
+//		st.start();
+//		
+//		Spectator client = new Spectator("localhost", 4452);
+//		Thread ct = new Thread(client);
+//		ct.start();
 	}
 	
 }

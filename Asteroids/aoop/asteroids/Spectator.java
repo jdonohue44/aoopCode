@@ -105,7 +105,6 @@ public class Spectator extends Thread {
     		shipAccelerating = dataIn.readBoolean();
     		score = dataIn.readInt();
     		
-    		System.out.println(numberOfAsteroids);
 	        dataIn.close();
 	        
 		}catch(IOException e){
