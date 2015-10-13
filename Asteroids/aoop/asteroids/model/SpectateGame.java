@@ -24,7 +24,9 @@ public class SpectateGame extends Game implements Runnable {
 	{
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
-		this.ship.nextStep (spectator.getShipPositions()[0], spectator.getShipPositions()[1], spectator.getShipDirection(), spectator.isShipAccelerating(), spectator.getScore());
+//		this.ship.nextStep (spectator.getShipPositions()[0], spectator.getShipPositions()[1], spectator.getShipDirection(), spectator.isShipAccelerating(), spectator.getScore());
+		this.ship.nextStep (400,400,0,true,0);
+
 		this.setChanged ();
 		this.notifyObservers ();
 	}

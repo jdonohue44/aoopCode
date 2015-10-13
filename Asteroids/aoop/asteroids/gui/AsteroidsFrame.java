@@ -73,7 +73,7 @@ public class AsteroidsFrame extends JFrame
 		
 		// CardLayout setup for multiple JPanels
 		cardPanel = new JPanel(cardLayout);
-		asteroidsPanel = new AsteroidsPanel(this.getGame());
+		asteroidsPanel = new AsteroidsPanel();
 		menuPanel = new MenuPanel(cardPanel,cardLayout);
 		cardPanel.add(asteroidsPanel, "asteroidsPanel");
 		cardPanel.add(menuPanel,"menuPanel");

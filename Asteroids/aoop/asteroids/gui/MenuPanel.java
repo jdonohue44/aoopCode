@@ -30,10 +30,10 @@ public class MenuPanel extends JPanel {
 		
 		title.setForeground(new Color(0,200,200));
 		
-		singleplayerButton.setBackground(new Color(0,196,255));
-		hostButton.setBackground(new Color(0,196,255));
-		joinButton.setBackground(new Color(0,196,255));
-		spectateButton.setBackground(new Color(0,196,255));
+		singleplayerButton.setBackground(Color.white);
+		hostButton.setBackground(Color.white);
+		joinButton.setBackground(Color.white);
+		spectateButton.setBackground(Color.white);
 		
 		title.setBounds(100, 65, 600, 150);
 		singleplayerButton.setBounds(200,250,400,75);
@@ -70,11 +70,11 @@ public class MenuPanel extends JPanel {
             {
             	try {
             		MenuPanel.this.setNp(new NicknamePanel());
+                	MenuPanel.this.setGameId(1);
+                	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
             		MenuPanel.this.setGameId(-1);
 	            }
-            	MenuPanel.this.setGameId(1);
-            	cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         joinButton.addActionListener(new ActionListener() {
@@ -83,11 +83,12 @@ public class MenuPanel extends JPanel {
             	try {
             		MenuPanel.this.setNip(new NetworkInfoPanel());
 	            	MenuPanel.this.setNp(new NicknamePanel());
+	            	MenuPanel.this.setGameId(2);
+	            	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
             		MenuPanel.this.setGameId(-1);
 	            }
-            	MenuPanel.this.setGameId(2);
-            	cardLayout.show(cardPanel,"asteroidsPanel");
+
             }
         }); 
         spectateButton.addActionListener(new ActionListener() {
@@ -95,10 +96,12 @@ public class MenuPanel extends JPanel {
             {
             	try {
 		            MenuPanel.this.setNip(new NetworkInfoPanel());
+		         	MenuPanel.this.setGameId(3);
+		         	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
             		MenuPanel.this.setGameId(-1);
             	}
-            	MenuPanel.this.setGameId(3);
+           
             }
         }); 
 	}

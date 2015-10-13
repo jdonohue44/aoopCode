@@ -91,7 +91,6 @@ public class Asteroids
 				int port = nip.getPort();
 
 				Spectator spectator = new Spectator(host, port);
-				
 				Thread clientThread = new Thread(spectator);
 				clientThread.start();
 				
@@ -116,16 +115,19 @@ public class Asteroids
 	 */
 	public static void main (String [] args)
 	{
-		new Asteroids ();
-//		Game game = new Game();
-//		Thread t = new Thread(game);
-//		t.start();
-//		Spectator spec = new Spectator(4955);
-//		Thread clientThread = new Thread(spec);
-//		clientThread.start();
-//		Server server = new Server(game, "localhost",4955);
-//		Thread serverThread = new Thread(server);
-//		serverThread.start();
+//		new Asteroids ();
+		
+		Game g = new Game();
+		Thread gt = new Thread(g);
+		gt.start();
+		
+		Server s = new Server(g, "localhost", 4452);
+		Thread st = new Thread(s);
+		st.start();
+		
+		Spectator client = new Spectator("localhost", 4452);
+		Thread ct = new Thread(client);
+		ct.start();
 	}
 	
 }
