@@ -131,13 +131,14 @@ public class Server extends Thread{
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				DataOutputStream dataOut = new DataOutputStream(bytesOut);
 				
-		        // Write UDP Packet Reference Number
 		         dataOut.writeInt(this.packetReferenceNumber);
 		         
-		        // Write Asteroid Data
 		         dataOut.writeInt(numberOfAsteroids);
+		         
+		         dataOut.writeInt(numberOfBullets);
 		        
 
+			    // Write Asteroid Data
 		        for(int i = 0; i < asteroidPositions.length; i++){
 		        	dataOut.writeDouble(asteroidPositions[i]);
 		        }

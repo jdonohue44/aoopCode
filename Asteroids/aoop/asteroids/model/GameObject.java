@@ -146,4 +146,44 @@ public abstract class GameObject
 		return this.stepsTilCollide;
 	}
 
+	public double getLocationX() {
+		return locationX;
+	}
+
+	public void setLocationX(double locationX) {
+		this.locationX = locationX;
+	}
+
+	public double getLocationY() {
+		return locationY;
+	}
+
+	public void setLocationY(double locationY) {
+		this.locationY = locationY;
+	}
+
+	public int getStepsTilCollide() {
+		return stepsTilCollide;
+	}
+
+	public void setStepsTilCollide(int stepsTilCollide) {
+		this.stepsTilCollide = stepsTilCollide;
+	}
+
+	public void setVelocityX(double velocityX) {
+		this.velocityX = velocityX;
+	}
+
+	public void setVelocityY(double velocityY) {
+		this.velocityY = velocityY;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public void setDestroyed(boolean destroyed) {
+		this.destroyed = destroyed;
+	}
+
 }

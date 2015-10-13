@@ -10,6 +10,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
+import aoop.asteroids.model.Game;
+import aoop.asteroids.model.SpectateGame;
+
 //import aoop.asteroids.model.Game;
 
 /**
@@ -38,7 +41,7 @@ public class AsteroidsFrame extends JFrame
 	 NetworkInfoPanel networkInfoPanel;
 	 NicknamePanel nicknamePanel;
 	 
-	 //Game game;
+	 Game game;
 	 
 	 JPanel cardPanel;
 	 CardLayout cardLayout = new CardLayout();
@@ -70,7 +73,7 @@ public class AsteroidsFrame extends JFrame
 		
 		// CardLayout setup for multiple JPanels
 		cardPanel = new JPanel(cardLayout);
-		asteroidsPanel = new AsteroidsPanel();
+		asteroidsPanel = new AsteroidsPanel(this.getGame());
 		menuPanel = new MenuPanel(cardPanel,cardLayout);
 		cardPanel.add(asteroidsPanel, "asteroidsPanel");
 		cardPanel.add(menuPanel,"menuPanel");
@@ -80,14 +83,14 @@ public class AsteroidsFrame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
-
-//	public Game getGame() {
-//		return game;
-//	}
-//
-//	public void setGame(Game game) {
-//		this.game = game;
-//	}
+	
+	public Game getGame(){
+		return this.game;
+	}
+	
+	public void setGame(Game g){
+		this.game=g;
+	}
 
 	public AsteroidsPanel getAsteroidsPanel() {
 		return asteroidsPanel;

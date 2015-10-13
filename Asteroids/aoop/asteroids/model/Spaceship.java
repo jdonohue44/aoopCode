@@ -164,6 +164,14 @@ public class Spaceship extends GameObject
 		if (this.stepsTilFire != 0)
 			this.stepsTilFire--;
 	}
+	
+	public void nextStep(double locationX, double locationY, double direction, boolean isAccelerating, int score){
+		this.locationX = locationX;
+		this.locationY = locationY;
+		this.direction = direction;
+		this.up = isAccelerating;
+		this.score = score;
+	}
 
 	/**
 	 *	Returns a copy of the spaceship. Note that only interesting fields are 
@@ -230,5 +238,38 @@ public class Spaceship extends GameObject
 	{
 		return this.score;
 	}
+
+	public int getStepsTilFire() {
+		return stepsTilFire;
+	}
+
+	public void setStepsTilFire(int stepsTilFire) {
+		this.stepsTilFire = stepsTilFire;
+	}
+
+	public boolean isUp() {
+		return up;
+	}
+
+	public boolean isRight() {
+		return right;
+	}
+
+	public boolean isLeft() {
+		return left;
+	}
+
+	public void setDirection(double direction) {
+		this.direction = direction;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setFiring(boolean isFiring) {
+		this.isFiring = isFiring;
+	}
+	
 	
 }

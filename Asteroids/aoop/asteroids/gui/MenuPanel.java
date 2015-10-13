@@ -74,6 +74,7 @@ public class MenuPanel extends JPanel {
             		MenuPanel.this.setGameId(-1);
 	            }
             	MenuPanel.this.setGameId(1);
+            	cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         joinButton.addActionListener(new ActionListener() {
@@ -86,6 +87,7 @@ public class MenuPanel extends JPanel {
             		MenuPanel.this.setGameId(-1);
 	            }
             	MenuPanel.this.setGameId(2);
+            	cardLayout.show(cardPanel,"asteroidsPanel");
             }
         }); 
         spectateButton.addActionListener(new ActionListener() {
