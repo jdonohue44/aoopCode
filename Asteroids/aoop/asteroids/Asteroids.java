@@ -25,14 +25,14 @@ public class Asteroids
 	{
 		AsteroidsFrame frame = new AsteroidsFrame();
 		MenuPanel menu = frame.getMenuPanel();
-		frame.getAsteroidsPanel().startGame(); //gives AsteroidsPanel something to paint
+		frame.getAsteroidsPanel().startGame(new Game()); //gives AsteroidsPanel something to paint
 		
 		while(true){
 			int gameId = menu.getGameId();
 			
 			if(gameId == 0){ // single player game
 				AsteroidsPanel singlePlayerPanel = frame.getAsteroidsPanel();
-				singlePlayerPanel.startGame();
+				singlePlayerPanel.startGame(new Game());
 				Game game = singlePlayerPanel.getGame();
 				
 				Player player = new Player ();
@@ -49,7 +49,7 @@ public class Asteroids
 			}
 			else if(gameId == 1){ // host 
 				AsteroidsPanel singlePlayerPanel = frame.getAsteroidsPanel();
-				singlePlayerPanel.startGame();
+				singlePlayerPanel.startGame(new Game());
 				Game game = singlePlayerPanel.getGame();
 				
 				Server server = new Server(game, "localhost",4055);
@@ -69,7 +69,7 @@ public class Asteroids
 				}
 			}
 			else if(gameId == 2){ // join
-				frame.getAsteroidsPanel().startGame();
+				frame.getAsteroidsPanel().startGame(new Game());
 				Game game = frame.getAsteroidsPanel().getGame();
 				
 				Player player = new Player ();
@@ -95,7 +95,7 @@ public class Asteroids
 				clientThread.start();
 				
 				Game game = new SpectateGame(spectator);
-				asteroidsPanel.setGame(game);
+				asteroidsPanel.startGame(game);
 				Thread t = new Thread(game);
 				t.start();
 				

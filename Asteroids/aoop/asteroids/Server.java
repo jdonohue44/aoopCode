@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.Spaceship;
 
 
 public class Server extends Thread{
@@ -120,8 +122,8 @@ public class Server extends Thread{
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				DataOutputStream dataOut = new DataOutputStream(bytesOut);
 				
-		         dataOut.writeInt(numberOfAsteroids);
-		         dataOut.writeInt(numberOfBullets);
+		        dataOut.writeInt(numberOfAsteroids);
+		        dataOut.writeInt(numberOfBullets);
 		        
 			    // Write Asteroid Data
 		        for(int i = 0; i < asteroidPositions.length; i++){
@@ -142,7 +144,7 @@ public class Server extends Thread{
 		        dataOut.writeDouble(shipDirection);
 		        dataOut.writeBoolean(shipAccelerating);
 		        dataOut.writeInt(score);
-
+		        
 				byteData = new byte[256];
 		        byteData = bytesOut.toByteArray();	
 				packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);

@@ -10,8 +10,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import aoop.asteroids.model.Asteroid;
+import aoop.asteroids.model.Spaceship;
 
 
 public class Spectator extends Thread {
@@ -87,23 +89,23 @@ public class Spectator extends Thread {
 
  	        // Read asteroid data
     		for(int i = 0; i < numberOfAsteroids * 2; i++){
-    			asteroidPositions[i] = dataIn.readDouble();
+    			this.asteroidPositions[i] = dataIn.readDouble();
     		}
     		for(int i = 0; i < numberOfAsteroids; i++){
-    			asteroidRadii[i] = dataIn.readDouble();
+    			this.asteroidRadii[i] = dataIn.readDouble();
     		}
     		
     		// Read bullet data
     		for(int i = 0; i < numberOfBullets * 2; i++){
-    			bulletPositions[i] = dataIn.readDouble();
+    			this.bulletPositions[i] = dataIn.readDouble();
     		}
     		
     		// Read ship data
-    		shipPositions[0] = dataIn.readDouble(); // Ship X position
-    		shipPositions[1] = dataIn.readDouble(); // Ship Y position
-    		shipDirection = dataIn.readDouble();
-    		shipAccelerating = dataIn.readBoolean();
-    		score = dataIn.readInt();
+    		this.shipPositions[0] = dataIn.readDouble(); // Ship X position
+    		this.shipPositions[1] = dataIn.readDouble(); // Ship Y position
+    		this.shipDirection = dataIn.readDouble();
+    		this.shipAccelerating = dataIn.readBoolean();
+    		this.score = dataIn.readInt();
     		
 	        dataIn.close();
 	        
@@ -115,7 +117,7 @@ public class Spectator extends Thread {
 }
 	
 	public double[] getShipPositions() {
-		return shipPositions;
+		return this.shipPositions;
 	}
 
 	public void setShipPositions(double[] shipPositions) {
@@ -123,7 +125,7 @@ public class Spectator extends Thread {
 	}
 
 	public double getShipDirection() {
-		return shipDirection;
+		return this.shipDirection;
 	}
 
 	public void setShipDirection(double shipDirection) {
@@ -131,7 +133,7 @@ public class Spectator extends Thread {
 	}
 
 	public boolean isShipAccelerating() {
-		return shipAccelerating;
+		return this.shipAccelerating;
 	}
 
 	public void setShipAccelerating(boolean shipAccelerating) {

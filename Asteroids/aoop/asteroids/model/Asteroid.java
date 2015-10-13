@@ -39,6 +39,7 @@ public class Asteroid extends GameObject
 		this.locationY = (800 + this.locationY + this.velocityY) % 800;
 	}
 
+
 	/**
 	 *	Override this method in factory classes in order to produce offspring 
 	 *	upon destruction.

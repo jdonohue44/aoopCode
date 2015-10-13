@@ -49,8 +49,8 @@ public class AsteroidsPanel extends JPanel
 		});
 	}
 	
-	public void startGame(){
-		this.game = new Game();
+	public void startGame(Game game){
+		this.game = game;
 		this.game.addObserver (new Observer ()
 		{
 			@Override
