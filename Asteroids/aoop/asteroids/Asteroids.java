@@ -121,11 +121,11 @@ public class Asteroids
 //		Thread gt = new Thread(g);
 //		gt.start();
 //		
-//		Server s = new Server(g, "localhost", 4452);
+//		Server s = new Server(g, "localhost", 4453);
 //		Thread st = new Thread(s);
 //		st.start();
 //		
-//		Spectator client = new Spectator("localhost", 4452);
+//		Spectator client = new Spectator("localhost", 4453);
 //		Thread ct = new Thread(client);
 //		ct.start();
 	}

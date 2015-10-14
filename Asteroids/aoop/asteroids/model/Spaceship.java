@@ -1,6 +1,7 @@
 package aoop.asteroids.model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  *	This class represents the player in the Asteroids game. A spaceship is able 
@@ -14,8 +15,13 @@ import java.awt.Point;
  *
  *	@author Yannick Stoffers
  */
-public class Spaceship extends GameObject
+public class Spaceship extends GameObject implements Serializable
 {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 283534493916744015L;
 
 	/** Direction the spaceship is pointed in. */
 	private double direction;

@@ -9,6 +9,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
@@ -33,15 +34,8 @@ public class Server extends Thread{
 	ByteArrayInputStream byteIn;
 	DataInputStream dataIn;
 	
-	int score;
 	int numberOfAsteroids;
 	int numberOfBullets;
-	double shipDirection;
-	boolean shipAccelerating;
-    double[] asteroidPositions  = new double[4];
-    int[]    asteroidRadii      = new int[2];      
-    double[] bulletPositions  = new double[4];
-    double[] shipPositions  = new double[2];
 	
 	Game game;
 	
@@ -75,81 +69,28 @@ public class Server extends Thread{
 		        // Obtain Client's location
 		        int clientPort = packet.getPort();
 		        InetAddress clientAddress = packet.getAddress();
-		        
-           //  This is throwing an exception now ---> Too many files open on system.    
-		   //  this.spectators.add(new Spectator(clientAddress.getHostAddress(), clientPort));
 		   
-		
-		        score = this.game.getPlayer().getScore();
 		        numberOfAsteroids = this.game.getAsteroids().size();
 		        numberOfBullets = this.game.getBullets().size();
-		        shipDirection = this.game.getPlayer().getDirection();
-		        shipAccelerating = this.game.getPlayer().isUp();
-		        
-		        asteroidPositions  = new double[numberOfAsteroids*2];
-		        asteroidRadii      = new int[numberOfAsteroids];      
-		        bulletPositions  = new double[numberOfBullets * 2];
-		        shipPositions  = new double[2];
-		        
-		        // Asteroid Positions
-		        int counter = 0;
-		        for(Asteroid a : this.game.getAsteroids()){
-		        	asteroidPositions[counter] = a.getLocation().getX();
-		        	asteroidPositions[counter + 1] = a.getLocation().getY();
-		        	counter = counter += 2;
-		        }
-		        
-		        // Asteroid Radii
-		        counter = 0;
-		        for(Asteroid a : this.game.getAsteroids()){
-		        	asteroidRadii[counter] = a.getRadius();
-		          	counter++;
-		        }
-		        
-		        // Bullet Positions
-		        counter = 0;
-		        for (Bullet b : this.game.getBullets()) {
-		            bulletPositions[counter] = b.getLocation().getX();
-		            bulletPositions[counter + 1] = b.getLocation().getY();
-		            counter = counter + 2;
-		        }
-		        
-		        // Ship Positions
-		        shipPositions[0] = this.game.getPlayer().getLocation().getX();
-		        shipPositions[1] = this.game.getPlayer().getLocation().getY();
-		          
-		          
+ 
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-				DataOutputStream dataOut = new DataOutputStream(bytesOut);
+				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);	
 				
-		        dataOut.writeInt(numberOfAsteroids);
-		        dataOut.writeInt(numberOfBullets);
-		        
-			    // Write Asteroid Data
-		        for(int i = 0; i < asteroidPositions.length; i++){
-		        	dataOut.writeDouble(asteroidPositions[i]);
-		        } 
-		        for(int i = 0; i < asteroidRadii.length; i++){
-		        	dataOut.writeDouble(asteroidRadii[i]);
-		        }
-		        
-		         // Write Bullet Data
-		        for(int i = 0; i < bulletPositions.length; i++){
-		        	dataOut.writeDouble(bulletPositions[i]);
-		        }
-		        
-		         // Write Ship Data
-	        	dataOut.writeDouble(shipPositions[0]);
-	        	dataOut.writeDouble(shipPositions[1]);
-		        dataOut.writeDouble(shipDirection);
-		        dataOut.writeBoolean(shipAccelerating);
-		        dataOut.writeInt(score);
-		        
-				byteData = new byte[256];
-		        byteData = bytesOut.toByteArray();	
+				objOut.writeInt(this.game.getAsteroids().size());
+				objOut.writeInt(this.game.getBullets().size());
+				objOut.writeObject(this.game.getPlayer());
+				for(int i=0; i < this.numberOfAsteroids; i++){
+					objOut.writeObject(this.game.getAsteroids().toArray()[i]);
+				}
+				for(int i=0; i < this.numberOfBullets; i++){
+					objOut.writeObject(this.game.getBullets().toArray()[i]);
+				}
+			    objOut.close();
+				
+		        byteData = bytesOut.toByteArray();
 				packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
 			    serverSocket.send(packet);
-			    dataOut.close();
+
 			}
 			catch(Exception e){
 				System.out.println(e.getStackTrace() + "SERVER");

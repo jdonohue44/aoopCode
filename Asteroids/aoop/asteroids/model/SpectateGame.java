@@ -2,6 +2,10 @@ package aoop.asteroids.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import aoop.asteroids.Spectator;
 
@@ -9,22 +13,27 @@ public class SpectateGame extends Game implements Runnable {
 
 	Spectator spectator;
 	Spaceship ship;
-	ArrayList<Asteroid> asteroids;
-	ArrayList<Bullet> bullets;
+	List<Asteroid> asteroids = new ArrayList<Asteroid>();
+	List<Bullet> bullets  = new ArrayList<Bullet>();
+	List asteroidsList = Collections.synchronizedList(asteroids);
+	List bulletList  = Collections.synchronizedList(bullets);
 	private boolean aborted;
+	private boolean gameOver;
 	
 	public SpectateGame(Spectator spectator) {
 		this.ship = new Spaceship();
-		this.asteroids = new ArrayList<Asteroid>();
-		this.bullets = new ArrayList<Bullet>();
+		this.gameOver = false;
 		this.spectator = spectator;
 	}
 
-	protected void update ()
+	protected synchronized void update ()
 	{
+		this.ship = spectator.getShip();
+		this.asteroids = Collections.synchronizedList(spectator.getAsteroids());
+		this.bullets = Collections.synchronizedList(spectator.getBullets());
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
-		this.ship.nextStep (spectator.getShipPositions()[0], spectator.getShipPositions()[1], spectator.getShipDirection(), spectator.isShipAccelerating(), spectator.getScore());
+		this.ship.nextStep();
 		this.setChanged ();
 		this.notifyObservers ();
 	}
