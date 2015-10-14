@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  *	@author Yannick Stoffers
  */
-public class Spaceship extends GameObject implements Serializable
+public class Spaceship extends GameObject
 {
 
 	/**

@@ -3,9 +3,9 @@ package aoop.asteroids;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -32,22 +32,23 @@ public class Spectator extends Thread {
 	ByteArrayInputStream bytesIn;
 	byte[] byteData;
 	
-	List<Asteroid> asteroids = new ArrayList<Asteroid>();
-	List<Bullet> bullets  = new ArrayList<Bullet>();
-	List asteroidsList = Collections.synchronizedList(asteroids);
-	List bulletsList  = Collections.synchronizedList(bullets);
+	ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
 	
 	int numberOfAsteroids =0;
 	int numberOfBullets =0;
 	Spaceship ship = new Spaceship();
 	int packetNumber;
     int score = 0;
+    
+    boolean isSpectating;
 	
 	public Spectator(String host, int serverPort) {
 		try {
 			this.clientSocket = new DatagramSocket();
 			this.clientPort = clientSocket.getLocalPort();
 			this.serverAddress = InetAddress.getByName(host);
+			this.isSpectating = true;
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +57,7 @@ public class Spectator extends Thread {
 	}
 	
 	public void run(){
-		while(true){
+		while(true && isSpectating){
 		try {
 			// Send Ping to Server with this clients Identifier
 			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
@@ -71,9 +72,16 @@ public class Spectator extends Thread {
 	        // Recieve Data from Server
 			byteData = new byte[1056];
 			packet = new DatagramPacket(byteData, byteData.length);
+			
+			try{
+			clientSocket.setSoTimeout(2000);
 			clientSocket.receive(packet);
 	        byteData = packet.getData();
-	        
+			}catch(SocketTimeoutException e){
+				this.isSpectating = false;
+				System.out.println("ended client");
+			}
+	       
 	        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
 	        ObjectInputStream objIn = new ObjectInputStream(bytesIn);
 
@@ -81,39 +89,39 @@ public class Spectator extends Thread {
 	        	this.numberOfAsteroids = objIn.readInt();
 	        	this.numberOfBullets   = objIn.readInt();
 				this.ship = (Spaceship) objIn.readObject();
-				for(int i=0; i < this.numberOfAsteroids; i++){
-					this.asteroids.add((Asteroid) objIn.readObject());
-				}
-				for(int i=0; i < this.numberOfBullets; i++){
-					this.bullets.add((Bullet) objIn.readObject());
-				}
+				this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
+				this.bullets   = (ArrayList<Bullet>) objIn.readObject();
 				objIn.close();
 				
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				clientSocket.close();
+				this.isSpectating =false;
 				objIn.close();
 			}
     		
 
 		}catch(IOException e){
 			System.out.println(e + " on the Client");
-			System.exit(1);
+			this.isSpectating = false;
 	        clientSocket.close();
 		}
 	}
 }
 
+	public boolean isSpectating(){
+		return this.isSpectating;
+	}
 	public Spaceship getShip(){
 		return this.ship;
 	}
 	
-	public List<Asteroid> getAsteroids(){
-		return this.asteroidsList;
+	public ArrayList<Asteroid> getAsteroids(){
+		return this.asteroids;
 	}
 	
-	public List<Bullet> getBullets(){
-		return this.bulletsList;
+	public ArrayList<Bullet> getBullets(){
+		return this.bullets;
 	}
 	
 	

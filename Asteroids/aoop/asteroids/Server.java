@@ -79,12 +79,8 @@ public class Server extends Thread{
 				objOut.writeInt(this.game.getAsteroids().size());
 				objOut.writeInt(this.game.getBullets().size());
 				objOut.writeObject(this.game.getPlayer());
-				for(int i=0; i < this.numberOfAsteroids; i++){
-					objOut.writeObject(this.game.getAsteroids().toArray()[i]);
-				}
-				for(int i=0; i < this.numberOfBullets; i++){
-					objOut.writeObject(this.game.getBullets().toArray()[i]);
-				}
+				objOut.writeObject(this.game.getAsteroids());
+				objOut.writeObject(this.game.getBullets());
 			    objOut.close();
 				
 		        byteData = bytesOut.toByteArray();

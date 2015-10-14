@@ -3,6 +3,7 @@ package aoop.asteroids.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,10 +14,8 @@ public class SpectateGame extends Game implements Runnable {
 
 	Spectator spectator;
 	Spaceship ship;
-	List<Asteroid> asteroids = new ArrayList<Asteroid>();
-	List<Bullet> bullets  = new ArrayList<Bullet>();
-	List asteroidsList = Collections.synchronizedList(asteroids);
-	List bulletList  = Collections.synchronizedList(bullets);
+	ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
 	private boolean aborted;
 	private boolean gameOver;
 	
@@ -29,8 +28,8 @@ public class SpectateGame extends Game implements Runnable {
 	protected synchronized void update ()
 	{
 		this.ship = spectator.getShip();
-		this.asteroids = Collections.synchronizedList(spectator.getAsteroids());
-		this.bullets = Collections.synchronizedList(spectator.getBullets());
+		this.asteroids = spectator.getAsteroids();
+		this.bullets = spectator.getBullets();
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
 		this.ship.nextStep();
@@ -50,7 +49,7 @@ public class SpectateGame extends Game implements Runnable {
 		return this.ship.clone ();
 	}
 
-	public Collection <Asteroid> getAsteroids ()
+	public synchronized Collection <Asteroid> getAsteroids ()
 	{
 		Collection <Asteroid> c = new ArrayList <> ();
 		for (Asteroid a : this.asteroids) c.add (a.clone ());
@@ -72,9 +71,9 @@ public class SpectateGame extends Game implements Runnable {
 	public void run ()
 	{ // Update -> sleep -> update -> sleep -> etc...
 		long executionTime, sleepTime;
-		while (!this.aborted)
+		while (!this.aborted && this.spectator.isSpectating())
 		{
-			if (!this.gameOver ())
+			if (!this.gameOver)
 			{
 				executionTime = System.currentTimeMillis ();
 				this.update ();

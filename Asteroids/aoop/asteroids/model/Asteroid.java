@@ -32,7 +32,7 @@ public class Asteroid extends GameObject
 
 	/** Updates location of the asteroid with traveled distance. */
 	@Override 
-	public void nextStep () 
+	public synchronized void nextStep () 
 	{
 		this.stepsTilCollide = Math.max (0, this.stepsTilCollide - 1);
 		this.locationX = (800 + this.locationX + this.velocityX) % 800;
