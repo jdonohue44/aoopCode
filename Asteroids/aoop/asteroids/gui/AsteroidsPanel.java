@@ -88,6 +88,7 @@ public class AsteroidsPanel extends JPanel
 
 		g2.setColor (Color.WHITE);
 		g2.drawString (String.valueOf (this.game.getPlayer ().getScore ()), 20, 20);
+		g2.drawString("Port: " + this.game.port, 710, 20);
 	}
 
 	/**

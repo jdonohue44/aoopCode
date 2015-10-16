@@ -55,6 +55,8 @@ public class Game extends Observable implements Runnable
 
 	/** Game tick counter for spawning random asteroids. */
 	private int cycleCounter;
+	
+	public int port;
 
 	/** Asteroid limit. */
 	private int asteroidsLimit;

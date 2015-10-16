@@ -39,22 +39,23 @@ public class Server extends Thread{
 	
 	Game game;
 	
-	public Server(Game game, String host, int port){
+	public Server(Game game){
 		this.game = game;
-		this.port = port;
 		this.spectators = new HashSet<Spectator>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(port);
-			this.address = InetAddress.getByName(host);
+			this.serverSocket = new DatagramSocket(0);
+			this.address = InetAddress.getByName("localhost");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.port = serverSocket.getLocalPort();
+		this.game.port = this.port;
 	}
 	
 	public void run(){
 		boolean go = true;
-		while(true && go){
+		while(go){
 			try{
 		        // receive request from Client
 				byteData = new byte[4];

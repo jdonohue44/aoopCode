@@ -41,14 +41,14 @@ public class Spectator extends Thread {
 	int packetNumber;
     int score = 0;
     
-    boolean isSpectating;
+    boolean spectating;
 	
 	public Spectator(String host, int serverPort) {
 		try {
 			this.clientSocket = new DatagramSocket();
 			this.clientPort = clientSocket.getLocalPort();
 			this.serverAddress = InetAddress.getByName(host);
-			this.isSpectating = true;
+			this.spectating = true;
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +57,7 @@ public class Spectator extends Thread {
 	}
 	
 	public void run(){
-		while(true && isSpectating){
+		while(spectating){
 		try {
 			// Send Ping to Server with this clients Identifier
 			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
@@ -74,11 +74,11 @@ public class Spectator extends Thread {
 			packet = new DatagramPacket(byteData, byteData.length);
 			
 			try{
-			clientSocket.setSoTimeout(2000);
+			clientSocket.setSoTimeout(1500);
 			clientSocket.receive(packet);
 	        byteData = packet.getData();
 			}catch(SocketTimeoutException e){
-				this.isSpectating = false;
+				this.spectating = false;
 				System.out.println("ended client");
 			}
 	       
@@ -96,21 +96,21 @@ public class Spectator extends Thread {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				clientSocket.close();
-				this.isSpectating =false;
+				this.spectating =false;
 				objIn.close();
 			}
     		
 
 		}catch(IOException e){
 			System.out.println(e + " on the Client");
-			this.isSpectating = false;
+			this.spectating = false;
 	        clientSocket.close();
 		}
 	}
 }
 
 	public boolean isSpectating(){
-		return this.isSpectating;
+		return this.spectating;
 	}
 	public Spaceship getShip(){
 		return this.ship;

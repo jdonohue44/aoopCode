@@ -52,7 +52,7 @@ public class Asteroids
 				singlePlayerPanel.startGame(new Game());
 				Game game = singlePlayerPanel.getGame();
 				
-				Server server = new Server(game, "localhost",4055);
+				Server server = new Server(game);
 				Thread serverThread = new Thread(server);
 				serverThread.start(); 
 				
@@ -64,6 +64,7 @@ public class Asteroids
 				t.start();
 				try {
 					t.join();
+					server.getServerSocket().close();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
