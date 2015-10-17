@@ -55,32 +55,32 @@ public class Server extends Thread{
 		boolean go = true;
 		while(go){
 			try{
-		        // receive request from Client
-				byteData = new byte[120];
+				// receive request from Client
+				byteData = new byte[204];
 				packet = new DatagramPacket(byteData, byteData.length);
 		        serverSocket.receive(packet);
 		        byteData = packet.getData();
 		        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
-				ObjectInputStream dataIn = new ObjectInputStream(bytesIn);
-		        GameListener listener = (GameListener) dataIn.readObject();
-		        dataIn.close();
+				ObjectInputStream objIn = new ObjectInputStream(bytesIn);
+		        GameListener listener = (GameListener) objIn.readObject();
+		        objIn.close();
 		        
 		        this.gameListeners.add(listener);
-
-		        int clientPort = packet.getPort();
-		        InetAddress clientAddress = packet.getAddress();
-
+		        
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);	
-
+				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
 				objOut.writeObject(this.game.getShips());
 				objOut.writeObject(this.game.getAsteroids());
 				objOut.writeObject(this.game.getBullets());
 			    objOut.close();
 				
-		        byteData = bytesOut.toByteArray();
-		        packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
-		        serverSocket.send(packet);
+		        for(GameListener gl : this.gameListeners){
+			        int clientPort = gl.getClientPort();
+			        InetAddress clientAddress = InetAddress.getByName(("localhost"));
+			        byteData = bytesOut.toByteArray();
+			        packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
+			        serverSocket.send(packet);
+		        }
 			}
 			catch(Exception e){
 				System.out.println(e +  "SERVER");

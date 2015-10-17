@@ -49,34 +49,32 @@ public class Spectator extends Thread{
 		try {
 			this.clientSocket = new DatagramSocket();
 			this.clientPort = clientSocket.getLocalPort();
-			this.clientAddress = clientSocket.getLocalAddress().getHostAddress();
+			this.clientAddress = this.clientSocket.getLocalAddress().getHostName();
+			System.out.println(this.clientAddress);
 			this.gameListener = new GameListener(clientAddress, clientPort);
-			
 			this.serverAddress = InetAddress.getByName(serverAddress);
 			this.serverPort = serverPort;
-			
 			this.spectating = true;
+	        
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-
 	}
 	
 	public void run(){
 		while(spectating){
 		try {
-			// Send Ping to Server with this clients Identifier
+			// Send Ping to Server with this clients socket information
 			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 			ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
 			dataOut.writeObject(this.gameListener);
 	        byteData = bytesOut.toByteArray();	
-			packet = new DatagramPacket(byteData, byteData.length, serverAddress, serverPort);
+			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
 		    clientSocket.send(packet);
 	        dataOut.close();
-
+	        
 	        // Recieve Data from Server
-			byteData = new byte[2056];
+			byteData = new byte[800];
 			packet = new DatagramPacket(byteData, byteData.length);
 			
 			try{

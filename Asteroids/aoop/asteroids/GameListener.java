@@ -1,18 +1,24 @@
 package aoop.asteroids;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class GameListener implements Serializable{
-	String clientAddress;
+	InetAddress clientAddress;
 	int clientPort;
 	GameListener(String clientAddress, int clientPort){
-		this.clientAddress = clientAddress;
-		this.clientPort = clientPort;
+		try {
+			this.clientAddress = InetAddress.getByName(clientAddress);
+			this.clientPort = clientPort;
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
-	public String getClientAddress() {
+	public InetAddress getClientAddress() {
 		return clientAddress;
 	}
-	public void setClientAddress(String clientAddress) {
+	public void setClientAddress(InetAddress clientAddress) {
 		this.clientAddress = clientAddress;
 	}
 	public int getClientPort() {
