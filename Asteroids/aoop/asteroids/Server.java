@@ -4,22 +4,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import aoop.asteroids.model.Asteroid;
-import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
-import aoop.asteroids.model.Spaceship;
+import aoop.asteroids.model.MultiplayerGame;
 
 
 public class Server extends Thread{
 
-	private HashSet<Spectator> spectators;
+	private HashSet<GameListener> gameListeners; // List of Spectators
 	
 	DatagramSocket serverSocket = null;
 	int port;
@@ -37,20 +35,20 @@ public class Server extends Thread{
 	int numberOfAsteroids;
 	int numberOfBullets;
 	
-	Game game;
+	MultiplayerGame game;
 	
-	public Server(Game game){
+	public Server(MultiplayerGame game){
 		this.game = game;
-		this.spectators = new HashSet<Spectator>();
+		this.gameListeners = new HashSet<GameListener>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(0);
+			this.serverSocket = new DatagramSocket(58762);
 			this.address = InetAddress.getByName("localhost");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.port = serverSocket.getLocalPort();
-		this.game.port = this.port;
+		this.game.setPort(this.port);
 	}
 	
 	public void run(){
@@ -58,51 +56,46 @@ public class Server extends Thread{
 		while(go){
 			try{
 		        // receive request from Client
-				byteData = new byte[4];
+				byteData = new byte[120];
 				packet = new DatagramPacket(byteData, byteData.length);
 		        serverSocket.receive(packet);
 		        byteData = packet.getData();
 		        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
-				DataInputStream dataIn = new DataInputStream(bytesIn);
-		        int clientId = dataIn.readInt();
+				ObjectInputStream dataIn = new ObjectInputStream(bytesIn);
+		        GameListener listener = (GameListener) dataIn.readObject();
 		        dataIn.close();
 		        
-		        // Obtain Client's location
+		        this.gameListeners.add(listener);
+
 		        int clientPort = packet.getPort();
 		        InetAddress clientAddress = packet.getAddress();
-		   
-		        numberOfAsteroids = this.game.getAsteroids().size();
-		        numberOfBullets = this.game.getBullets().size();
- 
+
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);	
-				
-				objOut.writeInt(this.game.getAsteroids().size());
-				objOut.writeInt(this.game.getBullets().size());
-				objOut.writeObject(this.game.getPlayer());
+
+				objOut.writeObject(this.game.getShips());
 				objOut.writeObject(this.game.getAsteroids());
 				objOut.writeObject(this.game.getBullets());
 			    objOut.close();
 				
 		        byteData = bytesOut.toByteArray();
-				packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
-			    serverSocket.send(packet);
-
+		        packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
+		        serverSocket.send(packet);
 			}
 			catch(Exception e){
-				System.out.println(e.getStackTrace() + "SERVER");
+				System.out.println(e +  "SERVER");
 				go = false;
 				serverSocket.close();
 			}
 		}
 	}
 
-	public HashSet<Spectator> getSpectators() {
-		return spectators;
+	public HashSet<GameListener> getSpectators() {
+		return this.gameListeners;
 	}
 
-	public void setSpectators(HashSet<Spectator> spectators) {
-		this.spectators = spectators;
+	public void setSpectators(HashSet<GameListener> gameListeners) {
+		this.gameListeners = gameListeners;
 	}
 
 	public DatagramSocket getServersocket() {
@@ -149,7 +142,7 @@ public class Server extends Thread{
 		return game;
 	}
 
-	public void setGame(Game game) {
+	public void setGame(MultiplayerGame game) {
 		this.game = game;
 	}
 

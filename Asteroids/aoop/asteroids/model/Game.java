@@ -42,31 +42,31 @@ public class Game extends Observable implements Runnable
 {
 
 	/** The spaceship of the player. */
-	private Spaceship ship;
+	protected Spaceship ship;
 
 	/** List of bullets. */
-	private Collection <Bullet> bullets;
+	protected Collection <Bullet> bullets;
 
 	/** List of asteroids. */
-	private Collection <Asteroid> asteroids;
+	protected Collection <Asteroid> asteroids;
 
 	/** Random number generator. */
-	private static Random rng;
+	protected static Random rng;
 
 	/** Game tick counter for spawning random asteroids. */
-	private int cycleCounter;
+	protected int cycleCounter;
 	
 	public int port;
 
 	/** Asteroid limit. */
-	private int asteroidsLimit;
+	protected int asteroidsLimit;
 
 	/** 
 	 *	Indicates whether the a new game is about to be started. 
 	 *
 	 *	@see #run()
 	 */
-	private boolean aborted;
+	protected boolean aborted;
 
 	/** Initializes a new game from scratch. */
 	public Game ()
@@ -166,7 +166,7 @@ public class Game extends Observable implements Runnable
 	 *	Adds a randomly sized asteroid at least 50 pixels removed from the 
 	 *	player.
 	 */
-	private void addRandomAsteroid ()
+	protected void addRandomAsteroid ()
 	{
 		int prob = Game.rng.nextInt (3000);
 		Point loc, shipLoc = this.ship.getLocation ();
@@ -190,7 +190,7 @@ public class Game extends Observable implements Runnable
 	 *	not with objects of the same type. I.e. bullets cannot collide with 
 	 *	bullets etc.
 	 */
-	private void checkCollisions ()
+	protected void checkCollisions ()
 	{ // Destroy all objects that collide.
 		for (Bullet b : this.bullets)
 		{ // For all bullets.
@@ -224,7 +224,7 @@ public class Game extends Observable implements Runnable
 	 * 	Increases the score of the player by one and updates asteroid limit 
 	 *	when required.
 	 */
-	private void increaseScore ()
+	protected void increaseScore ()
 	{
 		this.ship.increaseScore ();
 		if (this.ship.getScore () % 5 == 0) this.asteroidsLimit++;
@@ -236,7 +236,7 @@ public class Game extends Observable implements Runnable
 	 *	asteroids are faster than their predecessor and travel in opposite 
 	 *	direction.
 	 */
-	private void removeDestroyedObjects ()
+	protected void removeDestroyedObjects ()
 	{
 		Collection <Asteroid> newAsts = new ArrayList <> ();
 		for (Asteroid a : this.asteroids)
@@ -262,7 +262,7 @@ public class Game extends Observable implements Runnable
 	 *
 	 *	@return true if game is over, false otherwise.
 	 */ 
-	private boolean gameOver ()
+	protected boolean gameOver ()
 	{
 		return this.ship.isDestroyed ();
 	}

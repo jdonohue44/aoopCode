@@ -13,67 +13,35 @@ import aoop.asteroids.Spectator;
 public class SpectateGame extends Game implements Runnable {
 
 	Spectator spectator;
-	Spaceship ship;
-	ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
-	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
-	private boolean aborted;
-	private boolean gameOver;
+	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 	
 	public SpectateGame(Spectator spectator) {
-		this.ship = new Spaceship();
-		this.gameOver = false;
 		this.spectator = spectator;
 	}
 
+	@Override
 	protected synchronized void update ()
 	{
-		this.ship = spectator.getShip();
+		this.ships = spectator.getShips();
+		if(this.ships.size()>0) this.ship = this.ships.get(0);
 		this.asteroids = spectator.getAsteroids();
 		this.bullets = spectator.getBullets();
+		
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
-		this.ship.nextStep();
+		for (Spaceship s : this.ships) s.nextStep();
+		
 		this.setChanged ();
 		this.notifyObservers ();
 	}
 	
-	/** Sets all game data to hold the values of a new game. */
-	public void initGameData ()
-	{
-		super.initGameData();
-	}
-
-
-	public Spaceship getPlayer ()
-	{
-		return this.ship.clone ();
-	}
-
-	public synchronized Collection <Asteroid> getAsteroids ()
-	{
-		Collection <Asteroid> c = new ArrayList <> ();
-		for (Asteroid a : this.asteroids) c.add (a.clone ());
-		return c;
-	}
-
-	public Collection <Bullet> getBullets ()
-	{
-		Collection <Bullet> c = new ArrayList <> ();
-		for (Bullet b : this.bullets) c.add (b.clone ());
-		return c;
-	}
-	
-	private boolean gameOver ()
-	{
-		return this.ship.isDestroyed ();
-	}
-	
+	@Override
 	public void run ()
 	{ // Update -> sleep -> update -> sleep -> etc...
 		long executionTime, sleepTime;
 		while (!this.aborted && this.spectator.isSpectating())
 		{
-			if (!this.gameOver)
+			if (!this.gameOver())
 			{
 				executionTime = System.currentTimeMillis ();
 				this.update ();

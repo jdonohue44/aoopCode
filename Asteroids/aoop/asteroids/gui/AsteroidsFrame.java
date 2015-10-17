@@ -40,6 +40,7 @@ public class AsteroidsFrame extends JFrame
 	 MenuPanel menuPanel;
 	 NetworkInfoPanel networkInfoPanel;
 	 NicknamePanel nicknamePanel;
+	 ConnectionErrorPanel connectionErrorPanel;
 	 
 	 Game game;
 	 
@@ -75,8 +76,10 @@ public class AsteroidsFrame extends JFrame
 		cardPanel = new JPanel(cardLayout);
 		asteroidsPanel = new AsteroidsPanel();
 		menuPanel = new MenuPanel(cardPanel,cardLayout);
+		connectionErrorPanel = new ConnectionErrorPanel();
 		cardPanel.add(asteroidsPanel, "asteroidsPanel");
 		cardPanel.add(menuPanel,"menuPanel");
+		cardPanel.add(connectionErrorPanel,"connectionErrorPanel");
 		cardLayout.show(cardPanel,"menuPanel");
 		this.add(cardPanel);
 		
@@ -86,6 +89,14 @@ public class AsteroidsFrame extends JFrame
 	
 	public Game getGame(){
 		return this.game;
+	}
+	
+	public CardLayout getCardLayout(){
+		return this.cardLayout;
+	}
+	
+	public JPanel getCardPanel(){
+		return this.cardPanel;
 	}
 	
 	public void setGame(Game g){

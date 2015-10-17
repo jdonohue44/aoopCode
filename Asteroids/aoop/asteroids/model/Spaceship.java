@@ -170,14 +170,6 @@ public class Spaceship extends GameObject
 		if (this.stepsTilFire != 0)
 			this.stepsTilFire--;
 	}
-	
-	public void nextStep(double locationX, double locationY, double direction, boolean isAccelerating, int score){
-		this.locationX = locationX;
-		this.locationY = locationY;
-		this.direction = direction;
-		this.up = isAccelerating;
-		this.score = score;
-	}
 
 	/**
 	 *	Returns a copy of the spaceship. Note that only interesting fields are 
