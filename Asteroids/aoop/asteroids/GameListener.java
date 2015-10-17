@@ -2,32 +2,42 @@ package aoop.asteroids;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class GameListener implements Serializable{
 	InetAddress clientAddress;
 	int clientPort;
-	GameListener(String clientAddress, int clientPort){
-		try {
-			this.clientAddress = InetAddress.getByName(clientAddress);
+	int id;
+	
+	GameListener(InetAddress clientAddress, int clientPort, int id){
+			this.clientAddress = clientAddress;
 			this.clientPort = clientPort;
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+			this.id = id;
 	}
+
 	public InetAddress getClientAddress() {
 		return clientAddress;
 	}
+
 	public void setClientAddress(InetAddress clientAddress) {
 		this.clientAddress = clientAddress;
 	}
+
 	public int getClientPort() {
 		return clientPort;
 	}
+
 	public void setClientPort(int clientPort) {
 		this.clientPort = clientPort;
 	}
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -35,8 +45,10 @@ public class GameListener implements Serializable{
 		result = prime * result
 				+ ((clientAddress == null) ? 0 : clientAddress.hashCode());
 		result = prime * result + clientPort;
+		result = prime * result + id;
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -53,6 +65,9 @@ public class GameListener implements Serializable{
 			return false;
 		if (clientPort != other.clientPort)
 			return false;
+		if (id != other.id)
+			return false;
 		return true;
 	}
+	
 }

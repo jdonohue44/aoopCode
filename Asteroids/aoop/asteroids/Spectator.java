@@ -22,12 +22,13 @@ import aoop.asteroids.model.Spaceship;
 public class Spectator extends Thread{
 	
 	int clientPort;
-	String clientAddress;
+	InetAddress clientAddress;
 	int serverPort;
 	InetAddress serverAddress;
 	DatagramSocket clientSocket = null;
 	DatagramPacket packet;
-	DataOutputStream dataOut;
+	ObjectOutputStream objOut;
+	ObjectInputStream objIn;
 	ByteArrayOutputStream bytesOut;
 	ByteArrayInputStream bytesIn;
 	byte[] byteData;
@@ -36,12 +37,6 @@ public class Spectator extends Thread{
 	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
 	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 	GameListener gameListener;
-	
-	int numberOfAsteroids =0;
-	int numberOfBullets =0;
-	Spaceship ship = new Spaceship();
-	int packetNumber;
-    int score = 0;
     
     boolean spectating;
 	
@@ -49,13 +44,20 @@ public class Spectator extends Thread{
 		try {
 			this.clientSocket = new DatagramSocket();
 			this.clientPort = clientSocket.getLocalPort();
-			this.clientAddress = this.clientSocket.getLocalAddress().getHostName();
-			System.out.println(this.clientAddress);
-			this.gameListener = new GameListener(clientAddress, clientPort);
+			this.clientAddress = clientSocket.getLocalAddress().getLocalHost();
+			this.gameListener = new GameListener(clientAddress, clientPort, 0);
 			this.serverAddress = InetAddress.getByName(serverAddress);
 			this.serverPort = serverPort;
 			this.spectating = true;
-	        
+			
+			// Send Ping to Server with this clients socket information
+			bytesOut = new ByteArrayOutputStream();
+			objOut = new ObjectOutputStream(bytesOut);
+			objOut.writeObject(this.gameListener);
+	        byteData = bytesOut.toByteArray();	
+			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
+		    clientSocket.send(packet);
+	        objOut.close();
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,17 +66,9 @@ public class Spectator extends Thread{
 	public void run(){
 		while(spectating){
 		try {
-			// Send Ping to Server with this clients socket information
-			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-			ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
-			dataOut.writeObject(this.gameListener);
-	        byteData = bytesOut.toByteArray();	
-			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
-		    clientSocket.send(packet);
-	        dataOut.close();
-	        
+			
 	        // Recieve Data from Server
-			byteData = new byte[800];
+			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);
 			
 			try{
@@ -83,11 +77,10 @@ public class Spectator extends Thread{
 				byteData = packet.getData();
 			}catch(SocketTimeoutException e){
 				this.spectating = false;
-				System.out.println(e + ", so I ended the client");
 			}
 	       
-	        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
-	        ObjectInputStream objIn = new ObjectInputStream(bytesIn);
+	        bytesIn = new ByteArrayInputStream(byteData);
+	        objIn = new ObjectInputStream(bytesIn);
 
 	        try {
 				this.ships     = (ArrayList<Spaceship>) objIn.readObject();
@@ -102,7 +95,6 @@ public class Spectator extends Thread{
 				objIn.close();
 			}
     		
-
 		}catch(IOException e){
 			System.out.println(e + " on the Client");
 			this.spectating = false;
@@ -121,10 +113,6 @@ public class Spectator extends Thread{
 	
 	public ArrayList<Spaceship> getShips() {
 		return this.ships;
-	}
-	
-	public Spaceship getShip() {
-		return this.ship;
 	}
 	
 	public ArrayList<Asteroid> getAsteroids(){

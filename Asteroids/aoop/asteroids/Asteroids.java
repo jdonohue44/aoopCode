@@ -74,12 +74,13 @@ public class Asteroids
 			}
 			else if(gameId == 2){ // join
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
+				
 //				NetworkInfoPanel nip = frame.getMenuPanel().getNip();
 //				String host = nip.getHost();
 //				int port = nip.getPort();
 				
-				Spectator spectator = new Spectator("localhost", 58762);
-				Thread clientThread = new Thread(spectator);
+				Joiner joiner = new Joiner("localhost", 58762);
+				Thread clientThread = new Thread(joiner);
 				clientThread.start();
 				
 				MultiplayerGame game = (MultiplayerGame) asteroidsPanel.getGame();
@@ -114,12 +115,13 @@ public class Asteroids
 				
 				try {
 					t.join();
-					spectator.setSpectating(false);
 					if(frame.getMenuPanel().getGameId() != -1){
 						frame.getMenuPanel().setGameId(-1);
 						frame.getCardLayout().show(frame.getCardPanel(), "connectionErrorPanel");
 					}
-					frame.getMenuPanel().setGameId(-1);
+					else{
+						spectator.setSpectating(false);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

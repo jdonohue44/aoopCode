@@ -12,7 +12,7 @@ import aoop.asteroids.gui.Player;
 public class MultiplayerGame extends Game implements Runnable {
 
 	private Collection <Spaceship> ships;
-
+	
 	public MultiplayerGame() {
 		Game.rng = new Random ();
 		this.initGameData ();

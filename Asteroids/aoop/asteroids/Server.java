@@ -4,15 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.HashSet;
 
 import aoop.asteroids.model.Game;
 import aoop.asteroids.model.MultiplayerGame;
+import aoop.asteroids.model.Spaceship;
 
 
 public class Server extends Thread{
@@ -56,16 +59,31 @@ public class Server extends Thread{
 		while(go){
 			try{
 				// receive request from Client
-				byteData = new byte[204];
+				byteData = new byte[300];
 				packet = new DatagramPacket(byteData, byteData.length);
-		        serverSocket.receive(packet);
-		        byteData = packet.getData();
-		        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
-				ObjectInputStream objIn = new ObjectInputStream(bytesIn);
-		        GameListener listener = (GameListener) objIn.readObject();
-		        objIn.close();
+				try{
+					serverSocket.setSoTimeout(5);
+			        serverSocket.receive(packet);
+			        byteData = packet.getData();
+			        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
+					ObjectInputStream objIn = new ObjectInputStream(bytesIn);
+			        GameListener listener = (GameListener) objIn.readObject();
+		        	this.gameListeners.add(listener);
 		        
-		        this.gameListeners.add(listener);
+			        if(listener.getId() == 0){
+				        objIn.close();
+			        }
+			        else if(listener.getId() == 1) {
+			        	Spaceship s = (Spaceship) objIn.readObject();
+			        	this.game.getShips().add(s);
+				        objIn.close();
+			        }
+			        else{
+			        	throw new Exception("I'm sorry, I don't recognize that packet ID.");
+			        }
+				}catch(IOException e){
+					
+				}
 		        
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
@@ -75,15 +93,15 @@ public class Server extends Thread{
 			    objOut.close();
 				
 		        for(GameListener gl : this.gameListeners){
+			        InetAddress clientAddress = gl.getClientAddress();
 			        int clientPort = gl.getClientPort();
-			        InetAddress clientAddress = InetAddress.getByName(("localhost"));
 			        byteData = bytesOut.toByteArray();
 			        packet = new DatagramPacket(byteData, byteData.length, clientAddress, clientPort);
 			        serverSocket.send(packet);
 		        }
 			}
 			catch(Exception e){
-				System.out.println(e +  "SERVER");
+				System.out.println(e +  " on the Server");
 				go = false;
 				serverSocket.close();
 			}
