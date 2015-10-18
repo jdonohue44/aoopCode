@@ -11,12 +11,8 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 	
 	public JoinGame(Joiner joiner){
 		this.joiner = joiner;
-		Spaceship s = new Spaceship();
-		this.ship = s;
-		this.ships.add(s);
-		joiner.setShip(this.ship);
+		this.ship = joiner.getShip();
 	}
-	
 	
 	@Override
 	protected synchronized void update ()

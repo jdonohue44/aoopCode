@@ -19,7 +19,6 @@ public class MultiplayerGame extends Game implements Runnable {
 		Spaceship s = new Spaceship();
 		this.ship = s;
 		this.ships.add(s);
-		this.ships.add(new Spaceship(Color.RED));
 	}
 
 	public int getPort() {

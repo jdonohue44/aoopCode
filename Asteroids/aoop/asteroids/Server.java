@@ -62,7 +62,7 @@ public class Server extends Thread{
 		while(go){
 			try{
 				// receive request from Client
-				byteData = new byte[300];
+				byteData = new byte[800];
 				packet = new DatagramPacket(byteData, byteData.length);
 				try{
 					serverSocket.setSoTimeout(5);
@@ -82,19 +82,15 @@ public class Server extends Thread{
 				        objIn.close();
 			        }
 			        else if(listener.getId() == 1) {
-			        	Spaceship s = (Spaceship) objIn.readObject();
-			        	ArrayList<Bullet> bullets = (ArrayList<Bullet>) objIn.readObject();
-			        	this.game.getShips().add(s);
-			        	for(Bullet b: bullets){
-			        		this.game.getBullets().add(b);
-			        	}
+			        	this.gameListeners.add(listener);
+			        	ArrayList <Spaceship> ships2 = (ArrayList <Spaceship>) objIn.readObject();
+			        	this.game.getShips().addAll(ships2);
 				        objIn.close();
 			        }
 			        else{
 			        	throw new Exception("I'm sorry, I don't recognize that packet ID.");
 			        }
 				}catch(IOException e){
-					
 				}
 		        
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();

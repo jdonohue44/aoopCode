@@ -163,6 +163,14 @@ public class Game extends Observable implements Runnable
 		return c;
 	}
 	
+	public void setShips(ArrayList <Spaceship> ships){
+		this.ships = ships;
+	}
+	
+	public void addShip(Spaceship s){
+		this.ships.add(s);
+	}
+	
 	/**
 	 *	Method invoked at every game tick. It updates all game objects first. 
 	 *	Then it adds a bullet if the player is firing. Afterwards it checks all 

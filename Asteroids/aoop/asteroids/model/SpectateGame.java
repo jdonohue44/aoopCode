@@ -1,5 +1,7 @@
 package aoop.asteroids.model;
 
+import java.awt.Color;
+
 import aoop.asteroids.Spectator;
 
 public class SpectateGame extends Game implements Runnable {

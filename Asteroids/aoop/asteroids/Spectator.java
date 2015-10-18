@@ -67,7 +67,7 @@ public class Spectator extends Thread{
 		while(spectating){
 		try {
 			
-	        // Recieve Data from Server
+	        // Receive Data from Server
 			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);
 			
@@ -101,7 +101,19 @@ public class Spectator extends Thread{
 	        clientSocket.close();
 		}
 	}
-}
+		// Remove gameListener from Server
+		bytesOut = new ByteArrayOutputStream();
+		try {
+			objOut = new ObjectOutputStream(bytesOut);
+			objOut.writeObject(this.gameListener);
+	        byteData = bytesOut.toByteArray();	
+			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
+		    clientSocket.send(packet);
+	        objOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean isSpectating(){
 		return this.spectating;
@@ -122,5 +134,4 @@ public class Spectator extends Thread{
 	public ArrayList<Bullet> getBullets(){
 		return this.bullets;
 	}
-	
 }

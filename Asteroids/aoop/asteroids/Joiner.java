@@ -17,11 +17,13 @@ import aoop.asteroids.model.Spaceship;
 public class Joiner extends Spectator implements Runnable {
 	
 	Spaceship ship;
-	ArrayList<Bullet> bullets;
+	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 
-	public Joiner(String serverAddress, int serverPort) {
+	public Joiner(String serverAddress, int serverPort, Spaceship ship) {
 		super(serverAddress, serverPort);
 		this.gameListener.setId(1);
+		this.ship = ship;
+		this.ships.add(ship);
 	}
 	
 	@Override
@@ -32,8 +34,7 @@ public class Joiner extends Spectator implements Runnable {
 			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 			ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
 			dataOut.writeObject(this.gameListener);
-			dataOut.writeObject(this.ship);
-			dataOut.writeObject(this.bullets);
+			dataOut.writeObject(this.getShips());
 	        byteData = bytesOut.toByteArray();	
 			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
 		    clientSocket.send(packet);
@@ -58,6 +59,7 @@ public class Joiner extends Spectator implements Runnable {
 
 	        try {
 				this.ships     = (ArrayList<Spaceship>) objIn.readObject();
+				this.ships.add(this.ship);
 				this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
 				this.bullets   = (ArrayList<Bullet>) objIn.readObject();
 				objIn.close();
@@ -77,11 +79,21 @@ public class Joiner extends Spectator implements Runnable {
 }
 
 	public Spaceship getShip() {
-		return ship;
+		return this.ship;
 	}
-
+	
 	public void setShip(Spaceship ship) {
 		this.ship = ship;
 	}
+
+	public void setShips(ArrayList<Spaceship> ships) {
+		this.ships = ships;
+	}
+	
+	public ArrayList<Spaceship> getShips() {
+		return this.ships;
+	}
+
+
 	
 }
