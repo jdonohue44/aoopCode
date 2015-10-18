@@ -17,30 +17,31 @@ import aoop.asteroids.model.Spaceship;
 public class Joiner extends Spectator implements Runnable {
 	
 	Spaceship ship;
-	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
-
+	
 	public Joiner(String serverAddress, int serverPort, Spaceship ship) {
 		super(serverAddress, serverPort);
 		this.gameListener.setId(1);
 		this.ship = ship;
-		this.ships.add(ship);
+        try {
+    		// Send Ping to Server with this clients socket information
+    		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+    		ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
+    		dataOut.writeObject(this.gameListener);
+    		dataOut.writeObject(this.getShip());
+            byteData = bytesOut.toByteArray();	
+    		packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
+    	    clientSocket.send(packet);
+			dataOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void run(){
 		while(spectating){
 		try {
-			// Send Ping to Server with this clients socket information
-			ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-			ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
-			dataOut.writeObject(this.gameListener);
-			dataOut.writeObject(this.getShips());
-	        byteData = bytesOut.toByteArray();	
-			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
-		    clientSocket.send(packet);
-	        dataOut.close();
-	        
-	        
+
 	        // Recieve Data from Server
 			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);
@@ -59,7 +60,6 @@ public class Joiner extends Spectator implements Runnable {
 
 	        try {
 				this.ships     = (ArrayList<Spaceship>) objIn.readObject();
-				this.ships.add(this.ship);
 				this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
 				this.bullets   = (ArrayList<Bullet>) objIn.readObject();
 				objIn.close();
