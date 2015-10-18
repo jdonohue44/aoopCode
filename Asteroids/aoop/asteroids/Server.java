@@ -84,7 +84,10 @@ public class Server extends Thread{
 			        else if(listener.getId() == 1) {
 			        	this.gameListeners.add(listener);
 			        	ArrayList <Spaceship> ships2 = (ArrayList <Spaceship>) objIn.readObject();
-			        	this.game.getShips().addAll(ships2);
+			        	ArrayList<Spaceship> gameShips = new ArrayList<Spaceship>();
+			        	gameShips.addAll(this.game.getShips());
+			        	gameShips.addAll(ships2);
+			        	this.game.setShips(gameShips);
 				        objIn.close();
 			        }
 			        else{
