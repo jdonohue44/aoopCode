@@ -71,9 +71,14 @@ public class Server extends Thread{
 			        ByteArrayInputStream bytesIn = new ByteArrayInputStream(byteData);
 					ObjectInputStream objIn = new ObjectInputStream(bytesIn);
 			        GameListener listener = (GameListener) objIn.readObject();
-		        	this.gameListeners.add(listener);
 		        
 			        if(listener.getId() == 0){
+			        	if(!this.gameListeners.contains(listener)){
+			        		this.gameListeners.add(listener);
+			        	}
+			        	else{
+			        		this.gameListeners.remove(listener);
+			        	}
 				        objIn.close();
 			        }
 			        else if(listener.getId() == 1) {
