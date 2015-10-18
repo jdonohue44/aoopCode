@@ -1,5 +1,6 @@
 package aoop.asteroids.model;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,26 +11,17 @@ import aoop.asteroids.Spectator;
 import aoop.asteroids.gui.Player;
 
 public class MultiplayerGame extends Game implements Runnable {
-
-	private Collection <Spaceship> ships;
 	
 	public MultiplayerGame() {
 		Game.rng = new Random ();
 		this.initGameData ();
-		
 		this.ships = new ArrayList<Spaceship>();
-		this.ship = new Spaceship ();
-		this.ships.add(this.ship);
-		this.ships.add(new Spaceship());
+		Spaceship s = new Spaceship();
+		this.ship = s;
+		this.ships.add(s);
+		this.ships.add(new Spaceship(Color.RED));
 	}
 
-	public Collection <Spaceship> getShips ()
-	{
-		Collection <Spaceship> c = new ArrayList <> ();
-		for (Spaceship s : this.ships) c.add (s.clone ());
-		return c;
-	}
-	
 	public int getPort() {
 		return port;
 	}

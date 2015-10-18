@@ -6,6 +6,7 @@ import aoop.asteroids.gui.MenuPanel;
 import aoop.asteroids.gui.NetworkInfoPanel;
 import aoop.asteroids.gui.Player;
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.MultiplayerGame;
 import aoop.asteroids.model.Spaceship;
 import aoop.asteroids.model.SpectateGame;
@@ -83,28 +84,36 @@ public class Asteroids
 				Thread clientThread = new Thread(joiner);
 				clientThread.start();
 				
-				MultiplayerGame game = (MultiplayerGame) asteroidsPanel.getGame();
-				Spaceship s = new Spaceship();
-				game.addSpaceship(s);
+				JoinGame game = new JoinGame(joiner);
+				asteroidsPanel.startGame(game);
+				Thread t = new Thread(game);
+				t.start();
 				
 				Player player = new Player ();
-				player.addShip(s);
 				frame.addKeyListener(player);
 				game.linkController (player);
-
+				
 				try {
-					clientThread.join();
+					t.join();
+					if(frame.getMenuPanel().getGameId() != -1){
+						frame.getMenuPanel().setGameId(-1);
+						frame.getCardLayout().show(frame.getCardPanel(), "connectionErrorPanel");
+					}
+					else{
+						joiner.setSpectating(false);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				}	
 			}
+
 			else if (gameId == 3){ // spectate
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
-//				NetworkInfoPanel nip = frame.getMenuPanel().getNip();
-//				String host = nip.getHost();
-//				int port = nip.getPort();
+				NetworkInfoPanel nip = frame.getMenuPanel().getNip();
+				String host = nip.getHost();
+				int port = nip.getPort();
 
-				Spectator spectator = new Spectator("localhost", 58762);
+				Spectator spectator = new Spectator(host, port);
 				Thread clientThread = new Thread(spectator);
 				clientThread.start();
 				

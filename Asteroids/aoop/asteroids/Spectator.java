@@ -58,7 +58,7 @@ public class Spectator extends Thread{
 			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
 		    clientSocket.send(packet);
 	        objOut.close();
-		}catch (IOException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

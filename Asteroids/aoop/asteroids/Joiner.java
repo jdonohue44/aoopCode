@@ -11,16 +11,17 @@ import java.util.ArrayList;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.Spaceship;
 
 public class Joiner extends Spectator implements Runnable {
 	
 	Spaceship ship;
+	ArrayList<Bullet> bullets;
 
 	public Joiner(String serverAddress, int serverPort) {
 		super(serverAddress, serverPort);
 		this.gameListener.setId(1);
-		this.ship = new Spaceship();
 	}
 	
 	@Override
@@ -32,10 +33,13 @@ public class Joiner extends Spectator implements Runnable {
 			ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
 			dataOut.writeObject(this.gameListener);
 			dataOut.writeObject(this.ship);
+			dataOut.writeObject(this.bullets);
 	        byteData = bytesOut.toByteArray();	
 			packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
 		    clientSocket.send(packet);
 	        dataOut.close();
+	        
+	        
 	        // Recieve Data from Server
 			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);
@@ -71,8 +75,13 @@ public class Joiner extends Spectator implements Runnable {
 		}
 	}
 }
-	
-	public void addShip(Spaceship s){	
-		this.ships.add(s);
+
+	public Spaceship getShip() {
+		return ship;
 	}
+
+	public void setShip(Spaceship ship) {
+		this.ship = ship;
+	}
+	
 }

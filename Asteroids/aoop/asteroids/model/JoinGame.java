@@ -1,21 +1,29 @@
 package aoop.asteroids.model;
 
-import aoop.asteroids.Spectator;
+import java.util.ArrayList;
 
-public class SpectateGame extends Game implements Runnable {
+import aoop.asteroids.Joiner;
+import aoop.asteroids.gui.Player;
 
-	Spectator spectator;
+public class JoinGame extends MultiplayerGame implements Runnable {
+
+	Joiner joiner;
 	
-	public SpectateGame(Spectator spectator) {
-		this.spectator = spectator;
+	public JoinGame(Joiner joiner){
+		this.joiner = joiner;
+		Spaceship s = new Spaceship();
+		this.ship = s;
+		this.ships.add(s);
+		joiner.setShip(this.ship);
 	}
-
+	
+	
 	@Override
 	protected synchronized void update ()
 	{
-		this.ships = spectator.getShips();
-		this.asteroids = spectator.getAsteroids();
-		this.bullets = spectator.getBullets();
+		this.ships = joiner.getShips();
+		this.asteroids = joiner.getAsteroids();
+		this.bullets = joiner.getBullets();
 		
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
@@ -29,7 +37,7 @@ public class SpectateGame extends Game implements Runnable {
 	public void run ()
 	{ // Update -> sleep -> update -> sleep -> etc...
 		long executionTime, sleepTime;
-		while (!this.aborted && this.spectator.isSpectating())
+		while (!this.aborted && this.joiner.isSpectating())
 		{
 			if (!this.gameOver())
 			{
@@ -52,5 +60,7 @@ public class SpectateGame extends Game implements Runnable {
 			}
 		}
 	}
-}
 
+
+
+}

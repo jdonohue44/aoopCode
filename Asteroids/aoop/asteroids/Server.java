@@ -11,8 +11,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
 import aoop.asteroids.model.MultiplayerGame;
 import aoop.asteroids.model.Spaceship;
@@ -45,8 +47,9 @@ public class Server extends Thread{
 		this.gameListeners = new HashSet<GameListener>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(58762);
+			this.serverSocket = new DatagramSocket(0);
 			this.address = InetAddress.getByName("localhost");
+			this.game.setHost(serverSocket.getLocalAddress().getLocalHost());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,7 +78,11 @@ public class Server extends Thread{
 			        }
 			        else if(listener.getId() == 1) {
 			        	Spaceship s = (Spaceship) objIn.readObject();
+			        	ArrayList<Bullet> bullets = (ArrayList<Bullet>) objIn.readObject();
 			        	this.game.getShips().add(s);
+			        	for(Bullet b: bullets){
+			        		this.game.getBullets().add(b);
+			        	}
 				        objIn.close();
 			        }
 			        else{

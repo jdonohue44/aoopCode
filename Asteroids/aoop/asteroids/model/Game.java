@@ -1,6 +1,7 @@
 package aoop.asteroids.model;
 
 import java.awt.Point;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
@@ -43,6 +44,8 @@ public class Game extends Observable implements Runnable
 
 	/** The spaceship of the player. */
 	protected Spaceship ship;
+	
+	protected Collection <Spaceship> ships;
 
 	/** List of bullets. */
 	protected Collection <Bullet> bullets;
@@ -60,6 +63,8 @@ public class Game extends Observable implements Runnable
 
 	/** Asteroid limit. */
 	protected int asteroidsLimit;
+	
+	protected InetAddress host;
 
 	/** 
 	 *	Indicates whether the a new game is about to be started. 
@@ -84,7 +89,9 @@ public class Game extends Observable implements Runnable
 		this.asteroidsLimit = 7;
 		this.bullets = new ArrayList <> ();
 		this.asteroids = new ArrayList <> ();
+		this.ships = new ArrayList<> ();
 		this.ship.reinit ();
+		this.ships.add(this.ship);
 	}
 
 	/** 
@@ -105,6 +112,23 @@ public class Game extends Observable implements Runnable
 	public Spaceship getPlayer ()
 	{
 		return this.ship.clone ();
+	}
+
+	
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public InetAddress getHost() {
+		return host;
+	}
+
+	public void setHost(InetAddress host) {
+		this.host = host;
 	}
 
 	/** 
@@ -131,6 +155,14 @@ public class Game extends Observable implements Runnable
 		return c;
 	}
 
+
+	public Collection <Spaceship> getShips ()
+	{
+		Collection <Spaceship> c = new ArrayList <> ();
+		for (Spaceship s : this.ships) c.add (s.clone ());
+		return c;
+	}
+	
 	/**
 	 *	Method invoked at every game tick. It updates all game objects first. 
 	 *	Then it adds a bullet if the player is firing. Afterwards it checks all 
@@ -142,7 +174,7 @@ public class Game extends Observable implements Runnable
 	{
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
-		this.ship.nextStep ();
+		for (Spaceship s : this.ships) s.nextStep ();
 
 		if (this.ship.isFiring ())
 		{
