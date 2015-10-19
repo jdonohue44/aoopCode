@@ -45,7 +45,7 @@ public class Game extends Observable implements Runnable
 	/** The spaceship of the player. */
 	protected Spaceship ship;
 	
-	public ArrayList <Spaceship> ships;
+	public Collection <Spaceship> ships;
 
 	/** List of bullets. */
 	protected Collection <Bullet> bullets;
