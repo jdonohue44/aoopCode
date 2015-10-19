@@ -66,7 +66,6 @@ public class Game extends Observable implements Runnable
 	
 	protected InetAddress host;
 	
-	protected String nickname = "Score";
 
 	/** 
 	 *	Indicates whether the a new game is about to be started. 
@@ -174,10 +173,6 @@ public class Game extends Observable implements Runnable
 	
 	public void addShip(Spaceship s){
 		this.ships.add(s);
-	}
-	
-	public String getNickname() {
-		return nickname;
 	}
 
 	/**

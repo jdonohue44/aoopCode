@@ -84,7 +84,7 @@ public class Asteroids
 				String host = nip.getHost();
 				int port = nip.getPort();
 				
-				Joiner joiner = new Joiner(host, port, new Spaceship(Color.green));
+				Joiner joiner = new Joiner(host, port, new Spaceship(nickname));
 				Thread clientThread = new Thread(joiner);
 				clientThread.start();
 				

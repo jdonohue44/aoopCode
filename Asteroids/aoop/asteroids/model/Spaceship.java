@@ -46,16 +46,21 @@ public class Spaceship extends GameObject
 	private boolean left;
 	
 	private Color color;
+	
+	private String nickname;
+	
+	private int Id;
+	private static int shipNumber = 0;
 
 	/** Constructs a new spaceship with default values. */
 	public Spaceship ()
 	{
-		this (new Point (400, 400), 0, 0, 15, 0, false, 0, Color.white);
+		this (new Point (400, 400), 0, 0, 15, 0, false, 0, "Nickname");
 	}
 	
-	public Spaceship (Color color)
+	public Spaceship (String nickname)
 	{
-		this (new Point (400, 400), 0, 0, 15, 0, false, 0, color);
+		this (new Point (400, 400), 0, 0, 15, 0, false, 0, nickname);
 	}
 	
 	/**
@@ -72,7 +77,7 @@ public class Spaceship extends GameObject
 	 *	@param up indicator for accelarating button.
 	 *	@param score score.
 	 */
-	private Spaceship (Point location, double velocityX, double velocityY, int radius, double direction, boolean up, int score, Color color)
+	private Spaceship (Point location, double velocityX, double velocityY, int radius, double direction, boolean up, int score, String nickname)
 	{
 		super (location, velocityX, velocityY, radius);
 		this.direction 		= direction;
@@ -82,7 +87,15 @@ public class Spaceship extends GameObject
 		this.right 			= false;
 		this.stepsTilFire 	= 0;
 		this.score			= score;
-		this.color = color;
+		this.nickname = nickname;
+		this.Id = shipNumber;
+		shipNumber++;
+		
+		int colors[] = new int[3];
+		int start = (int)Math.floor(Math.random()*3);
+		colors[start] = (int)Math.floor(Math.random()*256);
+		colors[(start+(int)Math.floor(Math.random()*2)+1)%3] = 255;
+		this.color =  new Color(colors[0],colors[1],colors[2]);
 	}
 
 	/** 
@@ -132,6 +145,22 @@ public class Spaceship extends GameObject
 	public void setRight (boolean b)
 	{
 		this.right = b;
+	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public int getId() {
+		return Id;
+	}
+
+	public void setId(int id) {
+		Id = id;
 	}
 
 	/**
@@ -196,7 +225,9 @@ public class Spaceship extends GameObject
 	 */
 	public Spaceship clone ()
 	{
-		return new Spaceship (this.getLocation (), this.velocityX, this.velocityY, this.radius, this.direction, this.up, this.score, this.color);
+		Spaceship clone = new Spaceship (this.getLocation (), this.velocityX, this.velocityY, this.radius, this.direction, this.up, this.score, this.nickname);
+		clone.setColor( this.color);
+		return clone;
 	}
 
 	/**

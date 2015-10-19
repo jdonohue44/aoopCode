@@ -93,7 +93,7 @@ public class AsteroidsPanel extends JPanel
 		int locationY = 20;
 		for(Spaceship s : this.game.getShips()){
 			g2.setColor (s.getColor());
-			g2.drawString (this.game.getNickname()+": "+String.valueOf (s.getScore ()), 20, locationY);
+			g2.drawString (s.getNickname()+": "+String.valueOf (s.getScore ()), 20, locationY);
 			locationY += 20;
 		}
 		g2.setColor (Color.white);

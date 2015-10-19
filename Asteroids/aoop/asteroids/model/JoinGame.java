@@ -13,21 +13,27 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 		super(nickname);
 		this.joiner = joiner;
 		this.ship = joiner.getShip();
+		this.ships.add(this.ship);
 	}
 	
 	@Override
 	protected synchronized void update ()
 	{
-		this.ships = joiner.getShips();
-		this.asteroids = joiner.getAsteroids();
+		ArrayList<Spaceship> incomingShips = new ArrayList<Spaceship>();
+		for(Spaceship s : joiner.getShips()){
+			if(s.getId() != this.ship.getId()) incomingShips.add(s);
+		}
+		this.ships = incomingShips;
+		this.ships.add(this.ship);
 		this.bullets = joiner.getBullets();
-		
-		for (Asteroid a : this.asteroids) a.nextStep ();
-		for (Bullet b : this.bullets) b.nextStep ();
-		for (Spaceship s : this.ships) s.nextStep();
+		this.asteroids = joiner.getAsteroids();
 
-		this.setChanged ();
-		this.notifyObservers ();
+		for(Spaceship s : this.ships) s.nextStep();
+		for(Asteroid a : this.asteroids) a.nextStep();
+		for(Bullet b : this.bullets) b.nextStep();
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	@Override
