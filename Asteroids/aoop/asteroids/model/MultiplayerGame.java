@@ -16,7 +16,11 @@ public class MultiplayerGame extends Game implements Runnable {
 		Game.rng = new Random ();
 		this.initGameData ();
 		this.ships = new ArrayList<Spaceship>();
-		Spaceship s = new Spaceship();
+		int colors[] = new int[3];
+		int start = (int)Math.floor(Math.random()*3);
+		colors[start] = (int)Math.floor(Math.random()*256);
+		colors[(start+(int)Math.floor(Math.random()*2)+1)%3] = 255;
+		Spaceship s = new Spaceship(new Color(colors[0],colors[1],colors[2]));
 		this.ship = s;
 		this.ships.add(s);
 	}

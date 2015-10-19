@@ -45,7 +45,7 @@ public class Game extends Observable implements Runnable
 	/** The spaceship of the player. */
 	protected Spaceship ship;
 	
-	protected Collection <Spaceship> ships;
+	public Collection <Spaceship> ships;
 
 	/** List of bullets. */
 	protected Collection <Bullet> bullets;
@@ -113,6 +113,8 @@ public class Game extends Observable implements Runnable
 	{
 		return this.ship.clone ();
 	}
+	
+	
 
 	
 	public int getPort() {
@@ -158,9 +160,10 @@ public class Game extends Observable implements Runnable
 
 	public Collection <Spaceship> getShips ()
 	{
-		Collection <Spaceship> c = new ArrayList <> ();
-		for (Spaceship s : this.ships) c.add (s.clone ());
-		return c;
+//		Collection <Spaceship> c = new ArrayList <> ();
+//		for (Spaceship s : this.ships) c.add (s.clone ());
+//		return c;
+		return this.ships;
 	}
 	
 	public void setShips(ArrayList <Spaceship> ships){

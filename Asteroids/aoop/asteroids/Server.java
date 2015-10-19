@@ -87,6 +87,11 @@ public class Server extends Thread{
 			        	this.game.addShip(ship);
 				        objIn.close();
 			        }
+			        else if(listener.getId() == 2) {
+			        	Spaceship s = (Spaceship) objIn.readObject();
+			        	this.game.ships.toArray()[1] = s;
+				        objIn.close();
+			        }
 			        else{
 			        	throw new Exception("I'm sorry, I don't recognize that packet ID.");
 			        }
