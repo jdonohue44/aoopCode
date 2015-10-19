@@ -89,7 +89,10 @@ public class Server extends Thread{
 			        }
 			        else if(listener.getId() == 2) {
 			        	Spaceship s = (Spaceship) objIn.readObject();
-			        	((ArrayList)(this.game.ships)).set(1, s);
+			        	Spaceship player2 = (Spaceship) ((ArrayList)(this.game.ships)).get(1);
+			        	player2.setLocationX(s.getLocationX());
+			        	player2.setLocationY(s.getLocationY());
+			        	
 				        objIn.close();
 			        }
 			        else{
@@ -100,6 +103,7 @@ public class Server extends Thread{
 		        
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
+				System.out.println(this.game.getShips());
 				objOut.writeObject(this.game.getShips());
 				objOut.writeObject(this.game.getAsteroids());
 				objOut.writeObject(this.game.getBullets());
