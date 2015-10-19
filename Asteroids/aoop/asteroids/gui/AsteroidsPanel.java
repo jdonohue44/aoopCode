@@ -98,8 +98,8 @@ public class AsteroidsPanel extends JPanel
 		}
 		g2.setColor (Color.white);
 		if(this.game.port!=0){
-			g2.drawString("Port: " + this.game.port, 610, 20);
-			g2.drawString("Address: " + this.game.getHost() , 610, 40);
+			g2.drawString("Address: " + this.game.getHost().getHostAddress() , 645, 20);
+			g2.drawString("Port: " + this.game.port, 710, 40);
 		}
 	}
 
@@ -111,7 +111,6 @@ public class AsteroidsPanel extends JPanel
 	private void paintBullets (Graphics2D g)
 	{
 		g.setColor(game.getPlayer().getColor());
-		
 
 		for (Bullet b : this.game.getBullets ())
 		    g.drawOval (b.getLocation ().x - 2, b.getLocation ().y - 2, 5, 5);
