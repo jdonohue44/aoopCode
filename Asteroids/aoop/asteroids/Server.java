@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.MultiplayerGame;
 import aoop.asteroids.model.Spaceship;
 
@@ -41,6 +42,7 @@ public class Server extends Thread{
 	int numberOfBullets;
 	
 	MultiplayerGame game;
+	Joiner joiner;
 	
 	public Server(MultiplayerGame game){
 		this.game = game;
@@ -72,6 +74,7 @@ public class Server extends Thread{
 					ObjectInputStream objIn = new ObjectInputStream(bytesIn);
 			        GameListener listener = (GameListener) objIn.readObject();
 		        
+			        // Spectator
 			        if(listener.getId() == 0){
 			        	if(!this.gameListeners.contains(listener)){
 			        		this.gameListeners.add(listener);
@@ -81,10 +84,17 @@ public class Server extends Thread{
 			        	}
 				        objIn.close();
 			        }
+			        
+			        // Joiner
 			        else if(listener.getId() == 1) {
 			        	this.gameListeners.add(listener);
 			        	Spaceship ship = (Spaceship) objIn.readObject();
-			        	this.game.addShip(ship);
+			        	if(this.game.ships.size() == 1){
+			        		this.game.ships.add(ship);
+			        	}
+			        	else{
+			        	((ArrayList)(this.game.ships)).set(1,ship);
+			        	}
 				        objIn.close();
 			        }
 			        else{
@@ -92,11 +102,10 @@ public class Server extends Thread{
 			        }
 				}catch(IOException e){
 				}
-		        
+				
 				ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
 				ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
-				System.out.println(this.game.getShips());
-				objOut.writeObject(this.game.getShips());
+ 				objOut.writeObject(this.game.getShips());
 				objOut.writeObject(this.game.getAsteroids());
 				objOut.writeObject(this.game.getBullets());
 			    objOut.close();

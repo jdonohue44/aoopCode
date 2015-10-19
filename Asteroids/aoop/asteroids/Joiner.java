@@ -20,9 +20,14 @@ public class Joiner extends Spectator implements Runnable {
 	
 	public Joiner(String serverAddress, int serverPort, Spaceship ship) {
 		super(serverAddress, serverPort);
-		this.gameListener.setId(1); // ID = 1 to add a ship
+		this.gameListener.setId(1);
 		this.ship = ship;
-        try {
+	}
+	
+	@Override
+	public void run(){
+		while(spectating){
+		try {
     		// Send Ping to Server with this clients socket information
     		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
     		ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
@@ -32,15 +37,7 @@ public class Joiner extends Spectator implements Runnable {
     		packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
     	    clientSocket.send(packet);
 			dataOut.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void run(){
-		while(spectating){
-		try {
+			
 	        // Recieve Data from Server
 			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);

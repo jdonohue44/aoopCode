@@ -25,7 +25,7 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
 		for (Spaceship s : this.ships) s.nextStep();
-		
+
 		this.setChanged ();
 		this.notifyObservers ();
 	}
