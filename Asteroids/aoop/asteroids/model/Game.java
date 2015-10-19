@@ -59,12 +59,14 @@ public class Game extends Observable implements Runnable
 	/** Game tick counter for spawning random asteroids. */
 	protected int cycleCounter;
 	
-	public int port;
+	protected int port;
 
 	/** Asteroid limit. */
 	protected int asteroidsLimit;
 	
 	protected InetAddress host;
+	
+	protected String nickname = "Score";
 
 	/** 
 	 *	Indicates whether the a new game is about to be started. 
@@ -174,6 +176,10 @@ public class Game extends Observable implements Runnable
 		this.ships.add(s);
 	}
 	
+	public String getNickname() {
+		return nickname;
+	}
+
 	/**
 	 *	Method invoked at every game tick. It updates all game objects first. 
 	 *	Then it adds a bullet if the player is firing. Afterwards it checks all 

@@ -54,7 +54,7 @@ public class Asteroids
 			}
 			else if(gameId == 1){ // host 
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
-				asteroidsPanel.startGame(new MultiplayerGame());
+				asteroidsPanel.startGame(new MultiplayerGame(menu.getNp().getNickname()));
 				MultiplayerGame game = (MultiplayerGame) asteroidsPanel.getGame();
 				asteroidsPanel.setGame(game);
 				
@@ -77,7 +77,7 @@ public class Asteroids
 			}
 			else if(gameId == 2){ // join
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();			
-				NetworkInfoPanel nip = frame.getMenuPanel().getNip();
+				NetworkInfoPanel nip = menu.getNip();
 				String host = nip.getHost();
 				int port = nip.getPort();
 				
@@ -85,7 +85,7 @@ public class Asteroids
 				Thread clientThread = new Thread(joiner);
 				clientThread.start();
 				
-				JoinGame game = new JoinGame(joiner);
+				JoinGame game = new JoinGame(menu.getNp().getNickname(), joiner);
 				asteroidsPanel.startGame(game);
 				Thread t = new Thread(game);
 				t.start();
@@ -96,8 +96,8 @@ public class Asteroids
 				
 				try {
 					t.join();
-					if(frame.getMenuPanel().getGameId() != -1){
-						frame.getMenuPanel().setGameId(-1);
+					if(menu.getGameId() != -1){
+						menu.setGameId(-1);
 						frame.getCardLayout().show(frame.getCardPanel(), "connectionErrorPanel");
 					}
 					else{
@@ -110,7 +110,7 @@ public class Asteroids
 
 			else if (gameId == 3){ // spectate
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
-				NetworkInfoPanel nip = frame.getMenuPanel().getNip();
+				NetworkInfoPanel nip = menu.getNip();
 				String host = nip.getHost();
 				int port = nip.getPort();
 
@@ -125,8 +125,8 @@ public class Asteroids
 				
 				try {
 					t.join();
-					if(frame.getMenuPanel().getGameId() != -1){
-						frame.getMenuPanel().setGameId(-1);
+					if(menu.getGameId() != -1){
+						menu.setGameId(-1);
 						frame.getCardLayout().show(frame.getCardPanel(), "connectionErrorPanel");
 					}
 					else{

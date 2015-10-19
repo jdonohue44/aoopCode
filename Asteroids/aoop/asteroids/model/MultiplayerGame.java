@@ -12,7 +12,8 @@ import aoop.asteroids.gui.Player;
 
 public class MultiplayerGame extends Game implements Runnable {
 	
-	public MultiplayerGame() {
+	public MultiplayerGame(String nickname) {
+		this.nickname = nickname;
 		Game.rng = new Random ();
 		this.initGameData ();
 		this.ships = new ArrayList<Spaceship>();

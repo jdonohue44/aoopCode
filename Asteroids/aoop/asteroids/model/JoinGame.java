@@ -9,7 +9,8 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 
 	Joiner joiner;
 	
-	public JoinGame(Joiner joiner){
+	public JoinGame(String nickname, Joiner joiner){
+		super(nickname);
 		this.joiner = joiner;
 		this.ship = joiner.getShip();
 	}

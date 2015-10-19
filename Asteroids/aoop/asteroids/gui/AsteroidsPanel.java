@@ -93,13 +93,13 @@ public class AsteroidsPanel extends JPanel
 		int locationY = 20;
 		for(Spaceship s : this.game.getShips()){
 			g2.setColor (s.getColor());
-			g2.drawString (String.valueOf (s.getScore ()), 20, locationY);
+			g2.drawString (this.game.getNickname()+": "+String.valueOf (s.getScore ()), 20, locationY);
 			locationY += 20;
 		}
 		g2.setColor (Color.white);
-		if(this.game.port!=0){
+		if(this.game.getPort()!=0){
 			g2.drawString("Address: " + this.game.getHost().getHostAddress() , 645, 20);
-			g2.drawString("Port: " + this.game.port, 710, 40);
+			g2.drawString("Port: " + this.game.getPort(), 710, 40);
 		}
 	}
 
