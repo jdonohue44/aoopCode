@@ -90,11 +90,13 @@ public class Server extends Thread{
 			        	this.gameListeners.add(listener);
 			        	Spaceship ship = (Spaceship) objIn.readObject();
 			        	boolean containsShip = false;
+			        	int counter = 0;
 			        	for(Spaceship s : this.game.ships){
 				        	if((s.getId() == ship.getId())){
-				        		s = ship;
+				        		((ArrayList) this.game.ships).set(counter,ship);
 				        		containsShip = true;
 				        	}
+				        	counter++;
 			        	}
 			        	if(!containsShip) this.game.ships.add(ship);
 				        objIn.close();
