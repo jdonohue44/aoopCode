@@ -35,28 +35,12 @@ public class Joiner extends Spectator implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        this.gameListener.setId(2);
 	}
 	
 	@Override
 	public void run(){
 		while(spectating){
 		try {
-	        try {
-	    		// Send Ping to Server with this clients socket information
-	    		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-	    		ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
-	    		dataOut.writeObject(this.gameListener);
-	    		dataOut.writeObject(this.getShip());
-	            byteData = bytesOut.toByteArray();	
-	    		packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
-	    	    clientSocket.send(packet);
-				dataOut.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-
 	        // Recieve Data from Server
 			byteData = new byte[1600];
 			packet = new DatagramPacket(byteData, byteData.length);

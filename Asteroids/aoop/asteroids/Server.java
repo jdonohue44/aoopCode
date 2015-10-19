@@ -87,14 +87,6 @@ public class Server extends Thread{
 			        	this.game.addShip(ship);
 				        objIn.close();
 			        }
-			        else if(listener.getId() == 2) {
-			        	Spaceship s = (Spaceship) objIn.readObject();
-			        	Spaceship player2 = (Spaceship) ((ArrayList)(this.game.ships)).get(1);
-			        	player2.setLocationX(s.getLocationX());
-			        	player2.setLocationY(s.getLocationY());
-			        	
-				        objIn.close();
-			        }
 			        else{
 			        	throw new Exception("I'm sorry, I don't recognize that packet ID.");
 			        }
