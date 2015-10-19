@@ -89,7 +89,7 @@ public class Server extends Thread{
 			        }
 			        else if(listener.getId() == 2) {
 			        	Spaceship s = (Spaceship) objIn.readObject();
-			        	this.game.ships.toArray()[1] = s;
+			        	this.game.ships.set(1, s);
 				        objIn.close();
 			        }
 			        else{
