@@ -91,12 +91,12 @@ public class Server extends Thread{
 			        else if(listener.getId() == 1) {
 			        	this.gameListeners.add(listener);
 			        	Spaceship ship = (Spaceship) objIn.readObject();
-//			        	ArrayList<Bullet> bullets = (ArrayList<Bullet>) objIn.readObject();
 			        	boolean containsShip = false;
 			        	int counter = 0;
 			        	for(Spaceship s : this.game.ships){
 				        	if((s.getId() == ship.getId())){
-				        		((ArrayList) this.game.ships).set(counter,ship);
+				        		ship.setStepsTilFire(((ArrayList<Spaceship>)this.game.ships).get(counter).getStepsTilFire());
+				        		((ArrayList <Spaceship>) this.game.ships).set(counter,ship);
 				        		containsShip = true;
 				        	}
 				        	counter++;
@@ -115,6 +115,7 @@ public class Server extends Thread{
  				objOut.writeObject(this.game.getShips());
 				objOut.writeObject(this.game.getAsteroids());
 				objOut.writeObject(this.game.getBullets());
+				objOut.writeObject(this.game.getExplosions());
 			    objOut.close();
 				
 		        for(GameListener gl : this.gameListeners){
@@ -126,7 +127,7 @@ public class Server extends Thread{
 		        }
 			}
 			catch(Exception e){
-				System.out.println(  "On the Server: " + e.getStackTrace());
+				System.out.println(  "On the Server: " + e);
 				go = false;
 				serverSocket.close();
 			}

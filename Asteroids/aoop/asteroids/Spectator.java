@@ -16,6 +16,7 @@ import java.io.Serializable;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.Explosion;
 import aoop.asteroids.model.Spaceship;
 
 
@@ -36,6 +37,7 @@ public class Spectator extends Thread{
 	ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
 	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
 	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
+	ArrayList<Explosion> explosions = new ArrayList<Explosion>();
 	GameListener gameListener;
     
     boolean spectating;

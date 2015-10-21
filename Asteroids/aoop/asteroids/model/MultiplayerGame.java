@@ -30,6 +30,38 @@ public class MultiplayerGame extends Game implements Runnable {
 		this.port = port;
 	}
 	
+	@Override
+	protected boolean gameOver ()
+	{
+		return this.getShips().size() == 0;
+	}
+	
+	@Override
+	protected synchronized void update ()
+	{
+		for (Asteroid a : this.asteroids) a.nextStep ();
+		for (Bullet b : this.bullets) b.nextStep ();
+		for (Spaceship s : this.ships) s.nextStep ();
+
+		for(Spaceship s : this.getShips()){
+			if (s.isFiring ()){
+				double direction = s.getDirection ();
+				this.bullets.add (new Bullet(s.getLocation (), s.getVelocityX () + Math.sin (direction) * 15, s.getVelocityY () - Math.cos (direction) * 15));
+				s.setFired ();
+				}
+			}
+
+		this.checkCollisions ();
+		this.removeDestroyedObjects ();
+
+		if (this.cycleCounter == 0 && this.asteroids.size () < this.asteroidsLimit) this.addRandomAsteroid ();
+		this.cycleCounter++;
+		this.cycleCounter %= 200;
+
+		this.setChanged ();
+		this.notifyObservers ();
+	}
+	
 	public void addSpaceship(Spaceship s){
 		this.ships.add(s);
 	}

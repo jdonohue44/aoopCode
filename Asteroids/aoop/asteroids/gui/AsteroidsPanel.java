@@ -9,10 +9,13 @@ import java.awt.geom.Ellipse2D;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.scene.shape.Circle;
+
 import javax.swing.JPanel;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.Explosion;
 import aoop.asteroids.model.Game;
 import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.MultiplayerGame;
@@ -88,6 +91,7 @@ public class AsteroidsPanel extends JPanel
 		this.paintSpaceship (g2);
 		this.paintAsteroids (g2);
 		this.paintBullets (g2);
+		this.paintExplosions (g2);
 
 		
 		int locationY = 20;
@@ -110,7 +114,7 @@ public class AsteroidsPanel extends JPanel
 	 */
 	private void paintBullets (Graphics2D g)
 	{
-		g.setColor(game.getPlayer().getColor());
+		g.setColor(Color.yellow);
 
 		for (Bullet b : this.game.getBullets ())
 		    g.drawOval (b.getLocation ().x - 2, b.getLocation ().y - 2, 5, 5);
@@ -130,6 +134,20 @@ public class AsteroidsPanel extends JPanel
 			Ellipse2D.Double e = new Ellipse2D.Double ();
 			e.setFrame (a.getLocation ().x - a.getRadius (), a.getLocation ().y - a.getRadius (), 2 * a.getRadius (), 2 * a.getRadius ());
 			g.fill (e);
+		}
+	}
+	
+	private void paintExplosions (Graphics2D g){
+		for (Explosion e : this.game.getExplosions()){	
+			Ellipse2D.Double circle = new Ellipse2D.Double((int)(e.getLocation ().x-30), (int) e.getLocationY()-30, e.getRadius(), e.getRadius());
+			g.setColor (Color.ORANGE);
+			g.fill (circle);
+			g.draw (circle);
+			
+			Ellipse2D.Double circle2 = new Ellipse2D.Double((int)(e.getLocation ().x-15), (int) e.getLocationY()-15, e.getRadius()/1.5, e.getRadius()/1.5);
+			g.setColor (Color.RED);
+			g.fill (circle2);
+			g.draw (circle2);
 		}
 	}
 

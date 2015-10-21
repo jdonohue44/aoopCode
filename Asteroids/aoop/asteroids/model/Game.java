@@ -52,6 +52,8 @@ public class Game extends Observable implements Runnable
 
 	/** List of asteroids. */
 	public Collection <Asteroid> asteroids;
+	
+	public Collection <Explosion> explosions;
 
 	/** Random number generator. */
 	protected static Random rng;
@@ -91,6 +93,7 @@ public class Game extends Observable implements Runnable
 		this.bullets = new ArrayList <> ();
 		this.asteroids = new ArrayList <> ();
 		this.ships = new ArrayList<> ();
+		this.explosions = new ArrayList<> ();
 		this.ship.reinit ();
 		this.ships.add(this.ship);
 	}
@@ -114,9 +117,6 @@ public class Game extends Observable implements Runnable
 	{
 		return this.ship.clone ();
 	}
-	
-	
-
 	
 	public int getPort() {
 		return port;
@@ -169,6 +169,10 @@ public class Game extends Observable implements Runnable
 		return this.ships;
 	}
 	
+	public Collection <Explosion> getExplosions(){
+		return this.explosions;
+	}
+	
 	public void setShips(ArrayList <Spaceship> ships){
 		this.ships = ships;
 	}
@@ -189,6 +193,7 @@ public class Game extends Observable implements Runnable
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
 		for (Spaceship s : this.ships) s.nextStep ();
+		for (Explosion e : this.explosions) e.nextStep();
 
 		if (this.ship.isFiring ())
 		{
@@ -254,6 +259,8 @@ public class Game extends Observable implements Runnable
 				{// Collision with player -> destroy both objects.
 					b.destroy();
 					s.destroy();
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
+					this.explosions.add(new Explosion(p,0,0,100,10));
 				}
 			}
 		}
@@ -266,6 +273,8 @@ public class Game extends Observable implements Runnable
 				{// Collision with player -> destroy both objects.
 					a.destroy();
 					s.destroy();
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
+					this.explosions.add(new Explosion(p,0,0,100,10));
 				}
 			}
 		}
@@ -310,6 +319,13 @@ public class Game extends Observable implements Runnable
 		Collection <Bullet> newBuls = new ArrayList <> ();
 		for (Bullet b : this.bullets) if (!b.isDestroyed ()) newBuls.add (b);
 		this.bullets = newBuls;
+		
+		Collection <Explosion> newExpls = new ArrayList <> ();
+		for (Explosion e : this.explosions) {
+			if (!e.isDestroyed ()) newExpls.add (e);
+			System.out.println(e.stepsLeft);
+		}
+		this.explosions = newExpls;
 	}
 
 	/**

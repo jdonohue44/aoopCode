@@ -8,9 +8,11 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.Explosion;
 import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.Spaceship;
 
@@ -32,7 +34,8 @@ public class Joiner extends Spectator implements Runnable {
     		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
     		ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
     		objOut.writeObject(this.gameListener);
-    		if (!this.ship.isDestroyed()) objOut.writeObject(this.getShip());
+    		
+    	    objOut.writeObject(this.getShip());
             byteData = bytesOut.toByteArray();	
     		packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
     	    clientSocket.send(packet);
@@ -59,6 +62,7 @@ public class Joiner extends Spectator implements Runnable {
 					this.ships     = (ArrayList<Spaceship>) objIn.readObject();
 					this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
 					this.bullets   =  (ArrayList<Bullet>) objIn.readObject();
+					this.explosions = (ArrayList<Explosion>) objIn.readObject();
 				}
 				objIn.close();
 				
@@ -74,26 +78,17 @@ public class Joiner extends Spectator implements Runnable {
 	        clientSocket.close();
 		}
 	}
-}
+	}
 
 	public Spaceship getShip() {
-		return this.ship;
+		return ship;
 	}
-	
+
 	public void setShip(Spaceship ship) {
 		this.ship = ship;
 	}
 
-	public void setShips(ArrayList<Spaceship> ships) {
-		this.ships = ships;
+	public Collection<Explosion> getExplosions() {
+		return this.explosions;
 	}
-	
-	public ArrayList<Spaceship> getShips() {
-		return this.ships;
-	}
-	
-	public ArrayList<Asteroid> getAsteroids() {
-		return this.asteroids;
-	}
-	
 }

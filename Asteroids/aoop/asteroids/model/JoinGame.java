@@ -19,6 +19,11 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 	@Override
 	protected synchronized void update ()
 	{
+		this.bullets = joiner.getBullets();
+		this.asteroids = joiner.getAsteroids();
+		this.explosions = joiner.getExplosions();
+		
+		// update ship positions
 		ArrayList<Spaceship> incomingShips = new ArrayList<Spaceship>();
 		boolean stillAlive = false;
 		for(Spaceship s : joiner.getShips()){
@@ -26,24 +31,15 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 			else incomingShips.add(s);
 		}
 		this.ships = incomingShips;
-		if(stillAlive == false && this.ship.stepsTilCollide() == 0){
+		if((!stillAlive) && (this.ship.stepsTilCollide() == 0)){
 			this.ship.destroy();
 		}
 		else this.ships.add(this.ship);
 		
-		this.bullets = joiner.getBullets();
-		this.asteroids = joiner.getAsteroids();
-		
 		for(Spaceship s : this.ships) s.nextStep();
 		for(Bullet b : this.bullets) b.nextStep();
 		for(Asteroid a : this.asteroids) a.nextStep();
-		 
-		if (this.ship.isFiring ())
-		{
-			double direction = this.ship.getDirection ();
-			this.bullets.add (new Bullet(this.ship.getLocation (), this.ship.getVelocityX () + Math.sin (direction) * 15, this.ship.getVelocityY () - Math.cos (direction) * 15));
-			this.ship.setFired ();
-		}
+		for(Explosion e : this.explosions) e.nextStep();
 		
 		this.setChanged();
 		this.notifyObservers();
