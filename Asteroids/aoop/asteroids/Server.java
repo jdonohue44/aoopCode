@@ -51,7 +51,7 @@ public class Server extends Thread{
 		this.gameListeners = new HashSet<GameListener>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(57653);
+			this.serverSocket = new DatagramSocket(0);
 			this.address = InetAddress.getByName("localhost");
 			this.game.setHost(serverSocket.getLocalAddress().getLocalHost());
 		} catch (Exception e) {

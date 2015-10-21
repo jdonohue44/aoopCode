@@ -56,8 +56,8 @@ public class Asteroids
 			}
 			else if(gameId == 1){ // host 
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
-//				String nickname = menu.getNp().getNickname();
-				String nickname = "Host";
+				String nickname = menu.getNp().getNickname();
+//				String nickname = "Host";
 				
 				asteroidsPanel.startGame(new MultiplayerGame(nickname));
 				MultiplayerGame game = (MultiplayerGame) asteroidsPanel.getGame();
@@ -82,14 +82,14 @@ public class Asteroids
 			}
 			else if(gameId == 2){ // join
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();			
-//				NetworkInfoPanel nip = menu.getNip();
-//				String nickname = menu.getNp().getNickname();
-//				String host = nip.getHost();
-//				int port = nip.getPort();
+				NetworkInfoPanel nip = menu.getNip();
+				String nickname = menu.getNp().getNickname();
+				String host = nip.getHost();
+				int port = nip.getPort();
 				
-				String nickname = "Client";
-				String host = "localhost";
-				int port = 57653;
+//				String nickname = "Client";
+//				String host = "localhost";
+//				int port = 57653;
 				
 				
 				Joiner joiner = new Joiner(host, port, new Spaceship());
@@ -159,18 +159,6 @@ public class Asteroids
 	public static void main (String [] args)
 	{
 		new Asteroids ();
-		
-//		Game g = new Game();
-//		Thread gt = new Thread(g);
-//		gt.start();
-//		
-//		Server s = new Server(g, "localhost", 4453);
-//		Thread st = new Thread(s);
-//		st.start();
-//		
-//		Spectator client = new Spectator("localhost", 4453);
-//		Thread ct = new Thread(client);
-//		ct.start();
 	}
 	
 }
