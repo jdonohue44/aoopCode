@@ -30,13 +30,13 @@ public class Joiner extends Spectator implements Runnable {
 		try {
     		// Send Ping to Server with this clients socket information
     		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-    		ObjectOutputStream dataOut = new ObjectOutputStream(bytesOut);
-    		dataOut.writeObject(this.gameListener);
-    		dataOut.writeObject(this.getShip());
+    		ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
+    		objOut.writeObject(this.gameListener);
+    		if (!this.ship.isDestroyed()) objOut.writeObject(this.getShip());
             byteData = bytesOut.toByteArray();	
     		packet = new DatagramPacket(byteData, byteData.length, this.serverAddress, this.serverPort);
     	    clientSocket.send(packet);
-			dataOut.close();
+			objOut.close();
 			
 	        // Recieve Data from Server
 			byteData = new byte[1600];
@@ -55,9 +55,11 @@ public class Joiner extends Spectator implements Runnable {
 	        ObjectInputStream objIn = new ObjectInputStream(bytesIn);
 
 	        try {
-				this.ships     = (ArrayList<Spaceship>) objIn.readObject();
-				this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
-				this.bullets   = (ArrayList<Bullet>) objIn.readObject();
+				synchronized(this){
+					this.ships     = (ArrayList<Spaceship>) objIn.readObject();
+					this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
+					this.bullets   =  (ArrayList<Bullet>) objIn.readObject();
+				}
 				objIn.close();
 				
 			} catch (ClassNotFoundException e) {
@@ -89,7 +91,9 @@ public class Joiner extends Spectator implements Runnable {
 	public ArrayList<Spaceship> getShips() {
 		return this.ships;
 	}
-
-
+	
+	public ArrayList<Asteroid> getAsteroids() {
+		return this.asteroids;
+	}
 	
 }

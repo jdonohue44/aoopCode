@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
@@ -24,6 +25,8 @@ import aoop.asteroids.model.Spaceship;
 public class Server extends Thread{
 
 	private HashSet<GameListener> gameListeners; // List of Spectators
+	
+	private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 	
 	DatagramSocket serverSocket = null;
 	int port;
@@ -42,14 +45,13 @@ public class Server extends Thread{
 	int numberOfBullets;
 	
 	MultiplayerGame game;
-	Joiner joiner;
 	
 	public Server(MultiplayerGame game){
 		this.game = game;
 		this.gameListeners = new HashSet<GameListener>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(0);
+			this.serverSocket = new DatagramSocket(57653);
 			this.address = InetAddress.getByName("localhost");
 			this.game.setHost(serverSocket.getLocalAddress().getLocalHost());
 		} catch (Exception e) {
@@ -89,6 +91,7 @@ public class Server extends Thread{
 			        else if(listener.getId() == 1) {
 			        	this.gameListeners.add(listener);
 			        	Spaceship ship = (Spaceship) objIn.readObject();
+//			        	ArrayList<Bullet> bullets = (ArrayList<Bullet>) objIn.readObject();
 			        	boolean containsShip = false;
 			        	int counter = 0;
 			        	for(Spaceship s : this.game.ships){
@@ -98,7 +101,7 @@ public class Server extends Thread{
 				        	}
 				        	counter++;
 			        	}
-			        	if(!containsShip) this.game.ships.add(ship);
+			        	if(!containsShip && ship.stepsTilCollide() > 0) this.game.ships.add(ship);
 				        objIn.close();
 			        }
 			        else{
@@ -123,7 +126,7 @@ public class Server extends Thread{
 		        }
 			}
 			catch(Exception e){
-				System.out.println(e +  " on the Server");
+				System.out.println(  "On the Server: " + e.getStackTrace());
 				go = false;
 				serverSocket.close();
 			}

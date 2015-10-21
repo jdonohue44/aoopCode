@@ -48,10 +48,10 @@ public class Game extends Observable implements Runnable
 	public Collection <Spaceship> ships;
 
 	/** List of bullets. */
-	protected Collection <Bullet> bullets;
+	public Collection <Bullet> bullets;
 
 	/** List of asteroids. */
-	protected Collection <Asteroid> asteroids;
+	public Collection <Asteroid> asteroids;
 
 	/** Random number generator. */
 	protected static Random rng;
@@ -141,9 +141,10 @@ public class Game extends Observable implements Runnable
 	 */
 	public Collection <Asteroid> getAsteroids ()
 	{
-		Collection <Asteroid> c = new ArrayList <> ();
-		for (Asteroid a : this.asteroids) c.add (a.clone ());
-		return c;
+//			Collection <Asteroid> c = new ArrayList <> ();
+//			for (Asteroid a : this.asteroids) c.add (a.clone ());
+//			return c;
+		return this.asteroids;
 	}
 
 	/** 
@@ -153,9 +154,10 @@ public class Game extends Observable implements Runnable
 	 */
 	public Collection <Bullet> getBullets ()
 	{
-		Collection <Bullet> c = new ArrayList <> ();
-		for (Bullet b : this.bullets) c.add (b.clone ());
-		return c;
+//		Collection <Bullet> c = new ArrayList <> ();
+//		for (Bullet b : this.bullets) c.add (b.clone ());
+//		return c;
+		return this.bullets;
 	}
 
 
@@ -247,19 +249,24 @@ public class Game extends Observable implements Runnable
 				}
 			}
 
-			if (b.collides (this.ship))
-			{ // Collision with playerß -> destroy both objects
-				b.destroy ();
-				this.ship.destroy ();
+			for(Spaceship s : this.ships){
+				if (b.collides(s))
+				{// Collision with player -> destroy both objects.
+					b.destroy();
+					s.destroy();
+				}
 			}
 		}
 
+		
 		for (Asteroid a : this.asteroids)
 		{ // For all asteroids, no cross check with bullets required.
-			if (a.collides (this.ship))
-			{ // Collision with player -> destroy both objects.
-				a.destroy ();
-				this.ship.destroy ();
+			for(Spaceship s : this.ships){
+				if (a.collides(s))
+				{// Collision with player -> destroy both objects.
+					a.destroy();
+					s.destroy();
+				}
 			}
 		}
 	}
@@ -282,6 +289,11 @@ public class Game extends Observable implements Runnable
 	 */
 	protected void removeDestroyedObjects ()
 	{
+		
+		Collection <Spaceship> newShips = new ArrayList<> ();
+		for (Spaceship s : this.ships) if(!s.isDestroyed()) newShips.add(s);
+		this.ships = newShips;
+		
 		Collection <Asteroid> newAsts = new ArrayList <> ();
 		for (Asteroid a : this.asteroids)
 		{

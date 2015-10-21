@@ -131,7 +131,7 @@ public abstract class GameObject implements Serializable
 		double distX = this.locationX - other.getLocation ().x;
 		double distY = this.locationY - other.getLocation ().y;
 		double distance = Math.sqrt(distX * distX + distY * distY);
-		
+				
 		return distance < this.getRadius() + other.getRadius() && this.stepsTilCollide () == 0 && other.stepsTilCollide () == 0;
 	}
 

@@ -20,21 +20,34 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 	protected synchronized void update ()
 	{
 		ArrayList<Spaceship> incomingShips = new ArrayList<Spaceship>();
+		boolean stillAlive = false;
 		for(Spaceship s : joiner.getShips()){
-			if(s.getId() != this.ship.getId()) incomingShips.add(s);
+			if(s.getId() == this.ship.getId()) stillAlive = true;
+			else incomingShips.add(s);
 		}
 		this.ships = incomingShips;
-		this.ships.add(this.ship);
+		if(stillAlive == false && this.ship.stepsTilCollide() == 0){
+			this.ship.destroy();
+		}
+		else this.ships.add(this.ship);
+		
 		this.bullets = joiner.getBullets();
 		this.asteroids = joiner.getAsteroids();
-
+		
 		for(Spaceship s : this.ships) s.nextStep();
-		for(Asteroid a : this.asteroids) a.nextStep();
 		for(Bullet b : this.bullets) b.nextStep();
-
+		for(Asteroid a : this.asteroids) a.nextStep();
+		 
+		if (this.ship.isFiring ())
+		{
+			double direction = this.ship.getDirection ();
+			this.bullets.add (new Bullet(this.ship.getLocation (), this.ship.getVelocityX () + Math.sin (direction) * 15, this.ship.getVelocityY () - Math.cos (direction) * 15));
+			this.ship.setFired ();
+		}
+		
 		this.setChanged();
 		this.notifyObservers();
-	}
+		}
 	
 	@Override
 	public void run ()
@@ -62,6 +75,10 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 				e.printStackTrace ();
 			}
 		}
+	}
+	
+	public Spaceship getShip() {
+		return this.ship;
 	}
 
 
