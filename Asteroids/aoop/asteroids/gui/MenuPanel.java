@@ -27,6 +27,7 @@ public class MenuPanel extends JPanel {
 		JButton hostButton = new JButton("Host a Multiplayer Game");
 		JButton joinButton = new JButton("Join a Multiplayer Game");
 		JButton spectateButton = new JButton("Spectate a Game");
+		JButton highScoresButton = new JButton("High Scores");
 		
 		title.setForeground(new Color(0,200,200));
 		
@@ -34,29 +35,34 @@ public class MenuPanel extends JPanel {
 		hostButton.setBackground(Color.white);
 		joinButton.setBackground(Color.white);
 		spectateButton.setBackground(Color.white);
+		highScoresButton.setBackground(Color.red);
 		
-		title.setBounds(100, 65, 600, 150);
-		singleplayerButton.setBounds(200,250,400,75);
-		hostButton.setBounds(200,350,400,75);
-		joinButton.setBounds(200,450,400,75);
-		spectateButton.setBounds(200,550,400,75);
+		title.setBounds(100, 10, 600, 150);
+		singleplayerButton.setBounds(20,350,350,75);
+		hostButton.setBounds(20,450,350,75);
+		joinButton.setBounds(420,350,350,75);
+		spectateButton.setBounds(420,450,350,75);
+		highScoresButton.setBounds(200,200,400,100);
 		
 		title.setFont(new Font("Impact", Font.BOLD, 130));
-		singleplayerButton.setFont(new Font("Impact", Font.PLAIN, 40));
+		singleplayerButton.setFont(new Font("Impact", Font.PLAIN, 30));
 		hostButton.setFont(new Font("Impact", Font.PLAIN, 30));
 		joinButton.setFont(new Font("Impact", Font.PLAIN, 30));
-		spectateButton.setFont(new Font("Impact", Font.PLAIN, 40));
+		spectateButton.setFont(new Font("Impact", Font.PLAIN, 30));
+		highScoresButton.setFont(new Font("Impact", Font.PLAIN, 40));
 		
 		singleplayerButton.setFocusable(false);
 		hostButton.setFocusable(false);
 		joinButton.setFocusable(false);
 		spectateButton.setFocusable(false);
+		highScoresButton.setFocusable(false);
 		
 		this.add(title);
 		this.add(singleplayerButton);
 		this.add(hostButton);
 		this.add(joinButton);
 		this.add(spectateButton);
+		this.add(highScoresButton);
 		
         singleplayerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
@@ -69,7 +75,7 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-            		MenuPanel.this.setNp(new NicknamePanel());
+//            		MenuPanel.this.setNp(new NicknamePanel());
                 	MenuPanel.this.setGameId(1);
                 	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
@@ -81,8 +87,8 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-            		MenuPanel.this.setNip(new NetworkInfoPanel());
-	            	MenuPanel.this.setNp(new NicknamePanel());
+//            		MenuPanel.this.setNip(new NetworkInfoPanel());
+//	            	MenuPanel.this.setNp(new NicknamePanel());
 	            	MenuPanel.this.setGameId(2);
 	            	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
@@ -98,6 +104,17 @@ public class MenuPanel extends JPanel {
 		            MenuPanel.this.setNip(new NetworkInfoPanel());
 		         	MenuPanel.this.setGameId(3);
 		         	cardLayout.show(cardPanel,"asteroidsPanel");
+            	} catch (UnsupportedOperationException u) {
+            		MenuPanel.this.setGameId(-1);
+            	}
+           
+            }
+        }); 
+        highScoresButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+            	try {
+		         	cardLayout.show(cardPanel,"highScoresPanel");
             	} catch (UnsupportedOperationException u) {
             		MenuPanel.this.setGameId(-1);
             	}

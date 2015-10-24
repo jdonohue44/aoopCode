@@ -14,7 +14,6 @@ public class Explosion extends GameObject{
 	@Override
 	public void nextStep() {
 		
-		System.out.println("NEXT STEP");
 		this.stepsLeft--;
 		if (this.stepsLeft < 0)
 			this.destroy ();

@@ -2,6 +2,12 @@ package aoop.asteroids;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import aoop.asteroids.gui.AsteroidsFrame;
 import aoop.asteroids.gui.AsteroidsPanel;
@@ -12,6 +18,7 @@ import aoop.asteroids.model.Bullet;
 import aoop.asteroids.model.Game;
 import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.MultiplayerGame;
+import aoop.asteroids.model.Participant;
 import aoop.asteroids.model.Spaceship;
 import aoop.asteroids.model.SpectateGame;
 
@@ -33,6 +40,10 @@ public class Asteroids
 		AsteroidsFrame frame = new AsteroidsFrame();
 		MenuPanel menu = frame.getMenuPanel();
 		frame.getAsteroidsPanel().startGame(new Game()); //gives AsteroidsPanel something to paint
+		
+		// DB
+
+
 		
 		while(true){
 			int gameId = menu.getGameId();
@@ -56,8 +67,8 @@ public class Asteroids
 			}
 			else if(gameId == 1){ // host 
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();
-				String nickname = menu.getNp().getNickname();
-//				String nickname = "Host";
+//				String nickname = menu.getNp().getNickname();
+				String nickname = "Host";
 				
 				asteroidsPanel.startGame(new MultiplayerGame(nickname));
 				MultiplayerGame game = (MultiplayerGame) asteroidsPanel.getGame();
@@ -83,13 +94,13 @@ public class Asteroids
 			else if(gameId == 2){ // join
 				AsteroidsPanel asteroidsPanel = frame.getAsteroidsPanel();			
 				NetworkInfoPanel nip = menu.getNip();
-				String nickname = menu.getNp().getNickname();
-				String host = nip.getHost();
-				int port = nip.getPort();
+//				String nickname = menu.getNp().getNickname();
+//				String host = nip.getHost();
+//				int port = nip.getPort();
 				
-//				String nickname = "Client";
-//				String host = "localhost";
-//				int port = 57653;
+				String nickname = "Client";
+				String host = "localhost";
+				int port = 57653;
 				
 				
 				Joiner joiner = new Joiner(host, port, new Spaceship());

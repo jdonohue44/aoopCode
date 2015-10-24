@@ -50,7 +50,7 @@ public class Spaceship extends GameObject
 	private String nickname;
 	
 	private int Id;
-	private static int shipNumber = 0;
+	private static int shipNumber = -2;
 
 	/** Constructs a new spaceship with default values. */
 	public Spaceship ()

@@ -257,10 +257,10 @@ public class Game extends Observable implements Runnable
 			for(Spaceship s : this.ships){
 				if (b.collides(s))
 				{// Collision with player -> destroy both objects.
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
 					b.destroy();
 					s.destroy();
-					Point p = new Point ((int)s.locationX, (int)s.locationY);
-//					this.explosions.add(new Explosion(p,0,0,100,10));
+					this.explosions.add(new Explosion(p,0,0,80,3));
 				}
 			}
 		}
@@ -271,10 +271,10 @@ public class Game extends Observable implements Runnable
 			for(Spaceship s : this.ships){
 				if (a.collides(s))
 				{// Collision with player -> destroy both objects.
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
 					a.destroy();
 					s.destroy();
-					Point p = new Point ((int)s.locationX, (int)s.locationY);
-//					this.explosions.add(new Explosion(p,0,0,100,10));
+					this.explosions.add(new Explosion(p,0,0,80,3));
 				}
 			}
 		}
@@ -300,7 +300,9 @@ public class Game extends Observable implements Runnable
 	{
 		
 		Collection <Spaceship> newShips = new ArrayList<> ();
-		for (Spaceship s : this.ships) if(!s.isDestroyed()) newShips.add(s);
+		for (Spaceship s : this.ships){
+			if(!s.isDestroyed()) newShips.add(s);
+		}
 		this.ships = newShips;
 		
 		Collection <Asteroid> newAsts = new ArrayList <> ();
@@ -323,7 +325,6 @@ public class Game extends Observable implements Runnable
 		Collection <Explosion> newExpls = new ArrayList <> ();
 		for (Explosion e : this.explosions) {
 			if (!e.isDestroyed ()) newExpls.add (e);
-			System.out.println(e);
 		}
 		this.explosions = newExpls;
 	}

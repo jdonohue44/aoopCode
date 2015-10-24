@@ -10,24 +10,23 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.List;
 
-import aoop.asteroids.model.Bullet;
+import javax.persistence.*;
+
 import aoop.asteroids.model.Game;
-import aoop.asteroids.model.JoinGame;
 import aoop.asteroids.model.MultiplayerGame;
+import aoop.asteroids.model.Participant;
 import aoop.asteroids.model.Spaceship;
+
 
 
 public class Server extends Thread{
 
 	private HashSet<GameListener> gameListeners; // List of Spectators
-	
-	private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
-	
+		
 	DatagramSocket serverSocket = null;
 	int port;
 	String host;
@@ -41,6 +40,11 @@ public class Server extends Thread{
 	ByteArrayInputStream byteIn;
 	DataInputStream dataIn;
 	
+	EntityManagerFactory emf;
+	EntityManager em;
+	
+	ArrayList <Participant> participants = new ArrayList<Participant>();
+	
 	int numberOfAsteroids;
 	int numberOfBullets;
 	
@@ -51,9 +55,10 @@ public class Server extends Thread{
 		this.gameListeners = new HashSet<GameListener>();
 		this.packetReferenceNumber = 1;
 		try {
-			this.serverSocket = new DatagramSocket(0);
+			this.serverSocket = new DatagramSocket(57653);
 			this.address = InetAddress.getByName("localhost");
 			this.game.setHost(serverSocket.getLocalAddress().getLocalHost());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,6 +68,7 @@ public class Server extends Thread{
 	
 	public void run(){
 		boolean go = true;
+        
 		while(go){
 			try{
 				// receive request from Client
@@ -133,6 +139,7 @@ public class Server extends Thread{
 			}
 		}
 	}
+	
 
 	public HashSet<GameListener> getSpectators() {
 		return this.gameListeners;
