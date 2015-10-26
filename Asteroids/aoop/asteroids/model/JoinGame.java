@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import aoop.asteroids.Joiner;
 import aoop.asteroids.gui.Player;
 
-public class JoinGame extends MultiplayerGame implements Runnable {
+public class JoinGame extends Game implements Runnable {
 
 	Joiner joiner;
 	
-	public JoinGame(String nickname, Joiner joiner){
-		super(nickname);
+	public JoinGame(Joiner joiner){
 		this.joiner = joiner;
 		this.ship = joiner.getShip();
 		this.ships.add(this.ship);
@@ -19,6 +18,7 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 	@Override
 	protected synchronized void update ()
 	{
+		this.round = joiner.getRound();
 		this.bullets = joiner.getBullets();
 		this.asteroids = joiner.getAsteroids();
 		this.explosions = joiner.getExplosions();
@@ -27,10 +27,14 @@ public class JoinGame extends MultiplayerGame implements Runnable {
 		ArrayList<Spaceship> incomingShips = new ArrayList<Spaceship>();
 		boolean stillAlive = false;
 		for(Spaceship s : joiner.getShips()){
-			if(s.getId() == this.ship.getId()) stillAlive = true;
+			if(s.getId() == this.ship.getId()) {
+				this.ship.setScore(s.getScore());
+				stillAlive = true;
+			}
 			else incomingShips.add(s);
 		}
 		this.ships = incomingShips;
+		
 		if((!stillAlive) && (this.ship.stepsTilCollide() == 0)){
 			this.ship.destroy();
 		}

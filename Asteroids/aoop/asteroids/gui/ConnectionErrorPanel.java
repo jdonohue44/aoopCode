@@ -13,7 +13,7 @@ public class ConnectionErrorPanel extends JPanel {
 		this.setLayout(null);
 		setBackground(Color.black);
 		
-		JLabel text1 = new JLabel("Connection Ended/Could Not Be Established", SwingConstants.CENTER);
+		JLabel text1 = new JLabel("Connection Error", SwingConstants.CENTER);
 		JLabel text2 = new JLabel("Please go back to the main menu", SwingConstants.CENTER);
 		
 		text1.setForeground(Color.white);

@@ -50,12 +50,11 @@ public class Spaceship extends GameObject
 	private String nickname;
 	
 	private int Id;
-	private static int shipNumber = -2;
 
 	/** Constructs a new spaceship with default values. */
 	public Spaceship ()
 	{
-		this (new Point (400, 400), 0, 0, 15, 0, false, 0, "Nickname");
+		this (new Point (400, 400), 0, 0, 15, 0, false, 0, "Score");
 	}
 	
 	public Spaceship (String nickname)
@@ -88,8 +87,7 @@ public class Spaceship extends GameObject
 		this.stepsTilFire 	= 0;
 		this.score			= score;
 		this.nickname = nickname;
-		this.Id = shipNumber;
-		shipNumber++;
+		this.Id = (int)(Math.floor(Math.random()*9999999));
 		
 		int colors[] = new int[3];
 		int start = (int)Math.floor(Math.random()*3);
@@ -114,7 +112,7 @@ public class Spaceship extends GameObject
 		this.right 			= false;
 		this.destroyed		= false;
 		this.stepsTilFire 	= 0;
-		this.score 			= 0;
+		this.stepsTilCollide = 10;
 	}
 
 	/**

@@ -15,13 +15,16 @@ public class SpectateGame extends Game implements Runnable {
 	@Override
 	protected synchronized void update ()
 	{
+		this.round = spectator.getRound();
 		this.ships = spectator.getShips();
 		this.asteroids = spectator.getAsteroids();
 		this.bullets = spectator.getBullets();
+		this.explosions = spectator.getExplosions();
 		
 		for (Asteroid a : this.asteroids) a.nextStep ();
 		for (Bullet b : this.bullets) b.nextStep ();
 		for (Spaceship s : this.ships) s.nextStep();
+		for (Explosion e : this.explosions) e.nextStep();
 		
 		this.setChanged ();
 		this.notifyObservers ();

@@ -1,6 +1,8 @@
 package aoop.asteroids.gui;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -97,14 +99,36 @@ public class AsteroidsPanel extends JPanel
 		int locationY = 20;
 		for(Spaceship s : this.game.getShips()){
 			g2.setColor (s.getColor());
-			g2.drawString (s.getNickname()+": "+String.valueOf (s.getScore ()), 20, locationY);
+			g2.drawString (s.getNickname()+": "+String.valueOf (s.getScore ()), 10, locationY);
 			locationY += 20;
 		}
+		
 		g2.setColor (Color.white);
-		if(this.game.getPort()!=0){
-			g2.drawString("Address: " + this.game.getHost().getHostAddress() , 645, 20);
-			g2.drawString("Port: " + this.game.getPort(), 710, 40);
+		String s;
+		FontMetrics fontMetrics = g2.getFontMetrics();
+		
+		if(this.game instanceof MultiplayerGame){
+			if (((MultiplayerGame)this.game).getPort() != 0) {
+				s = "Address: " + ((MultiplayerGame)this.game).getHost().getHostAddress();
+				g2.drawString(s, 775 - fontMetrics.stringWidth(s), 20);
+				s = "Port: " + ((MultiplayerGame)this.game).getPort();
+				g2.drawString(s, 775 - fontMetrics.stringWidth(s), 40);
+			}
+			
+			if (!((MultiplayerGame)this.game).isRunning()) {
+				g2.setFont(new Font("Impact", Font.PLAIN, 30));
+				fontMetrics = g2.getFontMetrics();
+				s = "Waiting for other players to join...";
+				g2.drawString (s, 400 - fontMetrics.stringWidth(s)/2, 100);
+			}
 		}
+		
+			if(this.game.getRound()!=0) {
+				g2.setFont(new Font("Impact", Font.PLAIN, 30));
+				fontMetrics = g2.getFontMetrics();
+				s = "Round "+this.game.getRound();
+				g2.drawString (s, 400 - fontMetrics.stringWidth(s)/2, 40);
+			}
 	}
 
 	/**

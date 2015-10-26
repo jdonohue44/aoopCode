@@ -7,6 +7,10 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Random;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import aoop.asteroids.gui.Player;
 
 /**
@@ -60,13 +64,11 @@ public class Game extends Observable implements Runnable
 
 	/** Game tick counter for spawning random asteroids. */
 	protected int cycleCounter;
-	
-	protected int port;
 
 	/** Asteroid limit. */
 	protected int asteroidsLimit;
 	
-	protected InetAddress host;
+	protected int round;
 	
 
 	/** 
@@ -79,25 +81,43 @@ public class Game extends Observable implements Runnable
 	/** Initializes a new game from scratch. */
 	public Game ()
 	{
+		this.round = 0;
 		Game.rng = new Random ();
 		this.ship = new Spaceship ();
+		this.ships = new ArrayList<Spaceship>();
 		this.initGameData ();
 	}
 
 	/** Sets all game data to hold the values of a new game. */
 	public void initGameData ()
 	{
-		this.aborted = false;
-		this.cycleCounter = 0;
-		this.asteroidsLimit = 7;
-		this.bullets = new ArrayList <> ();
-		this.asteroids = new ArrayList <> ();
-		this.ships = new ArrayList<> ();
-		this.explosions = new ArrayList<> ();
-		this.ship.reinit ();
-		this.ships.add(this.ship);
+		if(this.getRound()==2){
+			for(Spaceship s : this.getShips()){
+				s.destroy();
+			}
+			EntityManagerFactory emf  = Persistence.createEntityManagerFactory("$objectdb/db/participantsTest.odb");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			for(Spaceship s : this.getShips()){
+				em.persist(new Participant(s.getScore(),s.getNickname()));
+		        em.getTransaction().commit();
+			}
+	        em.close();
+	        emf.close();
+		}
+		else{
+			this.round++;
+			this.aborted = false;
+			this.cycleCounter = 0;
+			this.asteroidsLimit = 7;
+			this.bullets = new ArrayList <> ();
+			this.asteroids = new ArrayList <> ();
+			this.ships = new ArrayList<> ();
+			this.explosions = new ArrayList<> ();
+			this.ship.reinit ();
+			this.ships.add(this.ship);
+		}
 	}
-
 	/** 
 	 *	Links the given controller to the spaceship. 
 	 *
@@ -118,20 +138,8 @@ public class Game extends Observable implements Runnable
 		return this.ship.clone ();
 	}
 	
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public InetAddress getHost() {
-		return host;
-	}
-
-	public void setHost(InetAddress host) {
-		this.host = host;
+	public int getRound() {
+		return round;
 	}
 
 	/** 
@@ -141,10 +149,10 @@ public class Game extends Observable implements Runnable
 	 */
 	public Collection <Asteroid> getAsteroids ()
 	{
-//			Collection <Asteroid> c = new ArrayList <> ();
-//			for (Asteroid a : this.asteroids) c.add (a.clone ());
-//			return c;
-		return this.asteroids;
+		Collection <Asteroid> c = new ArrayList <> ();
+		for (Asteroid a : this.asteroids) c.add (a.clone ());
+		return c;
+		//return this.asteroids;
 	}
 
 	/** 
@@ -152,12 +160,12 @@ public class Game extends Observable implements Runnable
 	 *
 	 *	@return a clone of the bullet set.
 	 */
-	public Collection <Bullet> getBullets ()
+	public synchronized Collection <Bullet> getBullets ()
 	{
-//		Collection <Bullet> c = new ArrayList <> ();
-//		for (Bullet b : this.bullets) c.add (b.clone ());
-//		return c;
-		return this.bullets;
+		Collection <Bullet> c = new ArrayList <> ();
+		for (Bullet b : this.bullets) c.add (b.clone ()); //rarely throws ConcurrentModificationException
+		return c;
+		//return this.bullets;
 	}
 
 
@@ -198,7 +206,7 @@ public class Game extends Observable implements Runnable
 		if (this.ship.isFiring ())
 		{
 			double direction = this.ship.getDirection ();
-			this.bullets.add (new Bullet(this.ship.getLocation (), this.ship.getVelocityX () + Math.sin (direction) * 15, this.ship.getVelocityY () - Math.cos (direction) * 15));
+			this.bullets.add (new Bullet(this.ship.getLocation (), this.ship.getVelocityX () + Math.sin (direction) * 15, this.ship.getVelocityY () - Math.cos (direction) * 15, this.ship.getId()));
 			this.ship.setFired ();
 		}
 
@@ -208,6 +216,11 @@ public class Game extends Observable implements Runnable
 		if (this.cycleCounter == 0 && this.asteroids.size () < this.asteroidsLimit) this.addRandomAsteroid ();
 		this.cycleCounter++;
 		this.cycleCounter %= 200;
+		
+		if (this.asteroids.size() == 0) {
+			this.increaseScore();
+			this.initGameData();
+		}
 
 		this.setChanged ();
 		this.notifyObservers ();
@@ -249,6 +262,7 @@ public class Game extends Observable implements Runnable
 			{ // Check all bullet/asteroid combinations.
 				if (a.collides (b))
 				{ // Collision -> destroy both objects.
+					this.increaseScore();
 					b.destroy ();
 					a.destroy ();
 				}
@@ -257,10 +271,10 @@ public class Game extends Observable implements Runnable
 			for(Spaceship s : this.ships){
 				if (b.collides(s))
 				{// Collision with player -> destroy both objects.
-					Point p = new Point ((int)s.locationX, (int)s.locationY);
 					b.destroy();
 					s.destroy();
-					this.explosions.add(new Explosion(p,0,0,80,3));
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
+					this.explosions.add(new Explosion(p,0,0,100,10));
 				}
 			}
 		}
@@ -271,10 +285,10 @@ public class Game extends Observable implements Runnable
 			for(Spaceship s : this.ships){
 				if (a.collides(s))
 				{// Collision with player -> destroy both objects.
-					Point p = new Point ((int)s.locationX, (int)s.locationY);
 					a.destroy();
 					s.destroy();
-					this.explosions.add(new Explosion(p,0,0,80,3));
+					Point p = new Point ((int)s.locationX, (int)s.locationY);
+					this.explosions.add(new Explosion(p,0,0,100,10));
 				}
 			}
 		}
@@ -300,9 +314,7 @@ public class Game extends Observable implements Runnable
 	{
 		
 		Collection <Spaceship> newShips = new ArrayList<> ();
-		for (Spaceship s : this.ships){
-			if(!s.isDestroyed()) newShips.add(s);
-		}
+		for (Spaceship s : this.ships) if(!s.isDestroyed()) newShips.add(s);
 		this.ships = newShips;
 		
 		Collection <Asteroid> newAsts = new ArrayList <> ();
@@ -310,7 +322,6 @@ public class Game extends Observable implements Runnable
 		{
 			if (a.isDestroyed ())
 			{
-				this.increaseScore ();
 				Collection <Asteroid> successors = a.getSuccessors ();
 				newAsts.addAll (successors);
 			}
@@ -380,7 +391,10 @@ public class Game extends Observable implements Runnable
 				executionTime -= System.currentTimeMillis ();
 				sleepTime = 40 - executionTime;
 			}
-			else sleepTime = 100;
+			else{
+				sleepTime = 100;
+				this.abort();
+			}
 
 			try
 			{

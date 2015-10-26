@@ -1,18 +1,16 @@
 package aoop.asteroids;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.util.Collection;
 
 import aoop.asteroids.model.Asteroid;
 import aoop.asteroids.model.Bullet;
@@ -34,13 +32,15 @@ public class Spectator extends Thread{
 	ByteArrayInputStream bytesIn;
 	byte[] byteData;
 	
+	protected int round;
+	
 	ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
 	ArrayList<Bullet> bullets  = new ArrayList<Bullet>();
 	ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 	ArrayList<Explosion> explosions = new ArrayList<Explosion>();
 	GameListener gameListener;
     
-    boolean spectating;
+    protected boolean spectating;
 	
 	public Spectator(String serverAddress, int serverPort) {
 		try {
@@ -83,21 +83,29 @@ public class Spectator extends Thread{
 	       
 	        bytesIn = new ByteArrayInputStream(byteData);
 	        objIn = new ObjectInputStream(bytesIn);
+	        int id = (int) objIn.readObject();
 
-	        try {
-				this.ships     = (ArrayList<Spaceship>) objIn.readObject();
-				this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
-				this.bullets   = (ArrayList<Bullet>) objIn.readObject();
-				objIn.close();
-				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				clientSocket.close();
-				this.spectating =false;
-				objIn.close();
-			}
+	        if (id == 0) {
+	        	objIn.close();
+	        }
+	        else if (id == 1) {
+		        try {
+		        	this.round     = (int) objIn.readObject();
+					this.ships     = (ArrayList<Spaceship>) objIn.readObject();
+					this.asteroids = (ArrayList<Asteroid>) objIn.readObject();
+					this.bullets   = (ArrayList<Bullet>) objIn.readObject();
+					this.explosions = (ArrayList<Explosion>) objIn.readObject();
+					objIn.close();
+					
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					clientSocket.close();
+					this.spectating =false;
+					objIn.close();
+				}
+	        }
     		
-		}catch(IOException e){
+		}catch(Exception e){
 			System.out.println(e + " on the Client");
 			this.spectating = false;
 	        clientSocket.close();
@@ -135,5 +143,14 @@ public class Spectator extends Thread{
 	
 	public ArrayList<Bullet> getBullets(){
 		return this.bullets;
+	}
+
+	public int getRound() {
+		return round;
+	}
+
+	public Collection<Explosion> getExplosions() {
+		// TODO Auto-generated method stub
+		return this.explosions;
 	}
 }

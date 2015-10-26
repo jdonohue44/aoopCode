@@ -17,6 +17,7 @@ public class MenuPanel extends JPanel {
 	int gameId = -1;
 	NetworkInfoPanel nip;
 	NicknamePanel np;
+	HighScoresPanel hsp;
 	
 	public MenuPanel(JPanel cardPanel, CardLayout cardLayout){
 		this.setLayout(null);
@@ -101,7 +102,7 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-		            MenuPanel.this.setNip(new NetworkInfoPanel());
+//		            MenuPanel.this.setNip(new NetworkInfoPanel());
 		         	MenuPanel.this.setGameId(3);
 		         	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
@@ -137,6 +138,10 @@ public class MenuPanel extends JPanel {
 
 	public void setNip(NetworkInfoPanel nip) {
 		this.nip = nip;
+	}
+	
+	public void setHSP(HighScoresPanel hsp){
+		this.hsp = hsp;
 	}
 
 	public NicknamePanel getNp() {

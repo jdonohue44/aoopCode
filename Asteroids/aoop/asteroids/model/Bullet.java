@@ -19,6 +19,8 @@ public class Bullet extends GameObject
 	 */
 	private int stepsLeft;
 	
+	private int id;
+	
 	/**
 	 *	Constructs a new bullet using the given location and velocity parame-
 	 *	ters. The amount of steps the bullet gets to live is by default 60.
@@ -27,9 +29,9 @@ public class Bullet extends GameObject
 	 *	@param velocityX velocity of the bullet as projected on the X-axis.
 	 *	@param velocityY velocity of the bullet as projected on the Y-axis.
 	 */
-	public Bullet (Point location, double velocityX, double velocityY)
+	public Bullet (Point location, double velocityX, double velocityY, int id)
 	{
-		this (location, velocityX, velocityY, 45);
+		this (location, velocityX, velocityY, 45, id);
 	}
 
 	/**
@@ -44,10 +46,11 @@ public class Bullet extends GameObject
      *
      *	@see #clone()
      */
-	private Bullet (Point location, double velocityX, double velocityY, int stepsLeft)
+	private Bullet (Point location, double velocityX, double velocityY, int stepsLeft, int id)
 	{
 		super (location, velocityX, velocityY, 0);
 		this.stepsLeft = stepsLeft;
+		this.id = id;
 	}
 
 	/**
@@ -72,6 +75,10 @@ public class Bullet extends GameObject
 	public Bullet clone ()
 	{
 		return new Bullet (this.getLocation (), this.velocityX, this.velocityY, this.stepsLeft);
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

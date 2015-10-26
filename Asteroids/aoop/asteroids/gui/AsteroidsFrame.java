@@ -2,8 +2,12 @@ package aoop.asteroids.gui;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.List;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -11,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import aoop.asteroids.model.Game;
+import aoop.asteroids.model.Participant;
 import aoop.asteroids.model.SpectateGame;
 
 //import aoop.asteroids.model.Game;
@@ -78,7 +83,7 @@ public class AsteroidsFrame extends JFrame
 		asteroidsPanel = new AsteroidsPanel();
 		menuPanel = new MenuPanel(cardPanel,cardLayout);
 		connectionErrorPanel = new ConnectionErrorPanel();
-		highScoresPanel = new HighScoresPanel();
+		highScoresPanel = new HighScoresPanel(new ArrayList<Participant>());
 		cardPanel.add(asteroidsPanel, "asteroidsPanel");
 		cardPanel.add(menuPanel,"menuPanel");
 		cardPanel.add(connectionErrorPanel,"connectionErrorPanel");
@@ -116,6 +121,10 @@ public class AsteroidsFrame extends JFrame
 
 	public MenuPanel getMenuPanel() {
 		return this.menuPanel;
+	}
+	
+	public HighScoresPanel getHighScoresPanel(){
+		return this.highScoresPanel;
 	}
 
 	public void setMenuPanel(MenuPanel menuPanel) {

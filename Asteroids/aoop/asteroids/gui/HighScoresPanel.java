@@ -1,46 +1,75 @@
 package aoop.asteroids.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import aoop.asteroids.model.Participant;
 
 public class HighScoresPanel extends JPanel {
 
-	public HighScoresPanel() {
-		this.setLayout(null);
-		setBackground(Color.black);
+
+	DefaultListModel listModel;
+	ArrayList<Participant> participantsList = new ArrayList<Participant>();
+	
+	public HighScoresPanel(ArrayList<Participant> participants) {
+		this.setLayout(new BorderLayout(400, 600));
+		this.setBackground(Color.black);
 		
 		JLabel title = new JLabel("High Scores", SwingConstants.CENTER);
 		title.setForeground(new Color(0,200,200));
-		title.setBounds(100, 65, 600, 150);
+		title.setBounds(100, 0, 600, 150);
 		title.setFont(new Font("Impact", Font.BOLD, 100));
 		this.add(title);
 		
-		EntityManagerFactory emf  = Persistence.createEntityManagerFactory("$objectdb/db/participantsTest.odb");
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(new Participant(5,"Jared"));
-        em.getTransaction().commit();
-        Query query = em.createQuery("SELECT p FROM Participant p", Participant.class);
-        List<Participant> participants = query.getResultList();
-        int positionY = 100;
+		this.listModel = new DefaultListModel();
+		JList list = new JList(listModel);
+		JTextField scores = new JTextField(600);
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setColumnHeaderView(title);
+		this.add(scrollPane);
+
         for(Participant p : participants){
-        	System.out.println(p);
-//        	this.add(, new JLabel(p.toString(), SwingConstants.CENTER).setBounds(20, positionY, 100, 150));
-        	positionY += 10;
-        }
-        em.close();
-        emf.close();
+        	listModel.addElement(p);
+        	}
+		}
+	
+
+	public DefaultListModel<Participant> getListModel() {
+		return listModel;
 	}
 
+	public void setListModel(DefaultListModel<Participant> listModel) {
+		this.listModel = listModel;
+	}
+	
+	public void setParticipants(ArrayList<Participant> participants){
+		for(Participant p : participants){
+			this.participantsList.add(p);
+		}
+
+	    for(Participant p : participants){
+	        this.listModel.addElement(p);
+	    }
+	}
+
+	public ArrayList<Participant> getParticipantsList() {
+		return participantsList;
+	}
+
+	
 }
