@@ -76,7 +76,7 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-//            		MenuPanel.this.setNp(new NicknamePanel());
+            		MenuPanel.this.setNp(new NicknamePanel());
                 	MenuPanel.this.setGameId(1);
                 	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
@@ -88,8 +88,8 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-//            		MenuPanel.this.setNip(new NetworkInfoPanel());
-//	            	MenuPanel.this.setNp(new NicknamePanel());
+            		MenuPanel.this.setNip(new NetworkInfoPanel());
+	            	MenuPanel.this.setNp(new NicknamePanel());
 	            	MenuPanel.this.setGameId(2);
 	            	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
@@ -102,7 +102,7 @@ public class MenuPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
             	try {
-//		            MenuPanel.this.setNip(new NetworkInfoPanel());
+		            MenuPanel.this.setNip(new NetworkInfoPanel());
 		         	MenuPanel.this.setGameId(3);
 		         	cardLayout.show(cardPanel,"asteroidsPanel");
             	} catch (UnsupportedOperationException u) {
